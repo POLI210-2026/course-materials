@@ -1,0 +1,190 @@
+---
+title: "POLI 210: Quantitative Analysis of Political Data I"
+subtitle: "Fall 2026 syllabus"
+author: "Professor Brad LeVeck"
+format:
+  html:
+    toc: true
+    toc-location: left
+    embed-resources: true
+    theme: cosmo
+    number-sections: true
+    smooth-scroll: true
+linkcolor: "#005A8B"
+---
+
+::: {.callout-note title="Download"}
+[Download the PDF syllabus](poli210-syllabus-fall-2026.pdf). The final exam's exact 24-hour window remains **TBD** and will be scheduled in consultation with the class near the end of the semester.
+:::
+
+# Course at a glance
+
+- **Instructor:** Professor Brad LeVeck
+- **Email:** [bleveck@ucmerced.edu](mailto:bleveck@ucmerced.edu)
+- **Office:** COB2 314
+- **Office hours:** Tuesdays and Thursdays, 1:30-2:30 p.m., COB2 314
+- **Class meetings:** Wednesdays, 1:30-4:20 p.m.
+- **Classroom:** Classroom and Office Building 1, Room 205
+- **Course sites:** [Course materials](https://poli210-2026.github.io/course-materials/), CatCourses, and private GitHub repositories for assignments
+- **Units:** 4
+- **Final:** Cumulative take-home final; 24-hour window during the December 12-18 final-examination period (**exact window TBD**)
+
+# Course description
+
+POLI 210 is the first course in the Political Science graduate methods sequence. It introduces the logic and practice of quantitative analysis, moving from probability through statistical inference and ending with the foundations of simple linear regression. Throughout the course, we will connect statistical ideas to political science questions and learn to evaluate what a quantitative analysis does - and does not - show.
+
+The course also treats reproducibility as part of statistical reasoning. Students will use R to analyze data, Quarto to combine code and explanation, and Git and GitHub to keep a transparent record of their work. No prior experience with R, Git, or Quarto is assumed.
+
+# Learning outcomes
+
+By the end of the course, students should be able to:
+
+1. Use probability models, conditional probability, random variables, and simulation to reason about uncertainty.
+2. Explain sampling distributions and use them to construct and interpret standard errors, confidence intervals, and hypothesis tests.
+3. Fit and interpret a simple linear regression, assess its assumptions, and distinguish prediction, association, and causal interpretation.
+4. Import, transform, summarize, and visualize political data in R.
+5. Build a reproducible analysis in Quarto and manage it with a basic Git/GitHub workflow.
+6. Communicate quantitative results clearly and evaluate the evidence offered for a substantive or causal claim.
+
+These course outcomes contribute primarily to the Political Science graduate program's goals of understanding social-science methods, conducting original research, evaluating evidence, and communicating research effectively.
+
+# Course materials and computing
+
+## Required text
+
+Darrin Speegle and Bryan Clair, *Probability, Statistics, and Data: A Fresh Approach Using R*. The complete text is available free at [probstatsdata.com](https://probstatsdata.com). The online and printed first-edition content is the same.
+
+Assigned political science articles, data, and short supplementary readings will be posted on CatCourses or linked in the weekly materials.
+
+## Optional references
+
+- Will H. Moore and David A. Siegel, *A Mathematics Course for Political and Social Research*.
+- Kieran Healy, *Data Visualization: A Practical Introduction*, available at [socviz.co](https://socviz.co).
+- Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund, *R for Data Science (2e)*, available at [r4ds.hadley.nz](https://r4ds.hadley.nz).
+
+## Software and accounts
+
+Students need a laptop on which they can install software and the following free tools:
+
+- a current version of [R](https://cran.r-project.org);
+- [RStudio Desktop](https://posit.co/download/rstudio-desktop/), which includes Quarto;
+- [Git](https://git-scm.com/downloads); and
+- a [GitHub](https://github.com) account.
+
+New course materials and assignments will use Quarto (`.qmd`) rather than R Markdown. HTML is the default output for routine work. When a PDF is required, Quarto will render it with Typst. Students will **not** be required to install a LaTeX distribution. Setup instructions and a troubleshooting checklist are available on the course-materials site and in Assignment A1.
+
+# How the course works
+
+Each meeting will combine discussion of statistical ideas, worked examples, short coding demonstrations, and hands-on practice. Preparation before class matters: complete the assigned reading, bring a laptop, and arrive ready to work with the concepts and code.
+
+The course is cumulative. Probability supports inference; inference supports regression. When earlier material is unclear, ask questions early - in class, in office hours, or by email.
+
+## GitHub assignment workflow
+
+Each assignment will have a private repository created from a course template. The basic workflow is:
+
+1. clone the repository to your computer;
+2. complete the analysis and written responses in the provided Quarto file;
+3. render the document locally;
+4. commit and push your work to GitHub; and
+5. check the automated tests in GitHub Actions and revise as needed.
+
+The latest commit pushed before the deadline is the submitted version. Automated checks can verify reproducibility, required files, and many deterministic calculations; they cannot evaluate the quality of a statistical explanation or substantive argument. Passing all automated checks therefore does not guarantee full credit.
+
+Do not make an assignment repository public or post course solutions elsewhere. If using GitHub under a name different from the one in the university roster, tell the instructor privately.
+
+# Assessment
+
+| Component | Number | Weight each | Course weight |
+|---|---:|---:|---:|
+| Type A assignments | 7 | 4% | 28% |
+| Type B assignments | 5 | 11% | 55% |
+| Take-home final | 1 | 17% | 17% |
+| **Total** |  |  | **100%** |
+
+## Type A assignments
+
+Type A assignments develop a specific statistical or computing skill. They are shorter and more structured than Type B assignments and will make the greatest use of automated feedback. Some tests will be visible so that students can check and improve their work before the deadline. Written interpretation and code quality will still be reviewed by the instructor.
+
+Unless an assignment says otherwise, Type A work is individual.
+
+## Type B assignments
+
+Type B assignments ask students to combine statistical tools with substantive reasoning, usually using political or social data. Automated checks will focus on whether the project renders and whether core computations are reproducible; interpretation, argument, and presentation will be graded by the instructor.
+
+Students may discuss Type B assignments and work through problems in groups of two or three. Each student must write, code, and submit an individual solution in their own repository, identify collaborators, and be able to explain every part of the submission. Copying another person's code or prose is not collaboration.
+
+## Assignment deadlines and extensions
+
+Assignments are due at 1:30 p.m. on the dates listed below. Because solutions and feedback may be discussed soon after a deadline, late submissions are not ordinarily accepted. If illness, disability, caregiving, religious observance, or another serious circumstance affects your work, contact the instructor as early as reasonably possible so that an appropriate plan can be made. University-approved accommodations apply.
+
+## Take-home final
+
+The final is cumulative and will assess statistical reasoning, interpretation, and reproducible analysis. Students will receive a 24-hour window during the official December 12-18 final-examination period. The exact start and end times will be scheduled in consultation with the class near the end of the semester; permitted resources will be announced with the exam instructions.
+
+# Provisional assignment map
+
+The labels and due dates below are fixed for planning purposes; the political cases and datasets used in the Type B assignments are working choices and may be refined before each assignment is released.
+
+| Assignment | Working focus | Due |
+|---|---|---|
+| **A1** | Reproducible workflow: Git, GitHub, R, and Quarto; textbook Chapter 1 | Sep. 9 |
+| **A2** | Probability by calculation and simulation | Sep. 16 |
+| **B1** | Conditional probability and Bayes in a political application | Sep. 23 |
+| **A3** | Discrete random variables in R | Sep. 30 |
+| **B2** | Random variables and simulation in an applied setting | Oct. 7 |
+| **A4** | Sampling distributions and the central limit theorem | Oct. 14 |
+| **B3** | Sampling theory and the behavior of estimators | Oct. 21 |
+| **A5** | Data wrangling with `dplyr` | Oct. 28 |
+| **B4** | Political-data visualization and descriptive analysis | Nov. 4 |
+| **A6** | Standard errors and confidence intervals | Nov. 18 |
+| **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
+| **B5** | Simple regression with political data | Dec. 9 |
+
+{{< pagebreak >}}
+
+# Course schedule
+
+The schedule may be adjusted to match the pace of the class. Changes will be announced in class and on CatCourses. Chapter references are to Speegle and Clair, *Probability, Statistics, and Data* (PSD). The official semester dates are available in the [UC Merced 2026-27 Academic Calendar](https://registrar.ucmerced.edu/schedules/academic-calendar/academic-calendar-2026-2027).
+
+| Date | Topic and preparation | Assignment activity |
+|---|---|---|
+| **Aug. 26** | Course introduction; reproducible workflows; Git, GitHub, R, and Quarto. **PSD Ch. 1.** | Assign A1 |
+| **Sep. 2** | **No class  -  APSA week.** |  |
+| **Sep. 9** | Probability foundations and simulation. **PSD Ch. 2.** | A1 due; assign A2 |
+| **Sep. 16** | Conditional probability, independence, and Bayes' rule. **PSD Ch. 2.** | A2 due; assign B1 |
+| **Sep. 23** | Discrete random variables, expectation, and variance. **PSD Ch. 3.** | B1 due; assign A3 |
+| **Sep. 30** | Continuous random variables and the normal distribution. **PSD Ch. 4.** | A3 due; assign B2 |
+| **Oct. 7** | Simulation, the law of large numbers, and the central limit theorem. **PSD Ch. 5.** | B2 due; assign A4 |
+| **Oct. 14** | Sampling distributions and point estimation. **PSD Ch. 5.** | A4 due; assign B3 |
+| **Oct. 21** | Data structures, tidy data, and transformation. **PSD Ch. 6.** | B3 due; assign A5 |
+| **Oct. 28** | Visualization and descriptive statistics. **PSD Ch. 7.** | A5 due; assign B4 |
+| **Nov. 4** | Standard errors and confidence intervals. **PSD Ch. 8.** | B4 due; assign A6 |
+| **Nov. 11** | **No class  -  Veterans Day holiday.** |  |
+| **Nov. 18** | Hypothesis tests, two-sample comparisons, power, and resampling. **PSD Ch. 8.** | A6 due; assign A7 |
+| **Nov. 25** | **No class  -  Thanksgiving week/non-instructional day.** |  |
+| **Dec. 2** | Simple linear regression: fitting, interpretation, and inference. **PSD Ch. 11.** | A7 due; assign B5 |
+| **Dec. 9** | Regression diagnostics, prediction, causal interpretation, and course synthesis. **PSD Ch. 11.** | B5 due |
+| **Dec. 12-18** | Official final-examination period. | Take-home final: exact 24-hour window **TBD** |
+
+# Use of generative AI
+
+The aim of the assignments is to develop your own statistical judgment and fluency with the course tools. Unless an assignment explicitly states otherwise, generative AI may be used as a tutor to explain a concept or help diagnose an error message. It may not be used to generate or substantially rewrite code, prose, interpretations, or answers that you submit for credit.
+
+Any permitted AI use must be disclosed in the submitted Quarto document and accompanied by a complete transcript or share link showing the prompts and responses. You remain responsible for checking the accuracy of all work and for being able to explain it. Generative AI is not permitted on the take-home final unless the final's written instructions expressly allow it.
+
+# Academic integrity
+
+Academic integrity is essential to research and to this course. Submitted work must be your own except where collaboration is expressly allowed and acknowledged. Plagiarism, fabrication, unauthorized collaboration, sharing solutions, submitting another person's code or prose, and using unauthorized resources are violations. Suspected violations will be handled under the current [UC Merced Academic Honesty Policy](https://osrr.ucmerced.edu/sites/g/files/ufvvjh1371/f/documents/interim_ucm_student_handbook_revised_version_for_pacaos_100_updates_3-26-26.pdf).
+
+If you are uncertain whether a form of assistance or reuse is allowed, ask before submitting the work.
+
+# Accessibility and student support
+
+UC Merced is committed to equal access. Students who may need disability-related accommodations should contact [Student Accessibility Services](https://access.ucmerced.edu) and notify the instructor through the university's accommodation process. Please begin this process early when possible; you do not need to disclose a diagnosis to the instructor.
+
+Graduate study can be demanding. Students seeking mental-health support may contact [UC Merced Counseling and Psychological Services](https://counseling.ucmerced.edu). If a circumstance is affecting your ability to participate in the course, you are also encouraged to contact the instructor so that we can identify appropriate course and campus resources.
+
+# Communication and syllabus changes
+
+Course announcements will be posted on CatCourses, and updated shared materials will appear on the course-materials site. Email is the best way to contact the instructor about an individual matter. The instructor may revise readings, examples, or assignment details to improve alignment with the class's progress; material changes to deadlines or grading will be communicated clearly in advance and reflected in an updated syllabus.

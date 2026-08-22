@@ -1,0 +1,53 @@
+---
+title: "Assignments"
+subtitle: "Fall 2026"
+---
+
+## Private-repository workflow
+
+Every assignment is distributed through a private GitHub repository created
+for you. Accept the GitHub invitation, clone the repository through RStudio,
+and work inside that RStudio Project. Your ordinary cycle is:
+
+1. edit and save source files;
+2. run code and render the Quarto document;
+3. inspect the Git diff;
+4. commit a coherent change;
+5. push to GitHub; and
+6. inspect the latest GitHub Actions run.
+
+The latest commit pushed before the deadline is the submitted version. A green
+automated check verifies specified mechanical and computational requirements;
+it does not evaluate the quality of an explanation or substantive argument.
+
+See [GitHub and RStudio](setup/github-rstudio.qmd) for the complete first-time
+workflow.
+
+## Assignment calendar
+
+All assignments are due at **1:30 p.m.**
+
+| Assignment | Focus | Due |
+|---|---|---|
+| **A1** | Reproducible workflow: Git, GitHub, R, and Quarto; PSD Chapter 1 | Sep. 9 |
+| **A2** | Probability by calculation and simulation | Sep. 16 |
+| **B1** | Conditional probability and Bayes in a political application | Sep. 23 |
+| **A3** | Discrete random variables in R | Sep. 30 |
+| **B2** | Random variables and simulation in an applied setting | Oct. 7 |
+| **A4** | Sampling distributions and the central limit theorem | Oct. 14 |
+| **B3** | Sampling theory and the behavior of estimators | Oct. 21 |
+| **A5** | Data wrangling with `dplyr` | Oct. 28 |
+| **B4** | Political-data visualization and descriptive analysis | Nov. 4 |
+| **A6** | Standard errors and confidence intervals | Nov. 18 |
+| **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
+| **B5** | Simple regression with political data | Dec. 9 |
+
+## Getting your repository
+
+GitHub sends an invitation to the account whose username you provided to the
+instructor. Check both your email and [GitHub notifications](https://github.com/notifications).
+After accepting, the repository appears under the `POLI210-2026` organization.
+Do not make it public, transfer it, or add other collaborators.
+
+If an invitation or repository is missing, email the instructor with your
+GitHub username. Do not send a password or authentication token.

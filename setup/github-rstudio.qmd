@@ -1,0 +1,60 @@
+---
+title: "GitHub and RStudio workflow"
+---
+
+## Accept the invitation
+
+GitHub sends access to your private assignment repository by email and through
+[GitHub notifications](https://github.com/notifications). Accept the invitation
+before trying to clone. You need to do this once for each assignment.
+
+## Clone through RStudio
+
+1. Open the private repository on GitHub.
+2. Select **Code**, choose **HTTPS**, and copy the repository URL.
+3. In RStudio, choose **File → New Project → Version Control → Git**.
+4. Paste the URL into **Repository URL**.
+5. Choose your local `Documents/POLI210` folder as the parent directory.
+6. Select **Create Project**.
+
+Cloning is a one-time operation. It creates the working files and a hidden
+`.git` directory containing the repository history. Downloading a ZIP file does
+not create that history and is not a substitute for cloning.
+
+## The cycle you repeat
+
+```text
+edit → save → inspect diff → stage → commit → push → inspect Actions
+```
+
+- **Save** writes the current file on your computer.
+- **Diff** shows exactly what changed.
+- **Stage** selects changes for the next snapshot.
+- **Commit** records that snapshot locally with a message.
+- **Push** sends local commits to GitHub.
+- **Actions** repeats the assignment's checks on a clean remote computer.
+
+Use short, descriptive commit messages such as `Add my name`, `Complete vector
+exercises`, or `Render final report`. Do not use one enormous final commit.
+
+## Local checks
+
+Assignments may include a command such as:
+
+```bash
+Rscript checks/check-a1.R
+```
+
+Run it in RStudio's **Terminal**, not the R Console. Read the first failed check,
+make one focused repair, and rerun it. After pushing, repeat that process with
+the newest run in GitHub's **Actions** tab.
+
+## Authentication problems
+
+GitHub account passwords cannot be used as Git passwords. If cloning or pushing
+opens a browser, sign into the correct GitHub account and authorize the request.
+If the repository cannot be found, first confirm that you accepted its
+invitation and that RStudio is using the expected account.
+
+Never paste a password or token into a Quarto file, R script, commit, screenshot,
+or help request.

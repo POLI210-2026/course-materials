@@ -1,0 +1,26 @@
+---
+title: "Class meetings"
+subtitle: "Preparation and shared materials"
+---
+
+Read the listed textbook material before class. Meeting pages and shared files
+will be added as the semester progresses.
+
+| Meeting | Date | Topic and preparation |
+|---:|---|---|
+| **1** | Aug. 26 | [Reproducible workflows; Git, GitHub, R, and Quarto](01-reproducible-workflows/index.qmd). **PSD Ch. 1.** |
+|  -  | Sep. 2 | **No class  -  APSA week.** |
+| **2** | Sep. 9 | Probability foundations and simulation. **PSD Ch. 2.** |
+| **3** | Sep. 16 | Conditional probability, independence, and Bayes' rule. **PSD Ch. 2.** |
+| **4** | Sep. 23 | Discrete random variables, expectation, and variance. **PSD Ch. 3.** |
+| **5** | Sep. 30 | Continuous random variables and the normal distribution. **PSD Ch. 4.** |
+| **6** | Oct. 7 | Simulation, the law of large numbers, and the central limit theorem. **PSD Ch. 5.** |
+| **7** | Oct. 14 | Sampling distributions and point estimation. **PSD Ch. 5.** |
+| **8** | Oct. 21 | Data structures, tidy data, and transformation. **PSD Ch. 6.** |
+| **9** | Oct. 28 | Visualization and descriptive statistics. **PSD Ch. 7.** |
+| **10** | Nov. 4 | Standard errors and confidence intervals. **PSD Ch. 8.** |
+|  -  | Nov. 11 | **No class  -  Veterans Day.** |
+| **11** | Nov. 18 | Hypothesis tests, two-sample comparisons, power, and resampling. **PSD Ch. 8.** |
+|  -  | Nov. 25 | **No class  -  Thanksgiving week.** |
+| **12** | Dec. 2 | Simple linear regression: fitting, interpretation, and inference. **PSD Ch. 11.** |
+| **13** | Dec. 9 | Regression diagnostics, prediction, causal interpretation, and synthesis. **PSD Ch. 11.** |

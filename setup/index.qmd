@@ -1,0 +1,31 @@
+---
+title: "Computing setup"
+subtitle: "Complete before the first meeting if possible"
+---
+
+## Checklist
+
+- [ ] Install a current version of [R](https://cran.r-project.org).
+- [ ] Install [RStudio Desktop](https://posit.co/download/rstudio-desktop/).
+- [ ] Install [Git](https://git-scm.com/downloads).
+- [ ] Create a [GitHub](https://github.com) account.
+- [ ] Send your GitHub username to the instructor privately.
+- [ ] Create a normal local course folder outside Dropbox, iCloud Drive,
+      OneDrive, and network storage.
+- [ ] Accept your private A1 repository invitation when it arrives.
+
+You do **not** need to install LaTeX. RStudio includes Quarto, and assignments
+will normally render to HTML. When PDF output is required, Quarto will use
+Typst.
+
+## Guides
+
+- [Install and verify the software](software.qmd)
+- [Clone and work through RStudio](github-rstudio.qmd)
+- [Understand file paths](file-paths.qmd)
+
+::: {.callout-tip title="Ask early"}
+Bring installation or authentication problems to the first seminar or office
+hours. Include the exact error text and what you were trying to do; never send
+a password, personal access token, or other secret.
+:::

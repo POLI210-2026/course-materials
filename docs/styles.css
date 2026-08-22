@@ -1,0 +1,21 @@
+:root {
+  --poli-blue: #005a8b;
+  --poli-gold: #fdb515;
+}
+
+.navbar {
+  border-bottom: 3px solid var(--poli-gold);
+}
+
+.course-lead {
+  max-width: 54rem;
+  font-size: 1.12rem;
+}
+
+.quick-links .card {
+  height: 100%;
+}
+
+table {
+  font-size: 0.96rem;
+}

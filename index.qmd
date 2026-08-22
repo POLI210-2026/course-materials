@@ -1,0 +1,76 @@
+---
+title: "Quantitative Analysis of Political Data I"
+subtitle: "POLI 210 · Fall 2026"
+page-layout: full
+toc: false
+---
+
+::: {.course-lead}
+POLI 210 introduces probability, statistical inference, data analysis in R,
+and the foundations of simple linear regression. We treat reproducibility as
+part of statistical reasoning: shared work is written in Quarto, managed with
+Git, and checked through GitHub.
+:::
+
+::: {.callout-important title="First meeting"}
+**Wednesday, August 26, 1:30-4:20 p.m.**
+
+Classroom and Office Building 1, Room 205
+
+Before class, install R, RStudio Desktop, and Git; create a GitHub account; and
+skim [Chapter 1 of the course text](https://probstatsdata.com/RData.html). Bring
+your laptop. See the [setup checklist](setup/index.qmd).
+:::
+
+## Quick links
+
+::: {.grid .quick-links}
+::: {.g-col-12 .g-col-md-6}
+::: {.card}
+### [Syllabus](syllabus/index.qmd)
+
+Course policies, learning outcomes, grading, readings, and the complete Fall
+2026 schedule.
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card}
+### [Assignments](assignments.qmd)
+
+Due dates and the private-repository submission workflow.
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card}
+### [Meeting materials](meetings/index.qmd)
+
+Preparation, shared notes, code, and resources organized by class meeting.
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card}
+### [Computing setup](setup/index.qmd)
+
+Install the course tools, clone through RStudio, and understand file paths.
+:::
+:::
+:::
+
+## Course information
+
+- **Instructor:** Professor Brad LeVeck
+- **Email:** [bleveck@ucmerced.edu](mailto:bleveck@ucmerced.edu)
+- **Office:** COB2 314
+- **Office hours:** Tuesdays and Thursdays, 1:30-2:30 p.m.
+- **Meetings:** Wednesdays, 1:30-4:20 p.m., COB1 205
+- **Required text:** Speegle and Clair, [*Probability, Statistics, and Data*](https://probstatsdata.com)
+
+::: {.callout-note title="Where different materials live"}
+This site contains public shared materials. CatCourses is the official location
+for announcements, grades, and restricted readings. Each assignment is
+distributed through a private GitHub repository visible only to the student and
+the instructor.
+:::

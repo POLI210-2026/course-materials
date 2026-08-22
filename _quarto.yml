@@ -1,0 +1,47 @@
+project:
+  type: website
+  output-dir: docs
+  resources:
+    - .nojekyll
+    - syllabus/poli210-syllabus-fall-2026.pdf
+
+website:
+  title: "POLI 210"
+  site-url: https://poli210-2026.github.io/course-materials/
+  description: "Quantitative Analysis of Political Data I, Fall 2026"
+  search: true
+  repo-url: https://github.com/POLI210-2026/course-materials
+  repo-actions: [source]
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: syllabus/index.qmd
+        text: Syllabus
+      - href: assignments.qmd
+        text: Assignments
+      - href: meetings/index.qmd
+        text: Meetings
+      - href: setup/index.qmd
+        text: Setup
+    right:
+      - icon: github
+        href: https://github.com/POLI210-2026/course-materials
+        aria-label: GitHub repository
+  page-footer:
+    left: "POLI 210 · Fall 2026 · UC Merced"
+    right: "Built with Quarto"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    smooth-scroll: true
+    linkcolor: "#005A8B"
+
+execute:
+  freeze: auto
+  warning: false
+  message: false

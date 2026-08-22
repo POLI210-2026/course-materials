@@ -1,0 +1,51 @@
+---
+title: "File paths and project folders"
+---
+
+A **file path** tells the computer where a file or folder is located. An
+absolute path begins at the top of one computer's file system:
+
+```text
+macOS:   /Users/avery/Documents/POLI210/a1-s01/data/district_turnout.csv
+Windows: C:/Users/Avery/Documents/POLI210/a1-s01/data/district_turnout.csv
+```
+
+Those paths work only on Avery's computer. Course code should instead use a
+path relative to the project root - the folder containing the `.Rproj` file:
+
+```r
+read.csv("data/district_turnout.csv")
+```
+
+That path works on macOS, Windows, another student's computer, and GitHub
+Actions.
+
+## Symbols and separators
+
+- Use forward slashes `/` in R paths on both macOS and Windows.
+- A single period `.` means the current folder.
+- Two periods `..` mean the parent folder.
+- Put a path containing spaces inside quotation marks.
+- Match capitalization exactly: `Data/file.csv` and `data/file.csv` may be
+  different paths on GitHub's Linux runner.
+
+## Three diagnostic questions
+
+Run these in the R Console:
+
+```r
+getwd()                                  # Where is R starting?
+list.files()                             # What is in that folder?
+file.exists("data/district_turnout.csv") # Can R find this path?
+```
+
+If the answers are surprising, open the `.Rproj` file and repair the relative
+path. Do not solve a submitted path problem with `setwd()` or `file.choose()`;
+those depend on one computer or on interactive input.
+
+## Where to clone
+
+Use a clearly local parent folder, such as `Documents/POLI210`. On Windows,
+check whether `Documents` is actually inside OneDrive. On macOS, check whether
+Desktop and Documents are stored in iCloud Drive. Choose a nonsynchronized
+folder when necessary.

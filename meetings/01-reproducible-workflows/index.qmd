@@ -1,0 +1,91 @@
+---
+title: "Meeting 1: Reproducible workflows"
+subtitle: "August 26, 2026"
+---
+
+## Before class
+
+1. Complete the [computing setup checklist](../../setup/index.qmd).
+2. Create a GitHub account and send the instructor your username privately.
+3. Read [PSD Chapter 1: Data in R](https://probstatsdata.com/RData.html).
+4. Bring your laptop and GitHub sign-in information.
+
+Your private A1 repository invitation may arrive shortly before class. Accept
+it when it appears, but do not download the repository as a ZIP file.
+
+## Learning goals
+
+By the end of the meeting, you should be able to:
+
+1. find the Source, Console, Environment, Files, Terminal, and Git panes in
+   RStudio;
+2. run basic Chapter 1 R code and save it in a script;
+3. clone and open a private repository as an RStudio Project;
+4. distinguish saving, staging, committing, and pushing;
+5. render a Quarto document to HTML; and
+6. locate the first useful message in a failed local or GitHub check.
+
+The central principle is: **saved source files - not objects left in the current
+Environment - must be sufficient to reproduce the result.**
+
+## One reproducible loop
+
+```text
+private GitHub repository
+        | clone once
+        v
+local RStudio Project → edit → run → render → inspect
+        |                                  |
+        +──────── stage → commit ──────────+
+                             |
+                             +→ push → GitHub Actions
+```
+
+## RStudio and R
+
+We will use R for arithmetic, functions, vectors, indexing, missing values, and
+small data frames. Useful diagnostic commands include:
+
+```r
+getwd()
+list.files()
+file.exists("data/district_turnout.csv")
+```
+
+Restarting R clears the Environment. A saved script can rebuild objects after a
+restart; an unsaved Console history cannot serve as a reproducible analysis.
+
+## Git and GitHub demonstration
+
+The instructor will demonstrate this cycle in a disposable private repository:
+
+1. clone through **File → New Project → Version Control → Git**;
+2. open the `.Rproj` file;
+3. replace the name placeholders;
+4. save and inspect the diff;
+5. commit with `Add my name`;
+6. complete the first R section and make another commit;
+7. push to GitHub; and
+8. inspect the resulting failed Action.
+
+The failure is intentional: only the beginning of the assignment will be
+complete. The useful skill is finding what remains and distinguishing an
+unfinished answer from a software or file-path problem.
+
+## Terminal check
+
+From the root of an A1 repository, run:
+
+```bash
+Rscript checks/check-a1.R
+```
+
+This belongs in RStudio's Terminal. It does not belong in the R Console. Read
+the first failure, make one focused change, and run the check again.
+
+## After class
+
+- Continue A1 in your own private repository.
+- Make several meaningful commits rather than one final upload.
+- Render and inspect the HTML before submitting.
+- Push and confirm the newest GitHub Action before **September 9 at 1:30 p.m.**

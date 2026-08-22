@@ -1,0 +1,68 @@
+---
+title: "Install and verify the software"
+---
+
+Install the tools in this order: R, RStudio Desktop, Git, then your GitHub
+account. Restart RStudio after installing or updating Git.
+
+## R
+
+Download R from [CRAN](https://cran.r-project.org) and choose the installer for
+your operating system. After installation, open RStudio and run this in the
+Console:
+
+```r
+R.version.string
+```
+
+You should see an R version rather than an error.
+
+## RStudio Desktop and Quarto
+
+Install the free desktop version from [Posit](https://posit.co/download/rstudio-desktop/).
+RStudio includes Quarto, so no separate Quarto installation is normally
+required. In RStudio's Terminal, verify it with:
+
+```bash
+quarto --version
+```
+
+## Git
+
+Install Git from [git-scm.com](https://git-scm.com/downloads). In RStudio's
+Terminal, run:
+
+```bash
+git --version
+```
+
+Then record the name that should appear on your commits:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "YOUR_GITHUB_EMAIL"
+```
+
+Use an email recognized by your GitHub account or the private `noreply` address
+shown in GitHub's email settings. These commands configure authorship; they do
+not sign you into GitHub.
+
+## GitHub account
+
+Create an account at [github.com](https://github.com). Choose a professional
+username you are comfortable using for course work and send that username - not
+your password - to the instructor. Verify the account's email address so that
+repository invitations and workflow notifications arrive.
+
+## A local course folder
+
+Create a parent folder such as:
+
+```text
+macOS:   /Users/avery/Documents/POLI210
+Windows: C:/Users/Avery/Documents/POLI210
+```
+
+Avoid a folder managed by Dropbox, iCloud Drive, OneDrive, or a network drive.
+Cloud-sync software can lock, duplicate, or make files inside Git's hidden
+`.git` directory online-only.
