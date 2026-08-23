@@ -54,7 +54,8 @@ Preparation, shared notes, code, and resources organized by class meeting.
 ::: {.card}
 ### [Computing setup](setup/index.qmd)
 
-Install the course tools, clone through RStudio, and understand file paths.
+Install the course tools, learn the Git/GitHub workflow, clone through RStudio,
+and understand file paths.
 :::
 :::
 :::

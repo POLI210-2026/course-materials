@@ -21,6 +21,7 @@ Typst.
 ## Guides
 
 - [Install and verify the software](software.qmd)
+- [Git and GitHub field guide](git-github.qmd)
 - [Clone and work through RStudio](github-rstudio.qmd)
 - [Understand file paths](file-paths.qmd)
 

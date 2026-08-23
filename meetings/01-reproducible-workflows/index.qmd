@@ -86,6 +86,8 @@ the first failure, make one focused change, and run the check again.
 ## After class
 
 - Continue A1 in your own private repository.
+- Use the [Git and GitHub field guide](../../setup/git-github.qmd) when you need
+  the workflow, command reference, or troubleshooting steps.
 - Make several meaningful commits rather than one final upload.
 - Render and inspect the HTML before submitting.
 - Push and confirm the newest GitHub Action before **September 9 at 1:30 p.m.**

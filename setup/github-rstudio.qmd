@@ -2,6 +2,9 @@
 title: "GitHub and RStudio workflow"
 ---
 
+For definitions, essential commands, common problems, and an end-of-assignment
+checklist, keep the [Git and GitHub field guide](git-github.qmd) nearby.
+
 ## Accept the invitation
 
 GitHub sends access to your private assignment repository by email and through

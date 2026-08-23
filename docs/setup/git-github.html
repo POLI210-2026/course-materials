@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computing setup – POLI 210</title>
+<title>Git and GitHub field guide – POLI 210</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -110,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Meetings</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../setup/index.html" aria-current="page"> 
+    <a class="nav-link" href="../setup/index.html"> 
 <span class="menu-text">Setup</span></a>
   </li>  
 </ul>
@@ -136,18 +171,35 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist">Checklist</a></li>
-  <li><a href="#guides" id="toc-guides" class="nav-link" data-scroll-target="#guides">Guides</a></li>
+  <li><a href="#what-the-tools-are" id="toc-what-the-tools-are" class="nav-link active" data-scroll-target="#what-the-tools-are">What the tools are</a></li>
+  <li><a href="#vocabulary-for-the-homework-workflow" id="toc-vocabulary-for-the-homework-workflow" class="nav-link" data-scroll-target="#vocabulary-for-the-homework-workflow">Vocabulary for the homework workflow</a></li>
+  <li><a href="#the-course-workflow" id="toc-the-course-workflow" class="nav-link" data-scroll-target="#the-course-workflow">The course workflow</a>
+  <ul class="collapse">
+  <li><a href="#once-for-each-assignment" id="toc-once-for-each-assignment" class="nav-link" data-scroll-target="#once-for-each-assignment">Once for each assignment</a></li>
+  <li><a href="#during-every-work-session" id="toc-during-every-work-session" class="nav-link" data-scroll-target="#during-every-work-session">During every work session</a></li>
+  </ul></li>
+  <li><a href="#commands-you-will-actually-use" id="toc-commands-you-will-actually-use" class="nav-link" data-scroll-target="#commands-you-will-actually-use">Commands you will actually use</a></li>
+  <li><a href="#common-problems" id="toc-common-problems" class="nav-link" data-scroll-target="#common-problems">Common problems</a>
+  <ul class="collapse">
+  <li><a href="#my-change-is-not-in-the-git-pane" id="toc-my-change-is-not-in-the-git-pane" class="nav-link" data-scroll-target="#my-change-is-not-in-the-git-pane">My change is not in the Git pane</a></li>
+  <li><a href="#github-does-not-show-my-latest-work" id="toc-github-does-not-show-my-latest-work" class="nav-link" data-scroll-target="#github-does-not-show-my-latest-work">GitHub does not show my latest work</a></li>
+  <li><a href="#push-was-rejected-or-mentions-non-fast-forward" id="toc-push-was-rejected-or-mentions-non-fast-forward" class="nav-link" data-scroll-target="#push-was-rejected-or-mentions-non-fast-forward">Push was rejected or mentions <code>non-fast-forward</code></a></li>
+  <li><a href="#i-staged-the-wrong-file" id="toc-i-staged-the-wrong-file" class="nav-link" data-scroll-target="#i-staged-the-wrong-file">I staged the wrong file</a></li>
+  <li><a href="#the-newest-github-action-failed" id="toc-the-newest-github-action-failed" class="nav-link" data-scroll-target="#the-newest-github-action-failed">The newest GitHub Action failed</a></li>
+  </ul></li>
+  <li><a href="#safety-rules" id="toc-safety-rules" class="nav-link" data-scroll-target="#safety-rules">Safety rules</a></li>
+  <li><a href="#before-you-finish-an-assignment" id="toc-before-you-finish-an-assignment" class="nav-link" data-scroll-target="#before-you-finish-an-assignment">Before you finish an assignment</a></li>
+  <li><a href="#optional-deeper-references" id="toc-optional-deeper-references" class="nav-link" data-scroll-target="#optional-deeper-references">Optional deeper references</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/setup/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/setup/git-github.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Computing setup</h1>
-<p class="subtitle lead">Complete before the first meeting if possible</p>
+<h1 class="title">Git and GitHub field guide</h1>
+<p class="subtitle lead">The small set of ideas and commands used in POLI 210</p>
 </div>
 
 
@@ -164,40 +216,232 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="checklist" class="level2">
-<h2 class="anchored" data-anchor-id="checklist">Checklist</h2>
-<ul class="task-list">
-<li><label><input type="checkbox">Install a current version of <a href="https://cran.r-project.org">R</a>.</label></li>
-<li><label><input type="checkbox">Install <a href="https://posit.co/download/rstudio-desktop/">RStudio Desktop</a>.</label></li>
-<li><label><input type="checkbox">Install <a href="https://git-scm.com/downloads">Git</a>.</label></li>
-<li><label><input type="checkbox">Create a <a href="https://github.com">GitHub</a> account.</label></li>
-<li><label><input type="checkbox">Send your GitHub username to the instructor privately.</label></li>
-<li><label><input type="checkbox">Create a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.</label></li>
-<li><label><input type="checkbox">Accept your private A1 repository invitation when it arrives.</label></li>
-</ul>
-<p>You do <strong>not</strong> need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst.</p>
-</section>
-<section id="guides" class="level2">
-<h2 class="anchored" data-anchor-id="guides">Guides</h2>
-<ul>
-<li><a href="../setup/software.html">Install and verify the software</a></li>
-<li><a href="../setup/git-github.html">Git and GitHub field guide</a></li>
-<li><a href="../setup/github-rstudio.html">Clone and work through RStudio</a></li>
-<li><a href="../setup/file-paths.html">Understand file paths</a></li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="Ask early">
+<p>You do not need to master all of Git to succeed in this course. POLI 210 uses a simple workflow: each assignment begins in a private GitHub repository, you work on a local copy in RStudio, and you push a sequence of commits back to GitHub. This page is the course reference for that workflow.</p>
+<section id="what-the-tools-are" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-tools-are">What the tools are</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>Meaning in this course</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Git</strong></td>
+<td>Software on your computer that records changes to files as a history of snapshots.</td>
+</tr>
+<tr class="even">
+<td><strong>GitHub</strong></td>
+<td>A website that stores a remote copy of a Git repository and runs assignment checks.</td>
+</tr>
+<tr class="odd">
+<td><strong>Repository</strong></td>
+<td>A project folder together with its Git history. We often shorten this to <strong>repo</strong>.</td>
+</tr>
+<tr class="even">
+<td><strong>RStudio Project</strong></td>
+<td>The local working folder you open through its <code>.Rproj</code> file. RStudio’s Git pane gives you buttons for common Git operations.</td>
+</tr>
+<tr class="odd">
+<td><strong>GitHub Actions</strong></td>
+<td>The automated checks that run on GitHub after you push.</td>
+</tr>
+</tbody>
+</table>
+<p>Git and GitHub are related but not identical. Git works locally and can record commits without an internet connection. GitHub stores the remote repository; it only receives a local commit after you <strong>push</strong> it.</p>
+<pre class="text"><code>GitHub: private remote repository and Actions
+                  ^ push
+                  |                 clone once / pull updates
+                  |                           |
+Your computer: edit -&gt; save -&gt; stage -&gt; commit</code></pre>
+<div class="callout callout-style-default callout-important callout-titled" title="Save, commit, and push are different">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Ask early
+<span class="screen-reader-only">Important</span>Save, commit, and push are different
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Bring installation or authentication problems to the first seminar or office hours. Include the exact error text and what you were trying to do; never send a password, personal access token, or other secret.</p>
+<p><strong>Save</strong> updates a file on your computer. <strong>Commit</strong> records a selected set of saved changes in the local Git history. <strong>Push</strong> sends local commits to GitHub. A saved answer is not submitted until its commit has been pushed.</p>
 </div>
 </div>
+</section>
+<section id="vocabulary-for-the-homework-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="vocabulary-for-the-homework-workflow">Vocabulary for the homework workflow</h2>
+<ul>
+<li><strong>Clone:</strong> Make the initial local copy of a GitHub repository, including its history and connection back to GitHub. Clone once per assignment.</li>
+<li><strong>Diff:</strong> A line-by-line view of what changed since the last commit. Green lines were added; red lines were removed.</li>
+<li><strong>Stage:</strong> Select the saved changes that belong in the next commit. In RStudio, check a file in the Git pane to stage it.</li>
+<li><strong>Commit:</strong> Record the staged changes as a local snapshot with a short message explaining the work.</li>
+<li><strong>Push:</strong> Send local commits to the GitHub repository.</li>
+<li><strong>Pull:</strong> Bring remote commits into the local repository. In an individual assignment this is usually needed only if the instructor has updated the repository or you edited it from another computer.</li>
+<li><strong>Working tree:</strong> Git’s name for the files currently in your local project folder.</li>
+<li><strong><code>main</code>:</strong> The single branch used for POLI 210 assignments. You do not need to create other branches.</li>
+</ul>
+</section>
+<section id="the-course-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="the-course-workflow">The course workflow</h2>
+<section id="once-for-each-assignment" class="level3">
+<h3 class="anchored" data-anchor-id="once-for-each-assignment">Once for each assignment</h3>
+<ol type="1">
+<li>Accept the private repository invitation from GitHub.</li>
+<li>On GitHub, select <strong>Code</strong>, choose <strong>HTTPS</strong>, and copy the URL.</li>
+<li>In RStudio, choose <strong>File -&gt; New Project -&gt; Version Control -&gt; Git</strong>.</li>
+<li>Paste the URL and clone into your local <code>Documents/POLI210</code> folder.</li>
+<li>Open the project through its <code>.Rproj</code> file.</li>
+</ol>
+<p>See <a href="../setup/github-rstudio.html">GitHub and RStudio workflow</a> for the illustrated menu sequence and authentication advice. Do not download the assignment as a ZIP file; a ZIP does not include the Git history or the connection to GitHub.</p>
+</section>
+<section id="during-every-work-session" class="level3">
+<h3 class="anchored" data-anchor-id="during-every-work-session">During every work session</h3>
+<ol type="1">
+<li>Open the correct <code>.Rproj</code> file and confirm the project name in RStudio.</li>
+<li>Run <code>git status</code> in the Terminal. If the working tree is clean and you need an instructor update, run <code>git pull --ff-only</code>.</li>
+<li>Edit and save a small, meaningful part of the assignment.</li>
+<li>Render the Quarto document and run the assignment’s local check.</li>
+<li>Inspect each changed file’s diff in the Git pane.</li>
+<li>Stage the files that belong together.</li>
+<li>Commit with a descriptive message such as <code>Complete Part 2</code>.</li>
+<li>Push, then inspect the newest run under GitHub’s <strong>Actions</strong> tab.</li>
+</ol>
+<p>Repeat the edit-to-push cycle several times. Small commits are easier to understand and recover than one enormous final commit.</p>
+</section>
+</section>
+<section id="commands-you-will-actually-use" class="level2">
+<h2 class="anchored" data-anchor-id="commands-you-will-actually-use">Commands you will actually use</h2>
+<p>Run these in RStudio’s <strong>Terminal</strong>, from the assignment’s project folder. They are Git commands, not R code, so do not enter them in the R Console. The commands are the same on macOS and Windows; only the terminal prompt and the way a full <a href="../setup/file-paths.html">file path</a> is written may look different.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What it tells Git to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>git status</code></td>
+<td>Summarize the current branch, saved changes, staged changes, and commits not yet pushed. This is the best first diagnostic command.</td>
+</tr>
+<tr class="even">
+<td><code>git diff</code></td>
+<td>Show saved changes that have not been staged. RStudio’s <strong>Diff</strong> button shows the same basic information.</td>
+</tr>
+<tr class="odd">
+<td><code>git diff --staged</code></td>
+<td>Show exactly what the next commit will contain.</td>
+</tr>
+<tr class="even">
+<td><code>git add a1-reproducible-workflow.qmd</code></td>
+<td>Stage one file. For later assignments, substitute the actual filename. Checking a file in RStudio’s Git pane does this too.</td>
+</tr>
+<tr class="odd">
+<td><code>git commit -m "Complete Part 2"</code></td>
+<td>Record the staged changes locally with a message. RStudio’s <strong>Commit</strong> window does the same thing.</td>
+</tr>
+<tr class="even">
+<td><code>git push</code></td>
+<td>Send local commits to GitHub.</td>
+</tr>
+<tr class="odd">
+<td><code>git pull --ff-only</code></td>
+<td>Bring down remote commits, but stop instead of creating an unexpected merge commit.</td>
+</tr>
+<tr class="even">
+<td><code>git log --oneline -5</code></td>
+<td>Show the five most recent local commits.</td>
+</tr>
+<tr class="odd">
+<td><code>git remote -v</code></td>
+<td>Show which GitHub repository the local project is connected to.</td>
+</tr>
+</tbody>
+</table>
+<p>You may also see the command-line form <code>git clone REPOSITORY-URL</code>. In this course, use RStudio’s new-project menu to clone so that it creates and opens the RStudio Project correctly.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Read git status literally">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Read git status literally
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>Changes not staged for commit</code> means Git sees saved changes that are not yet selected for a commit.</li>
+<li><code>Changes to be committed</code> means files are staged for the next commit.</li>
+<li><code>Your branch is ahead of 'origin/main'</code> means you have local commits to push.</li>
+<li><code>nothing to commit, working tree clean</code> means Git sees no uncommitted saved changes.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="common-problems" class="level2">
+<h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
+<section id="my-change-is-not-in-the-git-pane" class="level3">
+<h3 class="anchored" data-anchor-id="my-change-is-not-in-the-git-pane">My change is not in the Git pane</h3>
+<p>Save the file, then run <code>git status</code>. Also confirm that you opened the correct <code>.Rproj</code> file and edited the copy inside that project. See the <a href="../setup/file-paths.html">file-path guide</a> if you may have two copies of the assignment.</p>
+</section>
+<section id="github-does-not-show-my-latest-work" class="level3">
+<h3 class="anchored" data-anchor-id="github-does-not-show-my-latest-work">GitHub does not show my latest work</h3>
+<p>A save or local commit does not update GitHub. Run <code>git status</code>, commit any intended changes, and push. On GitHub, confirm that the newest commit message matches the one you just made.</p>
+</section>
+<section id="push-was-rejected-or-mentions-non-fast-forward" class="level3">
+<h3 class="anchored" data-anchor-id="push-was-rejected-or-mentions-non-fast-forward">Push was rejected or mentions <code>non-fast-forward</code></h3>
+<p>Do <strong>not</strong> force-push. First run <code>git status</code>. If the working tree is clean, run <code>git pull --ff-only</code> and read the result. If Git refuses or reports a conflict, stop and send the instructor the exact message before trying more commands.</p>
+</section>
+<section id="i-staged-the-wrong-file" class="level3">
+<h3 class="anchored" data-anchor-id="i-staged-the-wrong-file">I staged the wrong file</h3>
+<p>Uncheck it in RStudio’s Git pane, or run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore <span class="at">--staged</span> FILENAME</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This removes the file from the staging area without deleting your saved edits.</p>
+</section>
+<section id="the-newest-github-action-failed" class="level3">
+<h3 class="anchored" data-anchor-id="the-newest-github-action-failed">The newest GitHub Action failed</h3>
+<p>Open the newest run, expand the failed step, and read the first useful error. Confirm that the run used your newest commit. An Action failure does not erase your work; it means the remote check found something to repair.</p>
+</section>
+</section>
+<section id="safety-rules" class="level2">
+<h2 class="anchored" data-anchor-id="safety-rules">Safety rules</h2>
+<ul>
+<li>Work in the RStudio Project copy, not in a downloaded ZIP or a second copy.</li>
+<li>Do not edit the same assignment alternately in RStudio and GitHub’s web editor; that creates two changing copies that must be reconciled.</li>
+<li>Do not run <code>git init</code> inside a cloned assignment.</li>
+<li>Do not use <code>git push --force</code>, <code>git reset --hard</code>, or delete the hidden <code>.git</code> folder. Ask for help before using a command that discards or rewrites work.</li>
+<li>Never commit passwords, access tokens, or other secrets.</li>
+<li>Before following a Git command from a web search or AI tool, make sure you understand what it changes. When uncertain, show the proposed command and current <code>git status</code> to the instructor first.</li>
+</ul>
+</section>
+<section id="before-you-finish-an-assignment" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-finish-an-assignment">Before you finish an assignment</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">The Quarto document renders successfully.</label></li>
+<li><label><input type="checkbox">The local assignment check completes as expected.</label></li>
+<li><label><input type="checkbox">The diff contains your intended work and no secrets or accidental files.</label></li>
+<li><label><input type="checkbox">Your commits have descriptive messages.</label></li>
+<li><label><input type="checkbox"><code>git status</code> says the working tree is clean and the branch is up to date with <code>origin/main</code>.</label></li>
+<li><label><input type="checkbox">GitHub shows your newest commit and its newest Action run.</label></li>
+</ul>
+</section>
+<section id="optional-deeper-references" class="level2">
+<h2 class="anchored" data-anchor-id="optional-deeper-references">Optional deeper references</h2>
+<p>The material above is sufficient for the normal POLI 210 workflow. If you want more detail:</p>
+<ul>
+<li>GitHub’s <a href="https://docs.github.com/en/get-started/using-git/about-git">About Git</a> explains version control, repositories, and how GitHub relates to Git.</li>
+<li>GitHub’s <a href="https://docs.github.com/en/get-started/using-git/getting-changes-from-a-remote-repository">Getting changes from a remote repository</a> explains clone, fetch, and pull.</li>
+<li><a href="https://happygitwithr.com">Happy Git and GitHub for the useR</a> is the broader R-oriented tutorial previously used in this course. Its <a href="https://happygitwithr.com/git-commands">Git commands chapter</a> is a useful extended reference, but most of the book goes beyond what you need for A1.</li>
+</ul>
 
 
 </section>
@@ -611,7 +855,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/setup/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/setup/git-github.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Built with Quarto</p>
 </div>

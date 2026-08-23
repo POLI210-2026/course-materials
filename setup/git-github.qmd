@@ -1,0 +1,190 @@
+---
+title: "Git and GitHub field guide"
+subtitle: "The small set of ideas and commands used in POLI 210"
+---
+
+You do not need to master all of Git to succeed in this course. POLI 210 uses a
+simple workflow: each assignment begins in a private GitHub repository, you
+work on a local copy in RStudio, and you push a sequence of commits back to
+GitHub. This page is the course reference for that workflow.
+
+## What the tools are
+
+| Term | Meaning in this course |
+|---|---|
+| **Git** | Software on your computer that records changes to files as a history of snapshots. |
+| **GitHub** | A website that stores a remote copy of a Git repository and runs assignment checks. |
+| **Repository** | A project folder together with its Git history. We often shorten this to **repo**. |
+| **RStudio Project** | The local working folder you open through its `.Rproj` file. RStudio's Git pane gives you buttons for common Git operations. |
+| **GitHub Actions** | The automated checks that run on GitHub after you push. |
+
+Git and GitHub are related but not identical. Git works locally and can record
+commits without an internet connection. GitHub stores the remote repository;
+it only receives a local commit after you **push** it.
+
+```text
+GitHub: private remote repository and Actions
+                  ^ push
+                  |                 clone once / pull updates
+                  |                           |
+Your computer: edit -> save -> stage -> commit
+```
+
+::: {.callout-important title="Save, commit, and push are different"}
+**Save** updates a file on your computer. **Commit** records a selected set of
+saved changes in the local Git history. **Push** sends local commits to GitHub.
+A saved answer is not submitted until its commit has been pushed.
+:::
+
+## Vocabulary for the homework workflow
+
+- **Clone:** Make the initial local copy of a GitHub repository, including its
+  history and connection back to GitHub. Clone once per assignment.
+- **Diff:** A line-by-line view of what changed since the last commit. Green
+  lines were added; red lines were removed.
+- **Stage:** Select the saved changes that belong in the next commit. In
+  RStudio, check a file in the Git pane to stage it.
+- **Commit:** Record the staged changes as a local snapshot with a short
+  message explaining the work.
+- **Push:** Send local commits to the GitHub repository.
+- **Pull:** Bring remote commits into the local repository. In an individual
+  assignment this is usually needed only if the instructor has updated the
+  repository or you edited it from another computer.
+- **Working tree:** Git's name for the files currently in your local project
+  folder.
+- **`main`:** The single branch used for POLI 210 assignments. You do not need
+  to create other branches.
+
+## The course workflow
+
+### Once for each assignment
+
+1. Accept the private repository invitation from GitHub.
+2. On GitHub, select **Code**, choose **HTTPS**, and copy the URL.
+3. In RStudio, choose **File -> New Project -> Version Control -> Git**.
+4. Paste the URL and clone into your local `Documents/POLI210` folder.
+5. Open the project through its `.Rproj` file.
+
+See [GitHub and RStudio workflow](github-rstudio.qmd) for the illustrated menu
+sequence and authentication advice. Do not download the assignment as a ZIP
+file; a ZIP does not include the Git history or the connection to GitHub.
+
+### During every work session
+
+1. Open the correct `.Rproj` file and confirm the project name in RStudio.
+2. Run `git status` in the Terminal. If the working tree is clean and you need
+   an instructor update, run `git pull --ff-only`.
+3. Edit and save a small, meaningful part of the assignment.
+4. Render the Quarto document and run the assignment's local check.
+5. Inspect each changed file's diff in the Git pane.
+6. Stage the files that belong together.
+7. Commit with a descriptive message such as `Complete Part 2`.
+8. Push, then inspect the newest run under GitHub's **Actions** tab.
+
+Repeat the edit-to-push cycle several times. Small commits are easier to
+understand and recover than one enormous final commit.
+
+## Commands you will actually use
+
+Run these in RStudio's **Terminal**, from the assignment's project folder. They
+are Git commands, not R code, so do not enter them in the R Console.
+The commands are the same on macOS and Windows; only the terminal prompt and
+the way a full [file path](file-paths.qmd) is written may look different.
+
+| Command | What it tells Git to do |
+|---|---|
+| `git status` | Summarize the current branch, saved changes, staged changes, and commits not yet pushed. This is the best first diagnostic command. |
+| `git diff` | Show saved changes that have not been staged. RStudio's **Diff** button shows the same basic information. |
+| `git diff --staged` | Show exactly what the next commit will contain. |
+| `git add a1-reproducible-workflow.qmd` | Stage one file. For later assignments, substitute the actual filename. Checking a file in RStudio's Git pane does this too. |
+| `git commit -m "Complete Part 2"` | Record the staged changes locally with a message. RStudio's **Commit** window does the same thing. |
+| `git push` | Send local commits to GitHub. |
+| `git pull --ff-only` | Bring down remote commits, but stop instead of creating an unexpected merge commit. |
+| `git log --oneline -5` | Show the five most recent local commits. |
+| `git remote -v` | Show which GitHub repository the local project is connected to. |
+
+You may also see the command-line form `git clone REPOSITORY-URL`. In this
+course, use RStudio's new-project menu to clone so that it creates and opens the
+RStudio Project correctly.
+
+::: {.callout-tip title="Read git status literally"}
+- `Changes not staged for commit` means Git sees saved changes that are not yet
+  selected for a commit.
+- `Changes to be committed` means files are staged for the next commit.
+- `Your branch is ahead of 'origin/main'` means you have local commits to push.
+- `nothing to commit, working tree clean` means Git sees no uncommitted saved
+  changes.
+:::
+
+## Common problems
+
+### My change is not in the Git pane
+
+Save the file, then run `git status`. Also confirm that you opened the correct
+`.Rproj` file and edited the copy inside that project. See the
+[file-path guide](file-paths.qmd) if you may have two copies of the assignment.
+
+### GitHub does not show my latest work
+
+A save or local commit does not update GitHub. Run `git status`, commit any
+intended changes, and push. On GitHub, confirm that the newest commit message
+matches the one you just made.
+
+### Push was rejected or mentions `non-fast-forward`
+
+Do **not** force-push. First run `git status`. If the working tree is clean, run
+`git pull --ff-only` and read the result. If Git refuses or reports a conflict,
+stop and send the instructor the exact message before trying more commands.
+
+### I staged the wrong file
+
+Uncheck it in RStudio's Git pane, or run:
+
+```bash
+git restore --staged FILENAME
+```
+
+This removes the file from the staging area without deleting your saved edits.
+
+### The newest GitHub Action failed
+
+Open the newest run, expand the failed step, and read the first useful error.
+Confirm that the run used your newest commit. An Action failure does not erase
+your work; it means the remote check found something to repair.
+
+## Safety rules
+
+- Work in the RStudio Project copy, not in a downloaded ZIP or a second copy.
+- Do not edit the same assignment alternately in RStudio and GitHub's web
+  editor; that creates two changing copies that must be reconciled.
+- Do not run `git init` inside a cloned assignment.
+- Do not use `git push --force`, `git reset --hard`, or delete the hidden `.git`
+  folder. Ask for help before using a command that discards or rewrites work.
+- Never commit passwords, access tokens, or other secrets.
+- Before following a Git command from a web search or AI tool, make sure you
+  understand what it changes. When uncertain, show the proposed command and
+  current `git status` to the instructor first.
+
+## Before you finish an assignment
+
+- [ ] The Quarto document renders successfully.
+- [ ] The local assignment check completes as expected.
+- [ ] The diff contains your intended work and no secrets or accidental files.
+- [ ] Your commits have descriptive messages.
+- [ ] `git status` says the working tree is clean and the branch is up to date
+      with `origin/main`.
+- [ ] GitHub shows your newest commit and its newest Action run.
+
+## Optional deeper references
+
+The material above is sufficient for the normal POLI 210 workflow. If you want
+more detail:
+
+- GitHub's [About Git](https://docs.github.com/en/get-started/using-git/about-git)
+  explains version control, repositories, and how GitHub relates to Git.
+- GitHub's [Getting changes from a remote repository](https://docs.github.com/en/get-started/using-git/getting-changes-from-a-remote-repository)
+  explains clone, fetch, and pull.
+- [Happy Git and GitHub for the useR](https://happygitwithr.com) is the broader
+  R-oriented tutorial previously used in this course. Its
+  [Git commands chapter](https://happygitwithr.com/git-commands) is a useful
+  extended reference, but most of the book goes beyond what you need for A1.

@@ -98,25 +98,109 @@
     "text": "Where to clone\nUse a clearly local parent folder, such as Documents/POLI210. On Windows, check whether Documents is actually inside OneDrive. On macOS, check whether Desktop and Documents are stored in iCloud Drive. Choose a nonsynchronized folder when necessary."
   },
   {
-    "objectID": "setup/index.html",
-    "href": "setup/index.html",
-    "title": "Computing setup",
+    "objectID": "setup/git-github.html",
+    "href": "setup/git-github.html",
+    "title": "Git and GitHub field guide",
     "section": "",
-    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
+    "text": "You do not need to master all of Git to succeed in this course. POLI 210 uses a simple workflow: each assignment begins in a private GitHub repository, you work on a local copy in RStudio, and you push a sequence of commits back to GitHub. This page is the course reference for that workflow."
   },
   {
-    "objectID": "setup/index.html#checklist",
-    "href": "setup/index.html#checklist",
-    "title": "Computing setup",
-    "section": "",
-    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
+    "objectID": "setup/git-github.html#what-the-tools-are",
+    "href": "setup/git-github.html#what-the-tools-are",
+    "title": "Git and GitHub field guide",
+    "section": "What the tools are",
+    "text": "What the tools are\n\n\n\n\n\n\n\nTerm\nMeaning in this course\n\n\n\n\nGit\nSoftware on your computer that records changes to files as a history of snapshots.\n\n\nGitHub\nA website that stores a remote copy of a Git repository and runs assignment checks.\n\n\nRepository\nA project folder together with its Git history. We often shorten this to repo.\n\n\nRStudio Project\nThe local working folder you open through its .Rproj file. RStudio’s Git pane gives you buttons for common Git operations.\n\n\nGitHub Actions\nThe automated checks that run on GitHub after you push.\n\n\n\nGit and GitHub are related but not identical. Git works locally and can record commits without an internet connection. GitHub stores the remote repository; it only receives a local commit after you push it.\nGitHub: private remote repository and Actions\n                  ^ push\n                  |                 clone once / pull updates\n                  |                           |\nYour computer: edit -&gt; save -&gt; stage -&gt; commit\n\n\n\n\n\n\nImportantSave, commit, and push are different\n\n\n\nSave updates a file on your computer. Commit records a selected set of saved changes in the local Git history. Push sends local commits to GitHub. A saved answer is not submitted until its commit has been pushed."
   },
   {
-    "objectID": "setup/index.html#guides",
-    "href": "setup/index.html#guides",
-    "title": "Computing setup",
-    "section": "Guides",
-    "text": "Guides\n\nInstall and verify the software\nClone and work through RStudio\nUnderstand file paths\n\n\n\n\n\n\n\nTipAsk early\n\n\n\nBring installation or authentication problems to the first seminar or office hours. Include the exact error text and what you were trying to do; never send a password, personal access token, or other secret."
+    "objectID": "setup/git-github.html#vocabulary-for-the-homework-workflow",
+    "href": "setup/git-github.html#vocabulary-for-the-homework-workflow",
+    "title": "Git and GitHub field guide",
+    "section": "Vocabulary for the homework workflow",
+    "text": "Vocabulary for the homework workflow\n\nClone: Make the initial local copy of a GitHub repository, including its history and connection back to GitHub. Clone once per assignment.\nDiff: A line-by-line view of what changed since the last commit. Green lines were added; red lines were removed.\nStage: Select the saved changes that belong in the next commit. In RStudio, check a file in the Git pane to stage it.\nCommit: Record the staged changes as a local snapshot with a short message explaining the work.\nPush: Send local commits to the GitHub repository.\nPull: Bring remote commits into the local repository. In an individual assignment this is usually needed only if the instructor has updated the repository or you edited it from another computer.\nWorking tree: Git’s name for the files currently in your local project folder.\nmain: The single branch used for POLI 210 assignments. You do not need to create other branches."
+  },
+  {
+    "objectID": "setup/git-github.html#the-course-workflow",
+    "href": "setup/git-github.html#the-course-workflow",
+    "title": "Git and GitHub field guide",
+    "section": "The course workflow",
+    "text": "The course workflow\n\nOnce for each assignment\n\nAccept the private repository invitation from GitHub.\nOn GitHub, select Code, choose HTTPS, and copy the URL.\nIn RStudio, choose File -&gt; New Project -&gt; Version Control -&gt; Git.\nPaste the URL and clone into your local Documents/POLI210 folder.\nOpen the project through its .Rproj file.\n\nSee GitHub and RStudio workflow for the illustrated menu sequence and authentication advice. Do not download the assignment as a ZIP file; a ZIP does not include the Git history or the connection to GitHub.\n\n\nDuring every work session\n\nOpen the correct .Rproj file and confirm the project name in RStudio.\nRun git status in the Terminal. If the working tree is clean and you need an instructor update, run git pull --ff-only.\nEdit and save a small, meaningful part of the assignment.\nRender the Quarto document and run the assignment’s local check.\nInspect each changed file’s diff in the Git pane.\nStage the files that belong together.\nCommit with a descriptive message such as Complete Part 2.\nPush, then inspect the newest run under GitHub’s Actions tab.\n\nRepeat the edit-to-push cycle several times. Small commits are easier to understand and recover than one enormous final commit."
+  },
+  {
+    "objectID": "setup/git-github.html#commands-you-will-actually-use",
+    "href": "setup/git-github.html#commands-you-will-actually-use",
+    "title": "Git and GitHub field guide",
+    "section": "Commands you will actually use",
+    "text": "Commands you will actually use\nRun these in RStudio’s Terminal, from the assignment’s project folder. They are Git commands, not R code, so do not enter them in the R Console. The commands are the same on macOS and Windows; only the terminal prompt and the way a full file path is written may look different.\n\n\n\n\n\n\n\nCommand\nWhat it tells Git to do\n\n\n\n\ngit status\nSummarize the current branch, saved changes, staged changes, and commits not yet pushed. This is the best first diagnostic command.\n\n\ngit diff\nShow saved changes that have not been staged. RStudio’s Diff button shows the same basic information.\n\n\ngit diff --staged\nShow exactly what the next commit will contain.\n\n\ngit add a1-reproducible-workflow.qmd\nStage one file. For later assignments, substitute the actual filename. Checking a file in RStudio’s Git pane does this too.\n\n\ngit commit -m \"Complete Part 2\"\nRecord the staged changes locally with a message. RStudio’s Commit window does the same thing.\n\n\ngit push\nSend local commits to GitHub.\n\n\ngit pull --ff-only\nBring down remote commits, but stop instead of creating an unexpected merge commit.\n\n\ngit log --oneline -5\nShow the five most recent local commits.\n\n\ngit remote -v\nShow which GitHub repository the local project is connected to.\n\n\n\nYou may also see the command-line form git clone REPOSITORY-URL. In this course, use RStudio’s new-project menu to clone so that it creates and opens the RStudio Project correctly.\n\n\n\n\n\n\nTipRead git status literally\n\n\n\n\nChanges not staged for commit means Git sees saved changes that are not yet selected for a commit.\nChanges to be committed means files are staged for the next commit.\nYour branch is ahead of 'origin/main' means you have local commits to push.\nnothing to commit, working tree clean means Git sees no uncommitted saved changes."
+  },
+  {
+    "objectID": "setup/git-github.html#common-problems",
+    "href": "setup/git-github.html#common-problems",
+    "title": "Git and GitHub field guide",
+    "section": "Common problems",
+    "text": "Common problems\n\nMy change is not in the Git pane\nSave the file, then run git status. Also confirm that you opened the correct .Rproj file and edited the copy inside that project. See the file-path guide if you may have two copies of the assignment.\n\n\nGitHub does not show my latest work\nA save or local commit does not update GitHub. Run git status, commit any intended changes, and push. On GitHub, confirm that the newest commit message matches the one you just made.\n\n\nPush was rejected or mentions non-fast-forward\nDo not force-push. First run git status. If the working tree is clean, run git pull --ff-only and read the result. If Git refuses or reports a conflict, stop and send the instructor the exact message before trying more commands.\n\n\nI staged the wrong file\nUncheck it in RStudio’s Git pane, or run:\ngit restore --staged FILENAME\nThis removes the file from the staging area without deleting your saved edits.\n\n\nThe newest GitHub Action failed\nOpen the newest run, expand the failed step, and read the first useful error. Confirm that the run used your newest commit. An Action failure does not erase your work; it means the remote check found something to repair."
+  },
+  {
+    "objectID": "setup/git-github.html#safety-rules",
+    "href": "setup/git-github.html#safety-rules",
+    "title": "Git and GitHub field guide",
+    "section": "Safety rules",
+    "text": "Safety rules\n\nWork in the RStudio Project copy, not in a downloaded ZIP or a second copy.\nDo not edit the same assignment alternately in RStudio and GitHub’s web editor; that creates two changing copies that must be reconciled.\nDo not run git init inside a cloned assignment.\nDo not use git push --force, git reset --hard, or delete the hidden .git folder. Ask for help before using a command that discards or rewrites work.\nNever commit passwords, access tokens, or other secrets.\nBefore following a Git command from a web search or AI tool, make sure you understand what it changes. When uncertain, show the proposed command and current git status to the instructor first."
+  },
+  {
+    "objectID": "setup/git-github.html#before-you-finish-an-assignment",
+    "href": "setup/git-github.html#before-you-finish-an-assignment",
+    "title": "Git and GitHub field guide",
+    "section": "Before you finish an assignment",
+    "text": "Before you finish an assignment\n\nThe Quarto document renders successfully.\nThe local assignment check completes as expected.\nThe diff contains your intended work and no secrets or accidental files.\nYour commits have descriptive messages.\ngit status says the working tree is clean and the branch is up to date with origin/main.\nGitHub shows your newest commit and its newest Action run."
+  },
+  {
+    "objectID": "setup/git-github.html#optional-deeper-references",
+    "href": "setup/git-github.html#optional-deeper-references",
+    "title": "Git and GitHub field guide",
+    "section": "Optional deeper references",
+    "text": "Optional deeper references\nThe material above is sufficient for the normal POLI 210 workflow. If you want more detail:\n\nGitHub’s About Git explains version control, repositories, and how GitHub relates to Git.\nGitHub’s Getting changes from a remote repository explains clone, fetch, and pull.\nHappy Git and GitHub for the useR is the broader R-oriented tutorial previously used in this course. Its Git commands chapter is a useful extended reference, but most of the book goes beyond what you need for A1."
+  },
+  {
+    "objectID": "setup/github-rstudio.html",
+    "href": "setup/github-rstudio.html",
+    "title": "GitHub and RStudio workflow",
+    "section": "",
+    "text": "For definitions, essential commands, common problems, and an end-of-assignment checklist, keep the Git and GitHub field guide nearby."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#accept-the-invitation",
+    "href": "setup/github-rstudio.html#accept-the-invitation",
+    "title": "GitHub and RStudio workflow",
+    "section": "Accept the invitation",
+    "text": "Accept the invitation\nGitHub sends access to your private assignment repository by email and through GitHub notifications. Accept the invitation before trying to clone. You need to do this once for each assignment."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#clone-through-rstudio",
+    "href": "setup/github-rstudio.html#clone-through-rstudio",
+    "title": "GitHub and RStudio workflow",
+    "section": "Clone through RStudio",
+    "text": "Clone through RStudio\n\nOpen the private repository on GitHub.\nSelect Code, choose HTTPS, and copy the repository URL.\nIn RStudio, choose File → New Project → Version Control → Git.\nPaste the URL into Repository URL.\nChoose your local Documents/POLI210 folder as the parent directory.\nSelect Create Project.\n\nCloning is a one-time operation. It creates the working files and a hidden .git directory containing the repository history. Downloading a ZIP file does not create that history and is not a substitute for cloning."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#the-cycle-you-repeat",
+    "href": "setup/github-rstudio.html#the-cycle-you-repeat",
+    "title": "GitHub and RStudio workflow",
+    "section": "The cycle you repeat",
+    "text": "The cycle you repeat\nedit → save → inspect diff → stage → commit → push → inspect Actions\n\nSave writes the current file on your computer.\nDiff shows exactly what changed.\nStage selects changes for the next snapshot.\nCommit records that snapshot locally with a message.\nPush sends local commits to GitHub.\nActions repeats the assignment’s checks on a clean remote computer.\n\nUse short, descriptive commit messages such as Add my name, Complete vector exercises, or Render final report. Do not use one enormous final commit."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#local-checks",
+    "href": "setup/github-rstudio.html#local-checks",
+    "title": "GitHub and RStudio workflow",
+    "section": "Local checks",
+    "text": "Local checks\nAssignments may include a command such as:\nRscript checks/check-a1.R\nRun it in RStudio’s Terminal, not the R Console. Read the first failed check, make one focused repair, and rerun it. After pushing, repeat that process with the newest run in GitHub’s Actions tab."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#authentication-problems",
+    "href": "setup/github-rstudio.html#authentication-problems",
+    "title": "GitHub and RStudio workflow",
+    "section": "Authentication problems",
+    "text": "Authentication problems\nGitHub account passwords cannot be used as Git passwords. If cloning or pushing opens a browser, sign into the correct GitHub account and authorize the request. If the repository cannot be found, first confirm that you accepted its invitation and that RStudio is using the expected account.\nNever paste a password or token into a Quarto file, R script, commit, screenshot, or help request."
   },
   {
     "objectID": "assignments.html",
@@ -147,46 +231,25 @@
     "text": "Getting your repository\nGitHub sends an invitation to the account whose username you provided to the instructor. Check both your email and GitHub notifications. After accepting, the repository appears under the POLI210-2026 organization. Do not make it public, transfer it, or add other collaborators.\nIf an invitation or repository is missing, email the instructor with your GitHub username. Do not send a password or authentication token."
   },
   {
-    "objectID": "setup/github-rstudio.html",
-    "href": "setup/github-rstudio.html",
-    "title": "GitHub and RStudio workflow",
+    "objectID": "setup/index.html",
+    "href": "setup/index.html",
+    "title": "Computing setup",
     "section": "",
-    "text": "GitHub sends access to your private assignment repository by email and through GitHub notifications. Accept the invitation before trying to clone. You need to do this once for each assignment."
+    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
   },
   {
-    "objectID": "setup/github-rstudio.html#accept-the-invitation",
-    "href": "setup/github-rstudio.html#accept-the-invitation",
-    "title": "GitHub and RStudio workflow",
+    "objectID": "setup/index.html#checklist",
+    "href": "setup/index.html#checklist",
+    "title": "Computing setup",
     "section": "",
-    "text": "GitHub sends access to your private assignment repository by email and through GitHub notifications. Accept the invitation before trying to clone. You need to do this once for each assignment."
+    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
   },
   {
-    "objectID": "setup/github-rstudio.html#clone-through-rstudio",
-    "href": "setup/github-rstudio.html#clone-through-rstudio",
-    "title": "GitHub and RStudio workflow",
-    "section": "Clone through RStudio",
-    "text": "Clone through RStudio\n\nOpen the private repository on GitHub.\nSelect Code, choose HTTPS, and copy the repository URL.\nIn RStudio, choose File → New Project → Version Control → Git.\nPaste the URL into Repository URL.\nChoose your local Documents/POLI210 folder as the parent directory.\nSelect Create Project.\n\nCloning is a one-time operation. It creates the working files and a hidden .git directory containing the repository history. Downloading a ZIP file does not create that history and is not a substitute for cloning."
-  },
-  {
-    "objectID": "setup/github-rstudio.html#the-cycle-you-repeat",
-    "href": "setup/github-rstudio.html#the-cycle-you-repeat",
-    "title": "GitHub and RStudio workflow",
-    "section": "The cycle you repeat",
-    "text": "The cycle you repeat\nedit → save → inspect diff → stage → commit → push → inspect Actions\n\nSave writes the current file on your computer.\nDiff shows exactly what changed.\nStage selects changes for the next snapshot.\nCommit records that snapshot locally with a message.\nPush sends local commits to GitHub.\nActions repeats the assignment’s checks on a clean remote computer.\n\nUse short, descriptive commit messages such as Add my name, Complete vector exercises, or Render final report. Do not use one enormous final commit."
-  },
-  {
-    "objectID": "setup/github-rstudio.html#local-checks",
-    "href": "setup/github-rstudio.html#local-checks",
-    "title": "GitHub and RStudio workflow",
-    "section": "Local checks",
-    "text": "Local checks\nAssignments may include a command such as:\nRscript checks/check-a1.R\nRun it in RStudio’s Terminal, not the R Console. Read the first failed check, make one focused repair, and rerun it. After pushing, repeat that process with the newest run in GitHub’s Actions tab."
-  },
-  {
-    "objectID": "setup/github-rstudio.html#authentication-problems",
-    "href": "setup/github-rstudio.html#authentication-problems",
-    "title": "GitHub and RStudio workflow",
-    "section": "Authentication problems",
-    "text": "Authentication problems\nGitHub account passwords cannot be used as Git passwords. If cloning or pushing opens a browser, sign into the correct GitHub account and authorize the request. If the repository cannot be found, first confirm that you accepted its invitation and that RStudio is using the expected account.\nNever paste a password or token into a Quarto file, R script, commit, screenshot, or help request."
+    "objectID": "setup/index.html#guides",
+    "href": "setup/index.html#guides",
+    "title": "Computing setup",
+    "section": "Guides",
+    "text": "Guides\n\nInstall and verify the software\nGit and GitHub field guide\nClone and work through RStudio\nUnderstand file paths\n\n\n\n\n\n\n\nTipAsk early\n\n\n\nBring installation or authentication problems to the first seminar or office hours. Include the exact error text and what you were trying to do; never send a password, personal access token, or other secret."
   },
   {
     "objectID": "setup/software.html",
@@ -242,7 +305,7 @@
     "href": "index.html#quick-links",
     "title": "Quantitative Analysis of Political Data I",
     "section": "Quick links",
-    "text": "Quick links\n\n\n\nSyllabus\nCourse policies, learning outcomes, grading, readings, and the complete Fall 2026 schedule.\n\n\n\n\nAssignments\nDue dates and the private-repository submission workflow.\n\n\n\n\nMeeting materials\nPreparation, shared notes, code, and resources organized by class meeting.\n\n\n\n\nComputing setup\nInstall the course tools, clone through RStudio, and understand file paths."
+    "text": "Quick links\n\n\n\nSyllabus\nCourse policies, learning outcomes, grading, readings, and the complete Fall 2026 schedule.\n\n\n\n\nAssignments\nDue dates and the private-repository submission workflow.\n\n\n\n\nMeeting materials\nPreparation, shared notes, code, and resources organized by class meeting.\n\n\n\n\nComputing setup\nInstall the course tools, learn the Git/GitHub workflow, clone through RStudio, and understand file paths."
   },
   {
     "objectID": "index.html#course-information",
@@ -305,6 +368,6 @@
     "href": "meetings/01-reproducible-workflows/index.html#after-class",
     "title": "Meeting 1: Reproducible workflows",
     "section": "After class",
-    "text": "After class\n\nContinue A1 in your own private repository.\nMake several meaningful commits rather than one final upload.\nRender and inspect the HTML before submitting.\nPush and confirm the newest GitHub Action before September 9 at 1:30 p.m."
+    "text": "After class\n\nContinue A1 in your own private repository.\nUse the Git and GitHub field guide when you need the workflow, command reference, or troubleshooting steps.\nMake several meaningful commits rather than one final upload.\nRender and inspect the HTML before submitting.\nPush and confirm the newest GitHub Action before September 9 at 1:30 p.m."
   }
 ]
