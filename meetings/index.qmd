@@ -6,12 +6,15 @@ subtitle: "Preparation and shared materials"
 Read the listed textbook material before class. Meeting pages and shared files
 will be added as the semester progresses.
 
+**PSD** refers to Speegle and Clair, *Probability, Statistics, and Data*.
+**B&H** refers to Blitzstein and Hwang, *Introduction to Probability*.
+
 | Meeting | Date | Topic and preparation |
 |---:|---|---|
 | **1** | Aug. 26 | [Reproducible workflows; Git, GitHub, R, and Quarto](01-reproducible-workflows/index.qmd). **PSD Ch. 1.** |
 |  -  | Sep. 2 | **No class  -  APSA week.** |
 | **2** | Sep. 9 | Probability foundations and simulation. **PSD Ch. 2.** |
-| **3** | Sep. 16 | Conditional probability, independence, and Bayes' rule. **PSD Ch. 2.** |
+| **3** | Sep. 16 | Conditional probability, independence, and Bayes' rule. **[B&H Ch. 2](https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view?usp=sharing).** |
 | **4** | Sep. 23 | Discrete random variables, expectation, and variance. **PSD Ch. 3.** |
 | **5** | Sep. 30 | Continuous random variables and the normal distribution. **PSD Ch. 4.** |
 | **6** | Oct. 7 | Simulation, the law of large numbers, and the central limit theorem. **PSD Ch. 5.** |

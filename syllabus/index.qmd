@@ -54,7 +54,13 @@ These course outcomes contribute primarily to the Political Science graduate pro
 
 Darrin Speegle and Bryan Clair, *Probability, Statistics, and Data: A Fresh Approach Using R*. The complete text is available free at [probstatsdata.com](https://probstatsdata.com). The online and printed first-edition content is the same.
 
-Assigned political science articles, data, and short supplementary readings will be posted on CatCourses or linked in the weekly materials.
+For the September 16 meeting, the required supplementary reading is Joseph K.
+Blitzstein and Jessica Hwang, *Introduction to Probability*, Chapter 2,
+"Conditional Probability." A [free online version](https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view?usp=sharing)
+is linked from the book's official Harvard Stat 110 course site.
+
+Other assigned political science articles, data, and short supplementary
+readings will be posted on CatCourses or linked in the weekly materials.
 
 ## Optional references
 
@@ -145,14 +151,14 @@ The labels and due dates below are fixed for planning purposes; the political ca
 
 # Course schedule
 
-The schedule may be adjusted to match the pace of the class. Changes will be announced in class and on CatCourses. Chapter references are to Speegle and Clair, *Probability, Statistics, and Data* (PSD). The official semester dates are available in the [UC Merced 2026-27 Academic Calendar](https://registrar.ucmerced.edu/schedules/academic-calendar/academic-calendar-2026-2027).
+The schedule may be adjusted to match the pace of the class. Changes will be announced in class and on CatCourses. **PSD** refers to Speegle and Clair, *Probability, Statistics, and Data*; **B&H** refers to Blitzstein and Hwang, *Introduction to Probability*. The official semester dates are available in the [UC Merced 2026-27 Academic Calendar](https://registrar.ucmerced.edu/schedules/academic-calendar/academic-calendar-2026-2027).
 
 | Date | Topic and preparation | Assignment activity |
 |---|---|---|
 | **Aug. 26** | Course introduction; reproducible workflows; Git, GitHub, R, and Quarto. **PSD Ch. 1.** | Assign A1 |
 | **Sep. 2** | **No class  -  APSA week.** |  |
 | **Sep. 9** | Probability foundations and simulation. **PSD Ch. 2.** | A1 due; assign A2 |
-| **Sep. 16** | Conditional probability, independence, and Bayes' rule. **PSD Ch. 2.** | A2 due; assign B1 |
+| **Sep. 16** | Conditional probability, independence, and Bayes' rule. **[B&H Ch. 2](https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view?usp=sharing).** | A2 due; assign B1 |
 | **Sep. 23** | Discrete random variables, expectation, and variance. **PSD Ch. 3.** | B1 due; assign A3 |
 | **Sep. 30** | Continuous random variables and the normal distribution. **PSD Ch. 4.** | A3 due; assign B2 |
 | **Oct. 7** | Simulation, the law of large numbers, and the central limit theorem. **PSD Ch. 5.** | B2 due; assign A4 |
