@@ -1,0 +1,13 @@
+/*-- scss:defaults --*/
+$body-bg: #ffffff;
+$body-color: #172d42;
+$link-color: #005a8b;
+$presentation-heading-color: #005a8b;
+$font-family-sans-serif: Arial, sans-serif;
+$presentation-font-size-root: 30px;
+/*-- scss:rules --*/
+.reveal h1 { font-size: 1.8em; }
+.reveal h2 { font-size: 1.35em; }
+.reveal pre { font-size: .65em; }
+.reveal table { font-size: .84em; }
+.reveal .slide-number { color: #005a8b; }

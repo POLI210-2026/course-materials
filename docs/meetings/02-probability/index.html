@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Quantitative Analysis of Political Data I – POLI 210</title>
+<title>Meeting 2: Probability and simulation – POLI 210</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,23 +26,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5de8ef42e623ea2764a9862c621ae7e2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5de8ef42e623ea2764a9862c621ae7e2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">POLI 210</span>
     </a>
   </div>
@@ -94,23 +94,23 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./syllabus/index.html"> 
+    <a class="nav-link" href="../../syllabus/index.html"> 
 <span class="menu-text">Syllabus</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./assignments.html"> 
+    <a class="nav-link" href="../../assignments.html"> 
 <span class="menu-text">Assignments</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./meetings/index.html"> 
+    <a class="nav-link" href="../../meetings/index.html"> 
 <span class="menu-text">Meetings</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./setup/index.html"> 
+    <a class="nav-link" href="../../setup/index.html"> 
 <span class="menu-text">Setup</span></a>
   </li>  
 </ul>
@@ -128,22 +128,33 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#before-class" id="toc-before-class" class="nav-link active" data-scroll-target="#before-class">Before class</a></li>
+  <li><a href="#lecture-materials" id="toc-lecture-materials" class="nav-link" data-scroll-target="#lecture-materials">Lecture materials</a></li>
+  <li><a href="#by-the-end-of-the-seminar" id="toc-by-the-end-of-the-seminar" class="nav-link" data-scroll-target="#by-the-end-of-the-seminar">By the end of the seminar</a></li>
+  <li><a href="#after-class" id="toc-after-class" class="nav-link" data-scroll-target="#after-class">After class</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/meetings/02-probability/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Quantitative Analysis of Political Data I</h1>
-<p class="subtitle lead">POLI 210 · Fall 2026</p>
+<h1 class="title">Meeting 2: Probability and simulation</h1>
+<p class="subtitle lead">September 9, 2026 · 1:30–4:20 p.m. · COB1 205</p>
 </div>
 
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
     
   
@@ -155,76 +166,29 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="course-lead">
-<p>POLI 210 introduces probability, statistical inference, data analysis in R, and the foundations of simple linear regression. We treat reproducibility as part of statistical reasoning: shared work is written in Quarto, managed with Git, and checked through GitHub.</p>
-</div>
-<div class="callout callout-style-default callout-important callout-titled" title="Seminar 2: Probability and simulation">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Seminar 2: Probability and simulation
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Wednesday, September 9, 1:30-4:20 p.m.</strong></p>
-<p>Classroom and Office Building 1, Room 205</p>
-<p>Read <strong>PSD §§2.1, 2.2, and 2.4</strong> and bring your laptop. A1 is due at 1:30 p.m. See the <a href="./meetings/02-probability/index.html">meeting page</a> for lecture slides and R examples. Conditional probability and Bayes’ rule are reserved for next week.</p>
-</div>
-</div>
-<section id="quick-links" class="level2">
-<h2 class="anchored" data-anchor-id="quick-links">Quick links</h2>
-<div class="grid quick-links">
-<div class="g-col-12 g-col-md-6">
-<section id="syllabus" class="level3 card">
-<h3 class="anchored" data-anchor-id="syllabus"><a href="./syllabus/index.html">Syllabus</a></h3>
-<p>Course policies, learning outcomes, grading, readings, and the complete Fall 2026 schedule.</p>
+<section id="before-class" class="level2">
+<h2 class="anchored" data-anchor-id="before-class">Before class</h2>
+<p>Read Speegle and Clair, <a href="https://probstatsdata.com/probchapter.html"><em>Probability, Statistics, and Data</em>, §§2.1, 2.2, and 2.4</a>. Bring your laptop with RStudio ready to use. <strong>A1 is due at the beginning of class.</strong></p>
+<p>Conditional probability and Bayes’ rule (§2.3) are for September 16, alongside the assigned Blitzstein and Hwang Chapter 2 reading.</p>
 </section>
-</div>
-<div class="g-col-12 g-col-md-6">
-<section id="assignments" class="level3 card">
-<h3 class="anchored" data-anchor-id="assignments"><a href="./assignments.html">Assignments</a></h3>
-<p>Due dates and the private-repository submission workflow.</p>
-</section>
-</div>
-<div class="g-col-12 g-col-md-6">
-<section id="meeting-materials" class="level3 card">
-<h3 class="anchored" data-anchor-id="meeting-materials"><a href="./meetings/index.html">Meeting materials</a></h3>
-<p>Preparation, shared notes, code, and resources organized by class meeting.</p>
-</section>
-</div>
-<div class="g-col-12 g-col-md-6">
-<section id="computing-setup" class="level3 card">
-<h3 class="anchored" data-anchor-id="computing-setup"><a href="./setup/index.html">Computing setup</a></h3>
-<p>Install the course tools, learn the Git/GitHub workflow, clone through RStudio, and understand file paths.</p>
-</section>
-</div>
-</div>
-</section>
-<section id="course-information" class="level2">
-<h2 class="anchored" data-anchor-id="course-information">Course information</h2>
+<section id="lecture-materials" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-materials">Lecture materials</h2>
 <ul>
-<li><strong>Instructor:</strong> Professor Brad LeVeck</li>
-<li><strong>Email:</strong> <a href="mailto:bleveck@ucmerced.edu">bleveck@ucmerced.edu</a></li>
-<li><strong>Office:</strong> COB2 314</li>
-<li><strong>Office hours:</strong> Tuesdays and Thursdays, 1:30-2:30 p.m.</li>
-<li><strong>Meetings:</strong> Wednesdays, 1:30-4:20 p.m., COB1 205</li>
-<li><strong>Required text:</strong> Speegle and Clair, <a href="https://probstatsdata.com"><em>Probability, Statistics, and Data</em></a></li>
+<li><a href="../../lectures/02-probability/probability-slides.html">Open the lecture slides</a></li>
+<li><a href="../../lectures/02-probability/probability-slides.pdf">Download the slide PDF</a></li>
+<li><a href="../../lectures/02-probability/probability-demo.R">Download the R demonstration script</a></li>
+<li><a href="https://github.com/POLI210-2026/course-materials/tree/main/lectures/02-probability">Editable Quarto source and build instructions</a></li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled" title="Where different materials live">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Where different materials live
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This site contains public shared materials. CatCourses is the official location for announcements, grades, and restricted readings. Each assignment is distributed through a private GitHub repository visible only to the student and the instructor.</p>
-</div>
-</div>
+<p>Use the arrow keys in the browser slides. The PDF is an offline backup, compiled with Typst. Run the R script a section at a time in RStudio; it uses only base R.</p>
+</section>
+<section id="by-the-end-of-the-seminar" class="level2">
+<h2 class="anchored" data-anchor-id="by-the-end-of-the-seminar">By the end of the seminar</h2>
+<p>You should be able to define a sample space and event, distinguish equally likely from unequally likely outcomes, use complement and union rules, and calculate finite probabilities by counting when the assumptions permit it.</p>
+<p>You should also be able to simulate a complete trial with <code>sample()</code>, repeat trials with <code>replicate()</code>, and estimate an event probability using a logical comparison and <code>mean()</code>. We will compare exact and simulated answers using dice, random treatment assignment, hypothetical polling, and committee selection.</p>
+</section>
+<section id="after-class" class="level2">
+<h2 class="anchored" data-anchor-id="after-class">After class</h2>
+<p>Complete <strong>A2</strong>, due <strong>September 16 at 1:30 p.m.</strong>, in your private repository. Exercises 2.7, 2.9, and 2.36 explicitly pair analytical solutions with simulations. The <a href="../../assignments.html">assignment page</a> summarizes the selected exercises and submission workflow.</p>
 
 
 </section>
@@ -638,7 +602,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/POLI210-2026/course-materials/blob/main/meetings/02-probability/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Built with Quarto</p>
 </div>
@@ -648,5 +612,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

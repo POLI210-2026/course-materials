@@ -1,0 +1,4 @@
+*.pdf binary
+*.png binary
+*.html linguist-generated=true
+probability-slides.typ linguist-generated=true

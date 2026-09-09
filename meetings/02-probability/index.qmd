@@ -1,0 +1,41 @@
+---
+title: "Meeting 2: Probability and simulation"
+subtitle: "September 9, 2026 · 1:30–4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, [*Probability, Statistics, and Data*, §§2.1, 2.2, and
+2.4](https://probstatsdata.com/probchapter.html). Bring your laptop with RStudio
+ready to use. **A1 is due at the beginning of class.**
+
+Conditional probability and Bayes' rule (§2.3) are for September 16, alongside
+the assigned Blitzstein and Hwang Chapter 2 reading.
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/02-probability/probability-slides.html)
+- [Download the slide PDF](../../lectures/02-probability/probability-slides.pdf)
+- [Download the R demonstration script](../../lectures/02-probability/probability-demo.R)
+- [Editable Quarto source and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/02-probability)
+
+Use the arrow keys in the browser slides. The PDF is an offline backup, compiled
+with Typst. Run the R script a section at a time in RStudio; it uses only base R.
+
+## By the end of the seminar
+
+You should be able to define a sample space and event, distinguish equally
+likely from unequally likely outcomes, use complement and union rules, and
+calculate finite probabilities by counting when the assumptions permit it.
+
+You should also be able to simulate a complete trial with `sample()`, repeat
+trials with `replicate()`, and estimate an event probability using a logical
+comparison and `mean()`. We will compare exact and simulated answers using dice,
+random treatment assignment, hypothetical polling, and committee selection.
+
+## After class
+
+Complete **A2**, due **September 16 at 1:30 p.m.**, in your private repository.
+Exercises 2.7, 2.9, and 2.36 explicitly pair analytical solutions with simulations.
+The [assignment page](../../assignments.qmd) summarizes the selected exercises
+and submission workflow.

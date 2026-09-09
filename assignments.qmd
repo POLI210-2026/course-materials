@@ -42,6 +42,15 @@ All assignments are due at **1:30 p.m.**
 | **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
 
+## A2: calculation and simulation
+
+**Due September 16 at 1:30 p.m.** A2 uses PSD exercises **2.1, 2.3, 2.4, 2.7,
+2.9, 2.33, and 2.36**, covering §§2.1, 2.2, and 2.4. Exercises 2.7, 2.9, and
+2.36 ask you to compare analytical and simulated answers. Follow the detailed
+instructions in your private repository, including the named R objects and
+visible checks. See the [Seminar 2 materials](meetings/02-probability/index.qmd)
+for worked examples of the workflow.
+
 ## Getting your repository
 
 GitHub sends an invitation to the account whose username you provided to the

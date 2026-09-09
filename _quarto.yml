@@ -1,9 +1,19 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "index.qmd"
+    - "assignments.qmd"
+    - "syllabus/*.qmd"
+    - "setup/*.qmd"
+    - "meetings/**/*.qmd"
+    - "!lectures/**"
   resources:
     - .nojekyll
     - syllabus/poli210-syllabus-fall-2026.pdf
+    - lectures/02-probability/probability-slides.html
+    - lectures/02-probability/probability-slides.pdf
+    - lectures/02-probability/probability-demo.R
 
 website:
   title: "POLI 210"
