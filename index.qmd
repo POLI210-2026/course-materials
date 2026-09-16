@@ -12,14 +12,14 @@ part of statistical reasoning: shared work is written in Quarto, managed with
 Git, and checked through GitHub.
 :::
 
-::: {.callout-important title="Seminar 2: Probability and simulation"}
-**Wednesday, September 9, 1:30-4:20 p.m.**
+::: {.callout-important title="Seminar 3: Conditional probability and Bayes' rule"}
+**Wednesday, September 16, 1:30-4:20 p.m.**
 
 Classroom and Office Building 1, Room 205
 
-Read **PSD §§2.1, 2.2, and 2.4** and bring your laptop. A1 is due at 1:30 p.m.
-See the [meeting page](meetings/02-probability/index.qmd) for lecture slides and
-R examples. Conditional probability and Bayes' rule are reserved for next week.
+Read **Blitzstein and Hwang, Chapter 2** and bring your laptop. A2 is due at
+1:30 p.m. See the [meeting page](meetings/03-conditional-probability/index.qmd)
+for lecture slides and R examples. B1 is due September 23 at 1:30 p.m.
 :::
 
 ## Quick links

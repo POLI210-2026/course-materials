@@ -14,6 +14,9 @@ project:
     - lectures/02-probability/probability-slides.html
     - lectures/02-probability/probability-slides.pdf
     - lectures/02-probability/probability-demo.R
+    - lectures/03-conditional-probability/conditional-probability-slides.html
+    - lectures/03-conditional-probability/conditional-probability-slides.pdf
+    - lectures/03-conditional-probability/conditional-probability-demo.R
 
 website:
   title: "POLI 210"

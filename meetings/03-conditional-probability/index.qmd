@@ -1,0 +1,43 @@
+---
+title: "Meeting 3: Conditional probability and Bayes' rule"
+subtitle: "September 16, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Blitzstein and Hwang, *Introduction to Probability*, **Chapter 2**
+([official free reader](https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view?usp=sharing)).
+Bring your laptop with RStudio ready to use. **A2 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/03-conditional-probability/conditional-probability-slides.html)
+- [Download the slide PDF](../../lectures/03-conditional-probability/conditional-probability-slides.pdf)
+- [Download the R demonstration script](../../lectures/03-conditional-probability/conditional-probability-demo.R)
+- [Editable Quarto source and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/03-conditional-probability)
+
+Use the arrow keys to navigate the browser slides. The Typst PDF is a printable
+and offline copy. Run the demonstration script a section at a time in RStudio;
+the examples use base R.
+
+## During the seminar
+
+We will distinguish conditional from marginal probabilities, examine
+independence, and use the law of total probability. A hypothetical arrest tree
+will provide the derivation of Bayes' rule before the break.
+
+After the break, we will solve Monty Hall analytically and simulate the host's
+actions. A model of competing coalitions will illustrate conditioning on a
+first step and simulating a complete process. In each example, identify the
+reference group used in the denominator of a conditional probability.
+
+## After class
+
+Complete **B1: Interpreting Cease-Fire Monitoring Reports** in your private
+GitHub repository. It is due **September 23 at 1:30 p.m.** The assignment
+combines calculation, simulation, and interpretation in a hypothetical case.
+
+Save your source, render and inspect the HTML, then commit and push **both the
+`.qmd` and `.html` files**. GitHub Actions does not commit its rendered copy
+back to your repository. See the assignment's submission checklist and Quarto
+quick reference for details.
