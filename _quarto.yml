@@ -17,6 +17,11 @@ project:
     - lectures/03-conditional-probability/conditional-probability-slides.html
     - lectures/03-conditional-probability/conditional-probability-slides.pdf
     - lectures/03-conditional-probability/conditional-probability-demo.R
+    - lectures/04-discrete-random-variables/discrete-rv-slides.html
+    - lectures/04-discrete-random-variables/discrete-rv-slides.pdf
+    - lectures/04-discrete-random-variables/discrete-rv-live-demo.qmd
+    - lectures/04-discrete-random-variables/discrete-rv-live-demo.html
+    - lectures/04-discrete-random-variables/poli210-seminar4.Rproj
 
 website:
   title: "POLI 210"

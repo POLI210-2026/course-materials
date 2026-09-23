@@ -1,0 +1,48 @@
+---
+title: "Meeting 4: Discrete random variables"
+subtitle: "September 23, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[Chapter 3](https://probstatsdata.com/discreterandomvariables.html).
+Bring your laptop with RStudio ready to use. **B1 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/04-discrete-random-variables/discrete-rv-slides.html)
+- [Download the slide PDF](../../lectures/04-discrete-random-variables/discrete-rv-slides.pdf)
+- [Download the demonstration QMD](../../lectures/04-discrete-random-variables/discrete-rv-live-demo.qmd){download="discrete-rv-live-demo.qmd"}
+- [Read the demonstration with its output](../../lectures/04-discrete-random-variables/discrete-rv-live-demo.html)
+- [Optional RStudio project file](../../lectures/04-discrete-random-variables/poli210-seminar4.Rproj){download="poli210-seminar4.Rproj"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/04-discrete-random-variables)
+
+Use the arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy.
+
+Save the demonstration `.qmd` to your course folder and open it in RStudio.
+Each numbered example is independently runnable: use its green arrow or
+**Run Current Chunk**. The examples use base R. Rendering the document also
+requires `knitr` and `rmarkdown`. The HTML preview displays evaluated output;
+it does not run R in your browser. If using the optional project file, save
+it beside the QMD and open the project first.
+
+## During the seminar
+
+We will map outcomes to numerical values, construct probability mass functions,
+and compare exact calculations with simulated experiments. A voter-mobilization
+example connects enumeration and counting to treatment counts.
+
+We will use a polling model to study binomial counts and cumulative probabilities,
+then examine transformations, expectation, variance, and independence. A waiting-time
+example distinguishes failures before a first success from the total number of calls.
+
+## After class
+
+Rerun the demonstrations and change one input at a time. Explain the difference
+between increasing the number of voters in a poll and increasing the number of
+simulated polls. Practice translating each probability inequality into an R expression.
+
+Assignment instructions and submission repositories are distributed separately
+through the private-repository workflow.

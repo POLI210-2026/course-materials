@@ -1,0 +1,7 @@
+.quarto/
+*_files/
+discrete-rv-slides.typ
+.Rproj.user/
+.Rhistory
+.RData
+Rplots.pdf

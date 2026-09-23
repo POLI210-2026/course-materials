@@ -1,0 +1,252 @@
+---
+title: "Discrete random variables: live R demonstrations"
+subtitle: "POLI 210 - September 23, 2026"
+author: "Brad LeVeck"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+    embed-resources: true
+    code-copy: true
+    code-fold: false
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-width: 8
+fig-height: 3.6
+---
+
+## Using this document in class
+
+Open this `.qmd` in RStudio and run a chunk with its green arrow or
+**Run Current Chunk**. Each numbered demonstration is a complete, independent
+chunk: it defines its own inputs and seed. You can jump between demonstrations
+or rerun one after a change without sourcing another file. No packages are needed
+to run the code. Rendering the document uses knitr and rmarkdown.
+
+The HTML is a reference copy with output, not an interactive R session.
+Change and execute the `.qmd` in RStudio for the live demonstration.
+Do not restore an old `.RData` workspace. Working in the supplied R project
+also avoids machine-specific file paths.
+
+## 1. Outcomes become numerical values
+
+**Before running:** Predict the number of rows and the most common count.
+
+```{r}
+#| label: demo-1-enumeration
+assignments <- expand.grid(person1 = c("C", "T"),
+                           person2 = c("C", "T"),
+                           person3 = c("C", "T"))
+assignments$X <- rowSums(assignments == "T")
+assignments
+table(factor(assignments$X, levels = 0:3)) / nrow(assignments)
+```
+
+Inspect the rows with `X == 1`. Three distinct outcomes map to one value.
+This enumerates the eight outcomes exactly. Changing the random variable
+would change the grouping, while leaving these assignment outcomes intact.
+
+**Try:** Compute the probability both a treatment and a control group exist.
+
+## 2. Three ways to simulate a treatment count
+
+**Before running:** What does one entry of each vector represent?
+
+```{r}
+#| label: demo-2-simulation
+set.seed(92302)
+N <- 20000
+X <- replicate(N, {
+  assignment <- sample(c("C", "T"), 3, replace = TRUE)
+  sum(assignment == "T")
+})
+xs <- 0:3
+pmf <- c(1, 3, 3, 1) / 8
+direct <- sample(xs, N, replace = TRUE, prob = pmf)
+binomial <- rbinom(N, size = 3, prob = .5)
+freq <- function(z) as.numeric(table(factor(z, levels = xs))) / length(z)
+comparison <- data.frame(x = xs, exact = pmf, experiment = freq(X),
+                         weighted_sample = freq(direct), binomial = freq(binomial))
+round(comparison, 4)
+barplot(rbind(pmf, freq(X)), beside = TRUE, names.arg = xs,
+        col = c("#263d4a", "#176b8e"), border = NA,
+        legend.text = c("Exact", "Simulated"),
+        args.legend = list(x = "topright", bty = "n"),
+        ylim = c(0, .5), xlab = "Number treated", ylab = "Probability / frequency")
+```
+
+**Try:** Change `N` to 100. Then restore 20,000. The theoretical PMF stays fixed.
+An unweighted sample of `0:3` would simulate a different distribution.
+
+## 3. Mean, probability, and variance
+
+**Before running:** Can the theoretical mean be the result of one experiment?
+
+```{r}
+#| label: demo-3-moments
+set.seed(92303)
+N <- 20000
+xs <- 0:3
+pmf <- c(1, 3, 3, 1) / 8
+X <- sample(xs, N, replace = TRUE, prob = pmf)
+mu <- sum(xs * pmf)
+model_variance <- sum((xs - mu)^2 * pmf)
+data.frame(quantity = c("Mean", "P(all same)", "Variance"),
+           exact = c(mu, pmf[1] + pmf[4], model_variance),
+           simulated = c(mean(X), mean(X == 0 | X == 3), mean((X - mu)^2)))
+c(sample_variance = var(X), sample_sd = sd(X))
+```
+
+`mean(X)` averages counts. `mean(X == 0 | X == 3)` averages a zero-one indicator.
+`var(X)` uses the sample mean and denominator `N-1`, so it can differ slightly
+from the displayed average squared deviation around the known model mean.
+
+## 4. Repeated polls
+
+**Before running:** Distinguish the number of polls from the number of voters
+within each poll. We assume known population support for this exercise.
+
+```{r}
+#| label: demo-4-polling
+set.seed(92304)
+N <- 20000
+n_voters <- 300
+p <- .46
+polls <- rbinom(N, size = n_voters, prob = p)
+cutoff <- n_voters / 2
+data.frame(event = c("Strict lead", "Tie or lead"),
+           exact = c(pbinom(floor(cutoff), n_voters, p, lower.tail = FALSE),
+                     pbinom(ceiling(cutoff) - 1, n_voters, p, lower.tail = FALSE)),
+           simulated = c(mean(polls > cutoff), mean(polls >= cutoff)))
+c(expected_count = n_voters * p, mean_count = mean(polls),
+  expected_proportion = p, mean_proportion = mean(polls / n_voters),
+  model_sd_proportion = sqrt(p * (1 - p) / n_voters))
+counts <- 0:n_voters
+plot(counts, dbinom(counts, n_voters, p), type = "h", lwd = 2,
+     col = ifelse(counts > cutoff, "#985326", "#263d4a"),
+     xlim = n_voters * c(.30, .65), xlab = "Supporters in one poll",
+     ylab = "Probability", main = "Strict sample lead highlighted")
+```
+
+**Try:** Hold `n_voters` fixed and change `N`. Then hold `N` fixed and change
+`n_voters` to 1,200. Only the second changes the model SD of the proportion.
+Neither calculation estimates a posterior probability of election victory.
+
+## 5. A discrete CDF and its jumps
+
+**Before running:** Compare $P(X<1)$ and $P(X\le1)$.
+
+```{r}
+#| label: demo-5-cdf
+xs <- 0:3
+pmf <- c(1, 3, 3, 1) / 8
+data.frame(x = xs, pmf = pmf, cdf = cumsum(pmf))
+c(less_than_1 = sum(pmf[xs < 1]), at_most_1 = sum(pmf[xs <= 1]))
+cuts <- c(-.6, xs, 3.6)
+heights <- c(0, cumsum(pmf))
+plot(NA, xlim = c(-.6, 3.6), ylim = c(-.03, 1.05),
+     xlab = "x", ylab = "F(x) = P(X <= x)")
+segments(cuts[-length(cuts)], heights, cuts[-1], heights,
+         lwd = 2, col = "#263d4a")
+points(xs, cumsum(pmf), pch = 16, col = "#263d4a")
+points(xs, c(0, cumsum(pmf)[1:3]), pch = 21, bg = "white", col = "#263d4a")
+```
+
+At 1, the jump is $3/8$. Between 1 and 2, the CDF remains $1/2$.
+
+## 6. Transforming values and combining probabilities
+
+**Before running:** Use the arrows in the slide diagram to predict the
+probabilities of $Y=(X-1.5)^2$.
+
+```{r}
+#| label: demo-6-transform
+set.seed(92306)
+N <- 20000
+xs <- 0:3
+pmf <- c(1, 3, 3, 1) / 8
+X <- sample(xs, N, replace = TRUE, prob = pmf)
+Y <- (X - 1.5)^2
+data.frame(x = xs, y = (xs - 1.5)^2, probability = pmf)
+aggregate(probability ~ y,
+          data = data.frame(y = (xs - 1.5)^2, probability = pmf), FUN = sum)
+table(factor(Y, levels = c(.25, 2.25))) / N
+c(exact_mean_Y = sum((xs - 1.5)^2 * pmf), simulated_mean_Y = mean(Y),
+  function_of_exact_mean = (sum(xs * pmf) - 1.5)^2)
+```
+
+`aggregate()` combines masses with the same destination. Compare averaging
+after applying the function with applying it to the average.
+
+## 7. Independent variables and copied values
+
+**Before running:** Predict the variances of `X + Z` and `X + X`.
+
+```{r}
+#| label: demo-7-independence
+set.seed(92307)
+N <- 20000
+X <- rbinom(N, 3, .5)
+Z <- rbinom(N, 3, .5)
+data.frame(quantity = c("Mean X+Z", "Mean X+X", "Variance X+Z", "Variance X+X"),
+           exact = c(3, 3, 1.5, 3),
+           simulated = c(mean(X + Z), mean(X + X), var(X + Z), var(X + X)))
+```
+
+Linearity of expectation applies to both sums. Variance additivity needs
+additional conditions, such as independence. A copied value is perfectly
+dependent on the original.
+
+## 8. Waiting for the first volunteer
+
+**Before running:** What should the counter return if the first call succeeds?
+
+```{r}
+#| label: demo-8-geometric
+set.seed(92308)
+N <- 20000
+p <- .2
+G <- replicate(N, {
+  failures <- 0L
+  while (sample(c(FALSE, TRUE), 1, prob = c(1 - p, p)) == FALSE) {
+    failures <- failures + 1L
+  }
+  failures
+})
+G_direct <- rgeom(N, prob = p)
+data.frame(quantity = c("Failures", "Total calls", "P(more than five calls)"),
+           exact = c((1 - p) / p, 1 / p, (1 - p)^5),
+           loop = c(mean(G), mean(G + 1), mean(G >= 5)),
+           direct = c(mean(G_direct), mean(G_direct + 1), mean(G_direct >= 5)))
+```
+
+The first successful call stops the loop. `G` counts preceding failures.
+Keep `p` strictly above zero if you experiment with this loop. Do not truncate
+long episodes and silently treat them as complete.
+
+## 9. Optional: other discrete models
+
+The marble example revisits A2. The hotline example assumes a constant rate
+of two calls per hour and independent counts in disjoint intervals.
+
+```{r}
+#| label: demo-9-other-models
+set.seed(92309)
+N <- 20000
+reds <- rhyper(N, m = 5, n = 5, k = 6)
+calls <- rpois(N, lambda = 2)
+data.frame(event = c("Four red marbles", "At least three hotline calls"),
+           exact = c(dhyper(4, 5, 5, 6), ppois(2, 2, lower.tail = FALSE)),
+           simulated = c(mean(reds == 4), mean(calls >= 3)))
+```
+
+## Sources
+
+Examples follow the accompanying lecture notes and
+[PSD Chapter 3](https://probstatsdata.com/discreterandomvariables.html).
+The hypothetical polling setup follows Example 3.21. The three-person
+assignment example adapts Matthew Blackwell's course slides, used with permission.

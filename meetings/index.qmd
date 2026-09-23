@@ -15,7 +15,7 @@ will be added as the semester progresses.
 |  -  | Sep. 2 | **No class  -  APSA week.** |
 | **2** | Sep. 9 | [Probability foundations and simulation](02-probability/index.qmd). **PSD §§2.1, 2.2, 2.4.** |
 | **3** | Sep. 16 | [Conditional probability, independence, and Bayes' rule](03-conditional-probability/index.qmd). **[B&H Ch. 2](https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view?usp=sharing).** |
-| **4** | Sep. 23 | Discrete random variables, expectation, and variance. **PSD Ch. 3.** |
+| **4** | Sep. 23 | [Discrete random variables, expectation, and variance](04-discrete-random-variables/index.qmd). **PSD Ch. 3.** |
 | **5** | Sep. 30 | Continuous random variables and the normal distribution. **PSD Ch. 4.** |
 | **6** | Oct. 7 | Simulation, the law of large numbers, and the central limit theorem. **PSD Ch. 5.** |
 | **7** | Oct. 14 | Sampling distributions and point estimation. **PSD Ch. 5.** |
