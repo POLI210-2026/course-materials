@@ -1,0 +1,499 @@
+---
+title: "Continuous random variables: live R demonstrations"
+subtitle: "POLI 210 - September 30, 2026"
+author: "Brad LeVeck"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+    embed-resources: true
+    code-copy: true
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-width: 8
+fig-height: 3.8
+fig-dpi: 160
+---
+
+## Using this document
+
+Open this QMD in RStudio. Run a numbered demonstration with its chunk's
+green arrow. **Every numbered chunk is independent:** it defines its own
+inputs, functions, and seed. You can jump between sections without running
+an earlier chunk. The code uses base R. Rendering uses knitr and rmarkdown.
+
+The HTML shows saved output; edit and run the QMD for live demonstrations.
+All examples are hypothetical. The bargaining population and forecast
+parameters differ from B2. No student data or homework solutions appear here.
+
+The integral notation in class means accumulating probability over an
+interval. These demonstrations use geometry, CDFs, or simulation to do the
+calculations. **No hand integration is needed.**
+
+## 1. Waiting times and rectangle areas
+
+Model the waiting time until an outreach worker arrives as
+$T\sim\operatorname{Unif}(0,10)$ minutes. This is a deliberately simple model,
+not an empirical claim about arrival times.
+
+**Predict:** What fraction of waits fall between 2 and 5 minutes?
+
+```{r}
+#| label: demo-1-uniform
+set.seed(93001)
+n_sim <- 50000
+waits <- runif(n_sim, min = 0, max = 10)
+exact_interval <- punif(5, 0, 10) - punif(2, 0, 10)
+data.frame(quantity = c("P(2 <= T <= 5)", "E[T]", "Var(T)"),
+           exact = c(exact_interval, 5, 100 / 12),
+           simulated = c(mean(waits >= 2 & waits <= 5),
+                         mean(waits), var(waits)))
+curve(dunif(x, 0, 10), from = -1, to = 11,
+      ylim = c(0, .13), col = "#176B87", lwd = 3,
+      xlab = "Waiting time (minutes)", ylab = "Density (per minute)")
+rect(2, 0, 5, .1, col = "#CEE3EB", border = NA)
+segments(0, .1, 10, .1, col = "#176B87", lwd = 3)
+epsilon <- c(.5, .1, .01)
+center <- 5
+narrow_intervals <- data.frame(
+  lower = center - epsilon,
+  upper = center + epsilon,
+  width = 2 * epsilon,
+  probability = punif(center + epsilon, 0, 10) -
+                punif(center - epsilon, 0, 10)
+)
+narrow_intervals$probability_per_minute <-
+  narrow_intervals$probability / narrow_intervals$width
+narrow_intervals
+c(density_at_five = dunif(5, 0, 10),
+  probability_at_or_below_five = punif(5, 0, 10))
+```
+
+The rectangle has width 3 minutes and height 0.1 per minute: area 0.3.
+`&` applies both inequalities to every draw. `&&` is not the vector
+operation we need here. Change `n_sim` to 500: the probability model and
+its variance stay fixed, but the simulation becomes less precise.
+
+In the shrinking-interval table, probabilities approach zero while
+probability divided by width remains 0.1 per minute. That local rate is
+`dunif(5, 0, 10)`. It does not mean $P(T=5)=0.1$.
+`punif(5, 0, 10)` returns a probability for the implicit interval
+$(-\infty,5]$, which here is the same event as $0\le T\le5$.
+
+For a density continuous at $x$, this generalizes to
+
+$$f_X(x)=\lim_{\epsilon\downarrow0}
+\frac{P(x-\epsilon\le X\le x+\epsilon)}{2\epsilon}.$$
+
+Some authors call a density $p(x)$ instead of $f_X(x)$. Check what the
+function represents, rather than assuming its letter means point probability.
+
+## 2. Optional: a sloping density without antiderivatives
+
+Suppose a different waiting-time model has density $f(t)=t/50$ on $[0,10]$.
+The whole triangle has area one. Its CDF within the support is
+$F(t)=t^2/100$, the area of a triangle of base $t$ and height $t/50$.
+
+The supplied sampling transformation $T=10\sqrt U$, for
+$U\sim\operatorname{Unif}(0,1)$, has that CDF. Understanding the density and
+CDF is the main task; deriving this sampling method is optional.
+
+```{r}
+#| label: demo-2-triangle
+set.seed(93002)
+n_sim <- 50000
+waits <- 10 * sqrt(runif(n_sim))
+exact_interval <- (5^2 - 2^2) / 100
+trapezoid_area <- (5 - 2) * ((2 / 50) + (5 / 50)) / 2
+data.frame(method = c("CDF difference", "Trapezoid area", "Simulation"),
+           probability = c(exact_interval, trapezoid_area,
+                           mean(waits >= 2 & waits <= 5)))
+curve(x / 50, from = 0, to = 10, lwd = 3, col = "#176B87",
+      xlab = "Waiting time (minutes)", ylab = "Density (per minute)")
+polygon(c(2, 2, 5, 5), c(0, 2 / 50, 5 / 50, 0),
+        col = "#CEE3EB", border = NA)
+curve(x / 50, add = TRUE, lwd = 3, col = "#176B87")
+```
+
+**Ask:** Why is an interval near 8 more likely than an equally wide interval
+near 2 under this model? Contrast that with the uniform model.
+
+## 3. Normal density, cumulative probability, and a near-tie
+
+Use the hypothetical forecast $V\sim\operatorname{Norm}(3,5)$, with margin
+measured in percentage points and **standard deviation** 5.
+
+**Predict:** Should the win probability exceed one half? Does a density at
+zero directly answer a probability question?
+
+```{r}
+#| label: demo-3-normal
+mu <- 3
+sigma <- 5
+density_at_zero <- dnorm(0, mean = mu, sd = sigma)
+p_win <- pnorm(0, mean = mu, sd = sigma, lower.tail = FALSE)
+p_near <- pnorm(1, mu, sigma) - pnorm(-1, mu, sigma)
+p_at_or_below_zero <- pnorm(0, mean = mu, sd = sigma)
+data.frame(quantity = c("Density at zero (per pp)", "P(V > 0)",
+                         "P(-1 <= V <= 1)"),
+           value = c(density_at_zero, p_win, p_near))
+
+epsilon <- c(.5, .1, .01)
+near_tie <- data.frame(
+  epsilon = epsilon,
+  exact = pnorm(epsilon, mu, sigma) - pnorm(-epsilon, mu, sigma),
+  rectangle = 2 * epsilon * density_at_zero
+)
+near_tie$probability_per_unit_width <- near_tie$exact / (2 * epsilon)
+near_tie
+
+x <- seq(mu - 4 * sigma, mu + 4 * sigma, length.out = 801)
+plot(x, dnorm(x, mu, sigma), type = "l", col = "#176B87", lwd = 3,
+     xlab = "Vote margin (percentage points)", ylab = "Density (per pp)")
+z <- seq(0, max(x), length.out = 401)
+polygon(c(0, z, max(z)), c(0, dnorm(z, mu, sigma), 0),
+        col = "#CEE3EB", border = NA)
+lines(x, dnorm(x, mu, sigma), col = "#176B87", lwd = 3)
+abline(v = 0, lty = 2)
+
+# The same lower-tail probability as PDF area and CDF height.
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2), mar = c(4.1, 4.1, 2.1, .7))
+plot(x, dnorm(x, mu, sigma), type = "l", col = "#176B87", lwd = 3,
+     xlab = "Margin (pp)", ylab = "Density (per pp)", main = "Normal PDF")
+z <- seq(min(x), 0, length.out = 401)
+polygon(c(min(z), z, 0), c(0, dnorm(z, mu, sigma), 0),
+        col = "#CEE3EB", border = NA)
+lines(x, dnorm(x, mu, sigma), col = "#176B87", lwd = 3)
+segments(0, 0, 0, dnorm(0, mu, sigma), lty = 2, col = "#A44A3F")
+text(mu - 2.4 * sigma, dnorm(mu, mu, sigma) * .9,
+     sprintf("Area = %.3f", p_at_or_below_zero), col = "#A44A3F")
+plot(x, pnorm(x, mu, sigma), type = "l", col = "#176B87", lwd = 3,
+     ylim = c(0, 1), xlab = "Threshold x (pp)",
+     ylab = "Cumulative probability", main = "Normal CDF")
+segments(min(x), p_at_or_below_zero, 0, p_at_or_below_zero,
+         lty = 2, col = "#A44A3F")
+segments(0, 0, 0, p_at_or_below_zero, lty = 2, col = "#A44A3F")
+points(0, p_at_or_below_zero, pch = 16, col = "#A44A3F")
+text(0, p_at_or_below_zero, sprintf("F(0) = %.3f", p_at_or_below_zero),
+     pos = 4, col = "#A44A3F", cex = .9)
+par(old_par)
+
+# Now vary the mean, keeping SD and the victory threshold fixed.
+mean_grid <- seq(-15, 15, length.out = 601)
+win_probability <- pnorm(0, mean = mean_grid, sd = sigma, lower.tail = FALSE)
+selected_means <- c(-5, 0, 5)
+selected_probabilities <- pnorm(selected_means / sigma)
+data.frame(assumed_mean = selected_means,
+           probability_of_victory = selected_probabilities)
+plot(mean_grid, win_probability, type = "l", col = "#176B87", lwd = 3,
+     ylim = c(0, 1), xlab = "Assumed mean margin (pp)",
+     ylab = "Probability of victory")
+segments(selected_means, 0, selected_means, selected_probabilities,
+         lty = 3, col = "#A44A3F")
+points(selected_means, selected_probabilities, pch = 16, col = "#A44A3F")
+text(selected_means[1:2], selected_probabilities[1:2],
+     sprintf("%.0f%%", 100 * selected_probabilities[1:2]),
+     pos = c(3, 2), col = "#A44A3F")
+text(selected_means[3] + .4, selected_probabilities[3] - .13,
+     sprintf("%.0f%%", 100 * selected_probabilities[3]),
+     pos = 4, col = "#A44A3F")
+legend("topleft", sprintf("SD = %g pp; victory requires V > 0", sigma), bty = "n")
+```
+
+The near-tie probability tends to zero as the interval shrinks.
+Probability **divided by interval width** approaches the density.
+The normal curve extends beyond the plot; `pnorm()` includes its full tails.
+
+On the CDF, the horizontal axis moves the **threshold** within the fixed
+$\operatorname{Norm}(3,5)$ distribution. On the final graph it changes the
+**assumed mean**, holding the victory threshold at zero. With SD 5, means
+$-5,0,5$ give victory probabilities of about 16%, 50%, and 84%.
+
+The same increase in mean has a larger probability effect around an even
+contest than far out in either tail.
+
+**Try:** Change only `sigma` to 10. Before running, predict the effect on the
+chance of a win when the mean remains positive.
+
+## 4. Quantiles and simulation
+
+A central 80% forecast interval leaves 10% in each tail. This interval
+describes the random margin under a given model. It is not a confidence
+interval for an unknown mean.
+
+```{r}
+#| label: demo-4-quantiles
+set.seed(93004)
+n_sim <- 50000
+mu <- 3
+sigma <- 5
+interval <- qnorm(c(.10, .90), mean = mu, sd = sigma)
+margins <- rnorm(n_sim, mean = mu, sd = sigma)
+data.frame(quantile = c(.10, .90), margin = interval,
+           cdf_check = pnorm(interval, mu, sigma))
+comparison <- data.frame(
+  quantity = c("P(V > 0)", "P(-1 <= V <= 1)", "Mean", "Variance",
+               "Inside central 80%"),
+  exact = c(pnorm(0, mu, sigma, lower.tail = FALSE),
+            pnorm(1, mu, sigma) - pnorm(-1, mu, sigma),
+            mu, sigma^2, .8),
+  simulated = c(mean(margins > 0), mean(margins >= -1 & margins <= 1),
+                mean(margins), var(margins),
+                mean(margins >= interval[1] & margins <= interval[2]))
+)
+comparison$absolute_difference <- abs(comparison$simulated - comparison$exact)
+comparison
+x <- seq(mu - 4 * sigma, mu + 4 * sigma, length.out = 801)
+probabilities <- c(.10, .90)
+plot(x, pnorm(x, mu, sigma), type = "l", col = "#176B87", lwd = 3,
+     ylim = c(0, 1), xlab = "Margin threshold (pp)",
+     ylab = "Cumulative probability", yaxt = "n")
+axis(2, at = c(.1, .5, .9), las = 1)
+segments(min(x), probabilities, interval, probabilities,
+         lty = 2, col = "#A44A3F")
+segments(interval, 0, interval, probabilities, lty = 2, col = "#A44A3F")
+points(interval, probabilities, pch = 16, col = "#A44A3F")
+text(interval, c(.28, .68), sprintf("%.2f pp", interval),
+     pos = c(2, 4), col = "#A44A3F")
+
+hist(margins, probability = TRUE, breaks = 50, col = "#CEE3EB",
+     border = "white", main = "Simulated margins and model density",
+     xlab = "Vote margin (percentage points)")
+curve(dnorm(x, mu, sigma), add = TRUE, lwd = 3, col = "#176B87")
+abline(v = interval, lty = 2, col = "#A44A3F")
+```
+
+Read the CDF guides from probabilities .10 and .90 across to the curve,
+then down to the thresholds. `pnorm(interval, mu, sigma)` checks that
+`qnorm()` returned the requested thresholds.
+
+`probability = TRUE` puts histogram **area** on the probability scale.
+More repetitions improve Monte Carlo precision. They do not make the
+forecast distribution narrower.
+
+## 5. A discrete election and its normal approximation
+
+Suppose exactly 200 people vote for A or B, independently, with probability
+0.5 for A. Let $K$ count A's votes. These are explicit toy-model assumptions.
+
+**Predict:** Is an exact tie impossible? Does a strict victory have probability
+exactly one half when a tie has positive probability?
+
+```{r}
+#| label: demo-5-votes
+set.seed(93005)
+n_sim <- 50000
+n_voters <- 200
+p <- .5
+mu_count <- n_voters * p
+sd_count <- sqrt(n_voters * p * (1 - p))
+tie_count <- n_voters / 2
+counts <- rbinom(n_sim, size = n_voters, prob = p)
+
+tie_exact <- dbinom(tie_count, n_voters, p)
+tie_normal <- pnorm(tie_count + .5, mu_count, sd_count) -
+              pnorm(tie_count - .5, mu_count, sd_count)
+win_exact <- pbinom(tie_count, n_voters, p, lower.tail = FALSE)
+win_normal <- pnorm(tie_count + .5, mu_count, sd_count, lower.tail = FALSE)
+data.frame(event = c("Tie", "Strict victory"),
+           binomial = c(tie_exact, win_exact),
+           normal_with_correction = c(tie_normal, win_normal),
+           simulated = c(mean(counts == tie_count), mean(counts > tie_count)))
+
+k <- 75:125
+plot(c(75, 125), c(0, .062), type = "n",
+     xlab = "Votes for A", ylab = "Mass / density per vote")
+rect(k - .5, 0, k + .5, dbinom(k, n_voters, p),
+     col = "#E5EDF1", border = "#A6BBC7")
+curve(dnorm(x, mu_count, sd_count), add = TRUE, lwd = 3, col = "#176B87")
+z <- seq(tie_count - .5, tie_count + .5, length.out = 101)
+polygon(c(min(z), z, max(z)), c(0, dnorm(z, mu_count, sd_count), 0),
+        col = adjustcolor("#A44A3F", .6), border = NA)
+
+# The same tie bin expressed in percentage-point margin units:
+margin_mu <- 100 * (2 * p - 1)
+margin_sd <- 200 * sd_count / n_voters
+tie_from_margin <- pnorm(100 / n_voters, margin_mu, margin_sd) -
+                   pnorm(-100 / n_voters, margin_mu, margin_sd)
+c(tie_from_count_units = tie_normal, tie_from_margin_units = tie_from_margin)
+```
+
+Each PMF bar has width one vote, so its height and area have the same
+numerical value. A normal density has probability **over a bin**, not at a
+point. The tie bin is 99.5 to 100.5 votes. A strict victory begins at its
+upper boundary, 100.5.
+
+The count and percentage-margin density heights have different units.
+Probabilities agree after transforming both the distribution and interval.
+
+## 6. A continuous margin gives a discrete contract payoff
+
+Continue with the **hypothetical** forecast $\operatorname{Norm}(3,5)$.
+A contract pays \$2 if the candidate wins and zero otherwise. It costs
+\$1.50. Ignore fees and interest. This is a probability example, not a
+description of a real market.
+
+**Predict:** Does a probability of profit above one half guarantee positive
+expected profit?
+
+```{r}
+#| label: demo-6-contract
+set.seed(93006)
+n_sim <- 50000
+mu <- 3
+sigma <- 5
+prize <- 2
+price <- 1.50
+margins <- rnorm(n_sim, mu, sigma)
+win <- margins > 0
+payout <- ifelse(win, prize, 0)
+profit <- payout - price
+p_win <- pnorm(0, mu, sigma, lower.tail = FALSE)
+pmf <- data.frame(profit = c(-price, prize - price),
+                  probability = c(1 - p_win, p_win))
+pmf
+data.frame(
+  quantity = c("Expected profit", "Profit variance", "P(positive profit)"),
+  exact = c(prize * p_win - price, prize^2 * p_win * (1 - p_win), p_win),
+  simulated = c(mean(profit), var(profit), mean(profit > 0))
+)
+c(break_even_price = prize * p_win)
+```
+
+Keep each payout tied to its corresponding margin draw. Do not independently
+draw another win indicator. Subtracting a fixed price shifts all profits by
+the same amount and leaves their variance unchanged.
+
+## 7. A finite population, its PMF, and its CDF
+
+Four potential project partners have minimum acceptable payments of 5, 15,
+15, and 45 points. Randomly choose one person with equal probability.
+This is a made-up teaching population, not the B2 dataset.
+
+**Predict:** Are the three distinct minimum payments equally likely?
+
+```{r}
+#| label: demo-7-population
+costs <- c(5, 15, 15, 45)
+values <- sort(unique(costs))
+counts <- as.numeric(table(factor(costs, levels = values)))
+probability <- counts / length(costs)
+cdf <- cumsum(probability)
+data.frame(value = values, count = counts, probability = probability, cdf = cdf)
+mu_cost <- sum(values * probability)
+variance_cost <- sum((values - mu_cost)^2 * probability)
+c(mean = mu_cost, population_variance = variance_cost,
+  direct_variance = mean((costs - mean(costs))^2),
+  R_sample_variance = var(costs))
+plot(ecdf(costs), verticals = TRUE, do.points = TRUE,
+     xlim = c(0, 50), col = "#176B87", lwd = 2,
+     main = "CDF for the four-person population",
+     xlab = "Payment threshold (points)", ylab = "Cumulative probability")
+c(at_most_15 = mean(costs <= 15), below_15 = mean(costs < 15))
+```
+
+`ecdf(costs)` gives the exact CDF for a uniform draw from these four entries.
+Here we define those entries as our entire population. We make no claim
+about a larger population. R's `var(costs)` uses denominator $N-1$;
+the finite-population variance here uses $N$.
+
+## 8. The payoff against a mean partner and crossing CDFs
+
+The project has an 80-point budget. Choose an offer before drawing a partner.
+If the offer meets their minimum, you retain the rest of the budget;
+otherwise you receive zero.
+
+```{r}
+#| label: demo-8-payoffs
+set.seed(93008)
+n_sim <- 50000
+costs <- c(5, 15, 15, 45)
+budget <- 80
+earnings <- function(cost, offer) ifelse(cost <= offer, budget - offer, 0)
+y15 <- earnings(costs, 15)
+y45 <- earnings(costs, 45)
+comparison <- data.frame(
+  offer = c(15, 45),
+  payoff_against_mean = c(earnings(mean(costs), 15),
+                          earnings(mean(costs), 45)),
+  expected_payoff = c(mean(y15), mean(y45)),
+  population_variance = c(mean((y15 - mean(y15))^2),
+                          mean((y45 - mean(y45))^2)),
+  probability_above_20 = c(mean(y15 > 20), mean(y45 > 20)),
+  probability_above_50 = c(mean(y15 > 50), mean(y45 > 50))
+)
+comparison
+plot(ecdf(y15), xlim = c(-5, 75), ylim = c(0, 1),
+     verticals = TRUE, do.points = TRUE, col = "#176B87", lwd = 2,
+     main = "Two payoff CDFs", xlab = "Earnings (points)",
+     ylab = "Cumulative probability")
+plot(ecdf(y45), add = TRUE, verticals = TRUE, do.points = TRUE,
+     col = "#A44A3F", lty = 2, lwd = 2)
+legend("topleft", c("Offer 15", "Offer 45"),
+       col = c("#176B87", "#A44A3F"), lty = c(1, 2), lwd = 2, bty = "n")
+partners <- sample(costs, size = n_sim, replace = TRUE)
+data.frame(offer = c(15, 45), exact = c(mean(y15), mean(y45)),
+           simulated = c(mean(earnings(partners, 15)),
+                         mean(earnings(partners, 45))))
+```
+
+Offer 15 has higher expected earnings, but offer 45 is more likely to exceed
+20 points. The ordering reverses at a 50-point threshold. The mean alone
+does not determine the whole distribution.
+
+Drawing from the full four-person vector preserves the repeated value 15.
+Sampling the three distinct values uniformly would change the population.
+
+## 9. A guided function and loop over offers
+
+This example calculates each offer's payoff for every possible partner.
+There is no randomness in that calculation. Simulation appears in Demo 8.
+
+**Before running:** Trace the loop once with an offer of 15. Identify
+which objects describe an offer, a partner, a vector of payoffs, and a
+table row.
+
+```{r}
+#| label: demo-9-loop
+costs <- c(5, 15, 15, 45)
+summarize_project <- function(costs, budget = 80) {
+  result <- data.frame(offer = 0:budget, acceptance = NA_real_,
+                       expected = NA_real_, variance = NA_real_)
+  for (i in seq_len(nrow(result))) {
+    offer <- result$offer[i]
+    accepted <- costs <= offer
+    payoff <- ifelse(accepted, budget - offer, 0)
+    result$acceptance[i] <- mean(accepted)
+    result$expected[i] <- mean(payoff)
+    result$variance[i] <- mean((payoff - mean(payoff))^2)
+  }
+  result
+}
+offers <- summarize_project(costs)
+offers[offers$offer %in% c(0, 5, 15, 25, 45, 80), ]
+best <- abs(offers$expected - max(offers$expected)) < 1e-10
+offers[best, ]
+plot(offers$offer, offers$expected, type = "l",
+     col = "#176B87", lwd = 2,
+     xlab = "Offer (points)", ylab = "Expected earnings (points)")
+```
+
+`NA_real_` reserves numeric cells that the loop will fill. The function
+returns its last expression, `result`. Row index `i` differs from the offer:
+row 1 corresponds to offer 0. Store the complete table, but display only
+the rows needed for interpretation.
+
+**Try:** Give a second toy population to the same function. Which quantities
+change? In B2, use the supplied data and your own derived payoff formulas.
+
+## References
+
+Speegle and Clair, [*Probability, Statistics, and Data*, Chapter 4](https://probstatsdata.com/continuousrandomvariables.html),
+especially Sections 4.1-4.4.2. These political examples, figures, and code
+are original course demonstrations. Use `?dnorm`, `?pnorm`, `?qnorm`,
+`?rnorm`, `?dbinom`, or `?ecdf` for the installed R documentation.

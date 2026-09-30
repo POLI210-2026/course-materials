@@ -42,6 +42,20 @@ All assignments are due at **1:30 p.m.**
 | **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
 
+## B2: random variables and decisions
+
+**Due October 7 at 1:30 p.m. Pacific.** B2 uses bargaining data to study
+discrete random variables, transformed earnings, and decisions under uncertainty.
+A hypothetical election forecast connects a continuous normal margin to a
+discrete contract payoff. See the
+[Seminar 5 materials](meetings/05-continuous-random-variables/index.qmd)
+for worked examples and the R demonstration.
+
+Accept the invitation to your private B2 repository and clone it as a new
+RStudio project. The data and plotting helpers are included. Follow the
+repository's README for the local checks, and commit both your completed
+QMD and freshly rendered HTML. Automated checks do not grade your reasoning.
+
 ## A2: calculation and simulation
 
 **Due September 16 at 1:30 p.m.** A2 uses PSD exercises **2.1, 2.3, 2.4, 2.7,

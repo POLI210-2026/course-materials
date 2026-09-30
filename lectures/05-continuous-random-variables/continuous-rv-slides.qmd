@@ -1,0 +1,677 @@
+---
+title: "Continuous random variables"
+subtitle: "POLI 210 - Seminar 5"
+author: "Brad LeVeck"
+date: "2026-09-30"
+format:
+  revealjs:
+    theme: [simple, slides.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    center: false
+    transition: none
+    embed-resources: true
+    code-overflow: wrap
+  typst:
+    fontsize: 21pt
+    template-partials: [typst-show.typ]
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 10
+fig-height: 3.0
+---
+
+```{r}
+#| label: setup
+#| include: false
+source("R/figures.R")
+```
+
+## Today's questions
+
+- How does an area describe the probability of an interval?
+- How do we calculate and simulate normal probabilities?
+- How can a continuous model approximate discrete vote counts?
+- How does a distribution of possible partners become a payoff distribution?
+
+We will read integrals as accumulated areas and use geometry or R to
+calculate them.
+
+**Reading:** PSD Chapter 4, Sections 4.1-4.4.2.
+
+## Probability mass and probability density
+
+Last week, a PMF assigned probability to each possible value:
+
+$$p_X(x)=P(X=x),\qquad \sum_x p_X(x)=1.$$
+
+For today's continuous models, a **density** allocates probability
+over intervals:
+
+$$P(a<X\le b)=\text{area under }f_X\text{ between }a\text{ and }b.$$
+
+The random variable still maps outcomes to numbers. We change how we
+describe its distribution.
+
+## A uniform waiting-time model
+
+Suppose an outreach worker arrives after $T\sim\operatorname{Unif}(0,10)$
+minutes. All intervals of the same length inside $[0,10]$ have equal probability.
+
+```{r}
+#| label: uniform-figure
+#| echo: false
+uniform_area()
+```
+
+$$P(2\le T\le5)=(5-2)(0.1)=0.3.$$
+
+## Why point probabilities are not enough
+
+Suppose each exact time in our uniform $[0,10]$ model had probability $c>0$.
+
+For $N$ distinct times,
+
+$$P(T\in\{t_1,\ldots,t_N\})=Nc.$$
+
+We can choose more than $1/c$ distinct times. That would give a
+probability greater than one.
+
+Each exact time has probability zero. The whole interval has probability one:
+
+$$P(T=t)=0,\qquad P(0\le T\le10)=1.$$
+
+The point probabilities alone lose the distribution's information.
+The density preserves how probability spreads across intervals.
+
+## Reading an integral
+
+$$P(a<X\le b)=\int_a^b f_X(x)\,dx.$$
+
+The bounds identify the interval. The density supplies the height.
+
+Imagine dividing the interval into thin rectangles:
+
+$$\text{probability}\ \approx\ \sum_i f_X(x_i)\,\Delta x.$$
+
+The integral is the limit as those rectangles become arbitrarily thin.
+
+For the uniform example, the rectangles all have height $0.1$.
+
+## A sloping density
+
+A different model has $f_T(t)=t/50$ on $[0,10]$, zero elsewhere.
+
+```{r}
+#| label: triangle-figure
+#| echo: false
+triangle_area()
+```
+
+The shaded trapezoid has area
+$(5-2)(0.04+0.10)/2=0.21$. No antiderivative is needed.
+
+## What makes a valid density?
+
+$$f_X(x)\ge0,\qquad \int_{-\infty}^{\infty}f_X(x)\,dx=1.$$
+
+A uniform wait between 0 and 10 **minutes** has density $0.1$ per minute.
+
+Measure that same wait in **hours**. Its range is $[0,1/6]$ and its
+density is $6$ per hour.
+
+$$P(T\le3\text{ minutes})=3(0.1)=0.05(6)=0.3.$$
+
+Density can exceed one. Area is a probability and stays between zero and one.
+
+## The CDF still answers the same question
+
+$$F_X(x)=P(X\le x).$$
+
+For a density model,
+
+$$F_X(x)=\int_{-\infty}^{x} f_X(t)\,dt,\qquad
+P(a<X\le b)=F_X(b)-F_X(a).$$
+
+The CDF accumulates area from the left. Where it is differentiable,
+its slope is the density: $F_X'(x)=f_X(x)$.
+
+For continuous density models, including or excluding the endpoints
+does not change an interval's probability.
+
+## A uniform CDF
+
+```{r}
+#| label: uniform-cdf-figure
+#| echo: false
+uniform_cdf()
+```
+
+Here $F_T(t)=t/10$ within $[0,10]$, with 0 to the left and 1 to the right.
+
+$$P(2<T\le5)=F_T(5)-F_T(2)=0.5-0.2=0.3.$$
+
+## Narrow intervals and a single point
+
+For $T\sim\operatorname{Unif}(0,10)$ minutes, zoom in around 5 minutes:
+
+| Interval | Width (minutes) | Probability | Probability / width |
+|---|---:|---:|---:|
+| $[4.5,5.5]$ | 1 | 0.1 | 0.1 per minute |
+| $[4.9,5.1]$ | 0.2 | 0.02 | 0.1 per minute |
+| $[4.99,5.01]$ | 0.02 | 0.002 | 0.1 per minute |
+
+The interval's **probability** shrinks toward zero. Its probability
+**per unit of width** stays at $0.1$ per minute.
+
+For a smooth density and a narrow interval,
+
+$$P(x-\epsilon\le X\le x+\epsilon)\approx 2\epsilon f_X(x).$$
+
+Width times density gives probability, just as time times speed gives distance.
+
+## Density at a point is a local rate
+
+Where the density is continuous at $x$,
+
+$$f_X(x)=\lim_{\epsilon\downarrow0}
+\frac{P(x-\epsilon\le X\le x+\epsilon)}{2\epsilon}.$$
+
+Divide probability by interval width, then shrink the interval.
+The limit gives a rate at $x$, with no particular interval left to specify.
+
+Some authors write $p(x)$ for this density. Here we use $f_X(x)$.
+That notation does not turn density into $P(X=x)$.
+
+| R expression | Result | Meaning |
+|---|---:|---|
+| `dunif(5, 0, 10)` | 0.1 | Density at 5, per minute |
+| `punif(5, 0, 10)` | 0.5 | Probability $P(T\le5)$ |
+
+`punif()` includes an implicit interval: everything at or below its argument.
+
+## Four useful R prefixes
+
+| Question | Uniform example | Normal example |
+|---|---|---|
+| Density height at $x$ | `dunif(x, 0, 10)` | `dnorm(x, mu, sigma)` |
+| Probability at or below $x$ | `punif(x, 0, 10)` | `pnorm(x, mu, sigma)` |
+| Value at cumulative probability $p$ | `qunif(p, 0, 10)` | `qnorm(p, mu, sigma)` |
+| Simulated values | `runif(N, 0, 10)` | `rnorm(N, mu, sigma)` |
+
+For a discrete distribution, `d` gives **mass**. For a continuous
+distribution, `d` gives **density**.
+
+## Simulation checks an area calculation
+
+```{r}
+#| label: uniform-code
+set.seed(93001)
+waits <- runif(50000, min = 0, max = 10)
+mean(waits >= 2 & waits <= 5)
+punif(5, 0, 10) - punif(2, 0, 10)
+```
+
+One draw is one waiting time. The logical comparison identifies draws
+inside the interval.
+
+**Demo 1:** Change the number of repetitions. The underlying probability
+stays at $0.3$. Demo 2 optionally checks the sloping-density example.
+
+## Expectation as a weighted average
+
+$$E[X]=\int_{-\infty}^{\infty}x f_X(x)\,dx.$$
+
+This is the continuous counterpart of $\sum_x x p_X(x)$.
+
+Small intervals have approximate weight $f_X(x)\Delta x$.
+Multiply each representative value by its weight, then add.
+
+For $T\sim\operatorname{Unif}(0,10)$, symmetry gives $E[T]=5$ minutes.
+
+**Question:** Does every density have its mean at the middle of its support?
+
+## Variance measures variation in outcomes
+
+$$\operatorname{Var}(X)=E[(X-\mu)^2]=E[X^2]-\mu^2.$$
+
+The formulas and interpretation carry over from discrete random variables.
+
+For $T\sim\operatorname{Unif}(0,10)$,
+
+$$E[T]=5,\qquad \operatorname{Var}(T)=\frac{100}{12}\approx8.33,
+\qquad \operatorname{SD}(T)\approx2.89.$$
+
+Variance uses minutes squared. SD uses minutes.
+
+More simulated waits improve our estimate of this variance. They do not
+make the model's waiting times less variable.
+
+## Transformations and expectation
+
+The rules for fixed constants still hold:
+
+$$E[aX+b]=aE[X]+b,\qquad
+\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X).$$
+
+For a general transformation $g$, average its values over the distribution:
+
+$$E[g(X)]=\int g(x)f_X(x)\,dx.$$
+
+For example, $E[T^2]=100/3$, whereas $(E[T])^2=25$.
+
+The two calculations answer different questions.
+
+## A finite population of potential partners
+
+Four people have minimum acceptable payments of **5, 15, 15, and 45** points.
+Choose one person uniformly at random.
+
+| Minimum payment $c$ | 5 | 15 | 45 |
+|---|---:|---:|---:|
+| $P(C=c)$ | $1/4$ | $1/2$ | $1/4$ |
+| $F_C(c)$ | $1/4$ | $3/4$ | $1$ |
+
+The average minimum payment is $E[C]=20$.
+
+Each person has equal probability. The three distinct payment values do not.
+
+## Expected payoff and the mean partner
+
+An 80-point project succeeds when your offer $a$ meets the partner's minimum.
+
+$$Y_a=\begin{cases}80-a,&C\le a,\\0,&C>a.\end{cases}$$
+
+At an offer of 15, the four possible earnings are $65,65,65,0$.
+
+$$E[Y_{15}]=48.75.$$
+
+A hypothetical partner with the **mean** minimum of 20 rejects that offer,
+giving a payoff of zero.
+
+The threshold transformation cannot generally be applied after averaging.
+
+## Crossing payoff CDFs
+
+```{r}
+#| label: crossing-figure
+#| echo: false
+payoff_cdfs()
+```
+
+Offer 15 has the higher mean. Offer 45 is more likely to exceed 20 points.
+Only offer 15 can exceed 50 points.
+
+**Demo 8:** Read the tail probability as $P(Y>y)=1-F_Y(y)$.
+
+## Break
+
+We have connected density, cumulative probability, and moments.
+
+After the break: the normal model, election forecasts, and a discrete
+vote-count approximation.
+
+## The normal model
+
+$$X\sim\operatorname{Norm}(\mu,\sigma),\qquad
+E[X]=\mu,\quad \operatorname{Var}(X)=\sigma^2.$$
+
+Following PSD, the second parameter is the **standard deviation**.
+
+$$f_X(x)=\frac{1}{\sigma\sqrt{2\pi}}
+\exp\left[-\frac12\left(\frac{x-\mu}{\sigma}\right)^2\right].$$
+
+This formula defines the curve. We use `dnorm()` to draw it and
+`pnorm()` to calculate its accumulated area.
+
+No hand evaluation of a normal integral is required.
+
+## Location and spread
+
+```{r}
+#| label: normal-shapes-figure
+#| echo: false
+normal_shapes()
+```
+
+Changing $\mu$ shifts the center. Increasing $\sigma$ spreads the same
+total area over a wider range and lowers the peak.
+
+## Standardization
+
+If $X\sim\operatorname{Norm}(\mu,\sigma)$, then
+
+$$Z=\frac{X-\mu}{\sigma}\sim\operatorname{Norm}(0,1).$$
+
+$Z$ measures distance from the mean in standard deviations.
+
+$$P(X\le x)=P\left(Z\le\frac{x-\mu}{\sigma}\right).$$
+
+We can use `pnorm(x, mean = mu, sd = sigma)` directly, or standardize
+first and use `pnorm((x - mu) / sigma)`.
+
+## The normal model's central areas
+
+| Distance from the mean | Probability |
+|---|---:|
+| Within one SD | About 68% |
+| Within two SDs | About 95% |
+| Within three SDs | About 99.7% |
+
+For example,
+
+$$P(\mu-\sigma\le X\le\mu+\sigma)
+=P(-1\le Z\le1)\approx0.683.$$
+
+These percentages describe the normal model. They are not universal
+rules for every distribution.
+
+## A hypothetical election forecast
+
+Suppose the final margin follows $V\sim\operatorname{Norm}(3,5)$,
+in percentage points.
+
+```{r}
+#| label: normal-win-figure
+#| echo: false
+normal_area()
+```
+
+The shaded area is $P(V>0)$, the probability of victory in this model.
+The parameters are assumptions, not estimates we fit today.
+
+## A normal density and its CDF
+
+For $V\sim\operatorname{Norm}(3,5)$, $F_V(x)=P(V\le x)$.
+
+```{r}
+#| label: normal-pdf-cdf-figure
+#| echo: false
+normal_pdf_cdf()
+```
+
+The shaded **area** on the left equals the **height** on the right:
+$F_V(0)\approx0.274$. The win probability is $1-F_V(0)\approx0.726$.
+
+The CDF rises fastest where the density is highest.
+
+## Win probabilities and close elections
+
+```{r}
+#| label: normal-probabilities
+pnorm(0, mean = 3, sd = 5, lower.tail = FALSE)
+pnorm(1, mean = 3, sd = 5) - pnorm(-1, mean = 3, sd = 5)
+```
+
+The first expression gives $P(V>0)$.
+The second gives $P(-1\le V\le1)$.
+
+Write the event and its CDF expression before choosing the R command.
+
+**Demo 3:** Compare these areas with `dnorm(0, 3, 5)`.
+
+## The forecast mean and the chance of victory
+
+Hold the SD at 5 and the victory threshold at zero. Vary the assumed mean $\mu$:
+
+$$P(V>0)=\Phi(\mu/5),\qquad \Phi(z)=P(Z\le z),\quad Z\sim\operatorname{Norm}(0,1).$$
+
+```{r}
+#| label: normal-win-curve-figure
+#| echo: false
+#| fig-height: 2.7
+normal_win_curve()
+```
+
+Here the horizontal axis changes the **mean of the distribution**.
+The previous CDF moved a **threshold within one fixed distribution**.
+
+## Density at a tie
+
+For this model, $f_V(0)\approx0.06664$ per percentage point.
+
+| $\epsilon$ (pp) | Interval width | $P(-\epsilon\le V\le\epsilon)$ |
+|---:|---:|---:|
+| 0.5 | 1.00 | 0.066574 |
+| 0.1 | 0.20 | 0.013328 |
+| 0.01 | 0.02 | 0.001333 |
+
+For narrow intervals, probability is approximately
+**width times density**.
+
+As the width shrinks, the probability tends to zero. Its ratio to the
+width tends to $f_V(0)$.
+
+## Quantiles run the CDF backward
+
+Start at a cumulative probability, move across to the curve, then down
+to its margin threshold.
+
+```{r}
+#| label: normal-quantile-cdf-figure
+#| echo: false
+normal_quantile_cdf()
+```
+
+`qnorm(c(.10, .90), mean = 3, sd = 5)` gives $-3.41$ and $9.41$.
+These enclose the middle **80%** of future margins under this model.
+
+## A central forecast interval
+
+```{r}
+#| label: central-figure
+#| echo: false
+normal_central()
+```
+
+The endpoints are approximately $-3.41$ and $9.41$ percentage points.
+The total area outside is $0.20$, divided equally between the tails.
+
+This describes the **random final margin**, given the model, rather than
+a confidence interval for an unknown mean.
+
+## Simulating the forecast
+
+```{r}
+#| label: normal-sim-code
+set.seed(93004)
+v <- rnorm(50000, mean = 3, sd = 5)
+c(win = mean(v > 0), mean = mean(v), variance = var(v))
+```
+
+**Demo 4:** Compare CDF calculations and model moments with the simulation.
+
+The number of draws controls simulation accuracy.
+The supplied $\sigma=5$ controls variation across possible election margins.
+
+## A continuous margin and a discrete payoff
+
+A hypothetical contract costs \$1.50 and pays \$2 for a victory:
+
+$$W=\begin{cases}2,&V>0,\\0,&V\le0,\end{cases}
+\qquad Z=W-1.50.$$
+
+Let $p=P(V>0)$. Then
+
+| Net profit $z$ | $-1.50$ | $0.50$ |
+|---|---:|---:|
+| $P(Z=z)$ | $1-p$ | $p$ |
+
+The margin $V$ is continuous in the model. The payout and profit are discrete.
+
+## A likely profit and an expected profit
+
+For the contract,
+
+$$E[Z]=2p-1.50,\qquad \operatorname{Var}(Z)=4p(1-p).$$
+
+Here $p\approx0.726$, so the probability of profit exceeds one half,
+but expected profit is about **minus five cents**.
+
+The loss is three times the size of the gain.
+
+**Demo 6:** Transform each simulated margin into its corresponding payout.
+Changing a fixed price shifts the mean profit, leaving variance unchanged.
+
+## A discrete election model
+
+Exactly 200 voters choose A or B independently.
+Each chooses A with probability $p=0.5$.
+
+$$K=\text{votes for A}\sim\operatorname{Binom}(200,0.5).$$
+
+$$E[K]=100,\qquad \operatorname{SD}(K)=\sqrt{50}\approx7.07.$$
+
+$K$ is a count. A tie, $K=100$, has positive probability.
+
+These independence and common-probability assumptions define a toy model.
+
+## A normal approximation to the count
+
+```{r}
+#| label: binomial-figure
+#| echo: false
+binomial_overlay()
+```
+
+Match the binomial mean and SD with
+$K^*\sim\operatorname{Norm}(100,\sqrt{50})$.
+
+Each displayed binomial bar has width one vote and area $P(K=k)$.
+
+## An exact tie becomes an interval
+
+```{r}
+#| label: continuity-figure
+#| echo: false
+binomial_overlay(tie=TRUE)
+```
+
+$$P(K=100)\approx P(99.5<K^*<100.5).$$
+
+The half-vote boundaries form a **continuity correction**.
+They assign the mass at 100 to its surrounding unit-width bin.
+
+## Exact and approximate election probabilities
+
+```{r}
+#| label: continuity-code
+sd_count <- sqrt(200 * .5 * .5)
+dbinom(100, size = 200, prob = .5)
+pnorm(100.5, 100, sd_count) - pnorm(99.5, 100, sd_count)
+```
+
+Both are about $0.0564$.
+
+A **strict victory** is $K\ge101$, approximated by $K^*>100.5$.
+It has probability about $0.4718$, not $0.5$.
+
+**Demo 5:** Compare exact probabilities, the approximation, and simulated counts.
+
+## Counts and percentage-point margins
+
+In a two-candidate election with $n$ votes,
+
+$$V=100\left(\frac{K}{n}-\frac{n-K}{n}\right)
+=\frac{200K}{n}-100.$$
+
+A one-vote increment changes the margin by $200/n$ percentage points.
+
+The tie bin in margin units is $(-100/n,100/n)$.
+For $n=200$, that is $(-0.5,0.5)$ percentage points.
+
+Probabilities agree across units when we transform both the interval and
+the distribution.
+
+## Assumptions behind the approximation
+
+- Independent Bernoulli votes with a common $p$ give a binomial count.
+- Independent votes with different $p_i$ give a Poisson-binomial count.
+- Dependence between votes can change the count's variance and shape.
+
+A normal approximation works best when the count has enough variation
+and neither boundary is too close to its center.
+
+Next week: a fuller account of why sums often have approximately normal
+distributions.
+
+## A forecast has additional sources of uncertainty
+
+The binomial example assumes a known $p$ and a fixed electorate size.
+
+A forecast may also represent uncertainty about support, turnout,
+or shared errors.
+
+B2 supplies a hypothetical normal margin model directly.
+Its parameters do not come from a specified binomial electorate.
+
+The count example explains how a continuous approximation can assign zero
+probability to a point even when the discrete event has positive probability.
+
+## B2 programming: values and their weights
+
+```{r}
+#| label: population-code
+costs <- c(5, 15, 15, 45)
+values <- sort(unique(costs))
+counts <- as.numeric(table(factor(costs, levels = values)))
+probability <- counts / length(costs)
+data.frame(values, probability, cdf = cumsum(probability))
+```
+
+**Demo 7:** Compute moments by probability weights and by all four people.
+
+For this finite population, use
+`mean((costs - mean(costs))^2)` for variance.
+
+## B2 programming: a loop over decisions
+
+For each offer, calculate its payoff against every possible partner.
+
+```{r}
+#| eval: false
+for (i in seq_len(nrow(result))) {
+  offer <- result$offer[i]
+  payoff <- ifelse(costs <= offer, budget - offer, 0)
+  result$expected[i] <- mean(payoff)
+  result$variance[i] <- mean((payoff - mean(payoff))^2)
+}
+```
+
+**Demo 9** supplies the complete function and result table.
+Row 1 corresponds to offer 0, so the row index differs from the offer.
+
+This loop calculates exact finite-population quantities. Random sampling
+with replacement provides a separate simulation check.
+
+## Questions to carry into B2
+
+1. What is the random experiment, and what stays fixed?
+2. Does the calculation require a mass, an area, a quantile, or a moment?
+3. Are we averaging transformed outcomes or transforming an average?
+4. Could two offers have crossing payoff CDFs?
+5. Which differences reflect simulation error rather than model uncertainty?
+
+Keep written derivations and interpretations outside R chunks.
+Render from a fresh session and commit both the QMD and current HTML.
+
+## Reading and references
+
+Speegle and Clair, [*Probability, Statistics, and Data*, Chapter 4](https://probstatsdata.com/continuousrandomvariables.html).
+
+- Sections 4.1-4.3: densities, CDFs, expectation, and variance.
+- Sections 4.4.1-4.4.2: normal computations and the binomial approximation.
+
+The waiting-time, project-partner, and forecast examples are hypothetical
+course examples. All figures are reproducible from the accompanying R code.
+
+R help: `?Uniform`, `?Normal`, `?Binomial`, and `?ecdf`.
+
+Point-probability intuition adapted from Matt Blackwell's random-variables
+lecture, slide 16, used with permission.

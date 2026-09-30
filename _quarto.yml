@@ -22,6 +22,11 @@ project:
     - lectures/04-discrete-random-variables/discrete-rv-live-demo.qmd
     - lectures/04-discrete-random-variables/discrete-rv-live-demo.html
     - lectures/04-discrete-random-variables/poli210-seminar4.Rproj
+    - lectures/05-continuous-random-variables/continuous-rv-slides.html
+    - lectures/05-continuous-random-variables/continuous-rv-slides.pdf
+    - lectures/05-continuous-random-variables/continuous-rv-live-demo.qmd
+    - lectures/05-continuous-random-variables/continuous-rv-live-demo.html
+    - lectures/05-continuous-random-variables/poli210-seminar5.Rproj
 
 website:
   title: "POLI 210"

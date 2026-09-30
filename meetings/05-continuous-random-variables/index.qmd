@@ -1,0 +1,51 @@
+---
+title: "Meeting 5: Continuous random variables"
+subtitle: "September 30, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[Chapter 4](https://probstatsdata.com/continuousrandomvariables.html),
+especially Sections 4.1-4.4.2. Bring your laptop with RStudio ready to use.
+**A3 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/05-continuous-random-variables/continuous-rv-slides.html)
+- [Download the slide PDF](../../lectures/05-continuous-random-variables/continuous-rv-slides.pdf)
+- [Download the demonstration QMD](../../lectures/05-continuous-random-variables/continuous-rv-live-demo.qmd){download="continuous-rv-live-demo.qmd"}
+- [Read the demonstration with its output](../../lectures/05-continuous-random-variables/continuous-rv-live-demo.html)
+- [Optional RStudio project file](../../lectures/05-continuous-random-variables/poli210-seminar5.Rproj){download="poli210-seminar5.Rproj"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/05-continuous-random-variables)
+
+Use the arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy.
+
+Save the demonstration QMD in your course folder and open it in RStudio.
+Each numbered chunk defines its own inputs and can run independently.
+The examples use base R and require no downloaded data. Rendering also
+requires `knitr` and `rmarkdown`. The HTML displays saved output rather
+than running R in your browser. If using the optional project file,
+save it beside the QMD and open the project first.
+
+## During the seminar
+
+We will distinguish point probabilities, densities, and cumulative probabilities.
+Integrals describe accumulated area, with geometry and R doing the calculations.
+No hand evaluation of complicated integrals is needed.
+
+We will examine normal CDFs, forecast probabilities, quantiles, and simulation.
+A discrete vote-count model illustrates the normal approximation and continuity
+correction. Bargaining and contract examples show how transformations change
+the distribution of payoffs, and why a mean alone does not describe a decision.
+
+## After class
+
+Rerun the demonstrations and change one input at a time. Explain the difference
+between a density height and an interval probability, and between changing
+a forecast's standard deviation and increasing the number of simulated draws.
+
+**B2 is due October 7 at 1:30 p.m. Pacific.** The instructions, prepared data,
+and plotting helpers are in your private B2 repository. Submit the QMD and
+current HTML there. Keep individual submissions private.

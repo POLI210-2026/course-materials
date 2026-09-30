@@ -1,0 +1,12 @@
+.quarto/
+.Rproj.user/
+.Rhistory
+.RData
+*.typ
+!notes-style.typ
+!typst-show.typ
+*_files/
+qa/
+
+/.quarto/
+**/*.quarto_ipynb
