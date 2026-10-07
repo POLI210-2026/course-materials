@@ -1,0 +1,721 @@
+---
+title: "Sampling distributions"
+subtitle: "POLI 210 - Seminar 6"
+author: "Brad LeVeck"
+date: "2026-10-07"
+format:
+  revealjs:
+    theme: [simple, slides.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    center: false
+    transition: none
+    embed-resources: true
+    code-overflow: wrap
+  typst:
+    fontsize: 21pt
+    template-partials: [typst-show.typ]
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 10
+fig-height: 3.0
+---
+
+```{r}
+#| label: setup
+#| include: false
+source("R/figures.R")
+```
+
+## Today's questions
+
+- How can simulated values reveal a density?
+- How does a statistic vary across repeated samples?
+- What do the LLN and CLT tell us about a sample mean?
+- Why do squared deviations and estimated standard errors lead to new distributions?
+
+**Reading:** PSD Chapter 5, Sections 5.1-5.5, emphasizing chi-squared and $t$.
+All numerical examples here are hypothetical.
+
+## Simulation reminder
+
+For an event $A$, estimate $P(A)$ by the fraction of simulated outcomes in $A$.
+
+```{r}
+#| label: reminder-code
+#| eval: false
+set.seed(100701)
+B <- 10000
+supporters <- rbinom(B, size = 4, prob = .6)
+mean(supporters >= 3)
+proportions(table(factor(supporters, levels = 0:4)))
+```
+
+`mean()` turns logical values into an estimated probability.
+`factor(..., levels = ...)` keeps possible outcomes with zero observed counts.
+
+## An estimated PMF
+
+```{r}
+#| label: pmf
+#| echo: false
+pmf_reminder()
+```
+
+More replications improve our approximation to this **same** distribution.
+They do not change its true probabilities.
+
+## Counts and areas in a histogram
+
+Group $B=20$ draws into bins of width $2h=2$.
+For density heights, divide each count by $B(2h)=40$.
+
+```{r}
+#| label: histogram
+#| echo: false
+#| fig-height: 3.2
+histogram_area()
+```
+
+Highlighted bar: height $=8/40=0.20$, area $=2(0.20)=0.40=8/20$.
+
+In R, `hist(draws, probability = TRUE)` makes the **total bar area one**.
+
+## A local estimate of density
+
+Last week, for a density continuous at $x$:
+
+$$f(x)=\lim_{h\downarrow0}\frac{P(x-h\le X\le x+h)}{2h}.$$
+
+For a bin centered at $x$, use its observed fraction and divide by its width:
+
+$$\widehat f_h(x)=
+\frac{\#\{b:x-h\le X_b\le x+h\}/B}{2h}.$$
+
+This gives the **height** of the density bar. Multiplying by $2h$
+recovers the fraction of draws in that bin.
+
+## Narrower bins reveal detail and noise
+
+The same 80 draws appear in every panel.
+
+```{r}
+#| label: histogram-binwidth
+#| echo: false
+#| fig-height: 2.8
+histogram_binwidth()
+```
+
+Narrow bins can be empty or spiky. Gaussian kernels use smooth weights
+instead of hard boundaries.
+
+They still need a bandwidth: shrinking it too far also produces spikes.
+
+## Kernel smoothing
+
+Give each observed value a smooth bump centered at that value.
+Each bump contributes area $1/B$. Add the bumps.
+
+```{r}
+#| label: kernels
+#| echo: false
+kernel_bumps()
+```
+
+Nearby observations contribute most to the estimated height at $x$.
+
+## A Gaussian kernel estimate
+
+If $\phi$ is the standard Normal density and $h>0$ is the bandwidth,
+
+$$\widehat f_h(x)=\frac{1}{B}\sum_{b=1}^{B}
+\frac{1}{h}\phi\!\left(\frac{x-X_b}{h}\right).$$
+
+- Each unweighted kernel is a Normal PDF with mean $X_b$ and SD $h$.
+- Dividing by $B$ gives each observation an equal share of the total area.
+- The resulting curve has area one and density units.
+
+Gaussian **bumps** can form a non-Normal density, including several peaks.
+
+## Bandwidth controls the amount of smoothing
+
+```{r}
+#| label: bandwidth
+#| echo: false
+bandwidth_comparison()
+```
+
+Small $h$ preserves fine detail and noise. Large $h$ can erase real features.
+Bandwidth is a smoothing choice, not the population standard deviation.
+
+## What R's density() does
+
+```{r}
+#| label: density-code
+#| eval: false
+fit <- density(draws)          # Gaussian kernel by default
+plot(fit)
+fit$bw                        # chosen bandwidth
+lines(density(draws, adjust = .5), col = "red")
+```
+
+R chooses a bandwidth and evaluates a kernel estimate on a grid.
+`adjust = .5` halves that bandwidth.
+
+`fit$x` holds grid locations. `fit$y` holds estimated **density heights**.
+Use `mean(draws >= a & draws <= b)` for a simulated interval probability.
+
+## A boundary caution
+
+```{r}
+#| label: boundaries
+#| echo: false
+boundary_caution()
+```
+
+Gaussian kernels spread some area beyond known endpoints and smooth jumps.
+For bounded variables, inspect the support before interpreting the curve.
+
+## A known parametric curve on the same axes
+
+```{r}
+#| label: overlay-code
+#| eval: false
+draws <- rnorm(2000, mean = 3, sd = 5)
+hist(draws, probability = TRUE)
+lines(density(draws), col = "blue")
+curve(dnorm(x, mean = 3, sd = 5), add = TRUE, col = "red")
+```
+
+The histogram and kernel estimate summarize the draws. The red curve uses
+the **known generating parameters**.
+
+`curve()` creates a grid across the histogram's x-axis range and supplies
+it as `x`, where `dnorm()` evaluates the density.
+
+For real data, `mean(draws)` and `sd(draws)` give a simple fitted Normal
+comparison. Parameter estimation and model checking need more than a
+visual match. We will return to principled fitting methods later.
+
+## A statistic is a random variable
+
+Imagine repeatedly sampling people from a hypothetical debate audience.
+Population probabilities are 0.6 for A, 0.3 for B, and 0.1 for unsure.
+
+```{r}
+#| label: debate
+#| echo: false
+debate_samples()
+```
+
+The population stays fixed. A new sample produces a new sample proportion.
+
+## The sampling distribution
+
+Let $X_i=1$ when person $i$ favors A and 0 otherwise.
+
+$$\widehat p=\overline X=\frac{1}{n}\sum_{i=1}^{n}X_i.$$
+
+```{r}
+#| label: poll-sampling
+#| echo: false
+poll_sampling()
+```
+
+Each entry in this histogram summarizes an **entire sample of 100 people**.
+
+## Sample size n and simulation replications B
+
+```{r}
+#| label: replication-code
+#| eval: false
+n <- 100                     # people in each sample
+B <- 10000                   # repeated samples
+sample_proportions <- replicate(B, {
+  people <- rbinom(n, size = 1, prob = .6)
+  mean(people)                # one statistic per sample
+})
+```
+
+Changing $n$ changes the sampling distribution.
+Changing $B$ changes how accurately the simulation displays it.
+
+## More samples versus larger samples
+
+```{r}
+#| label: n-vs-b
+#| echo: false
+sample_size_replications()
+```
+
+Here each observation is $\operatorname{Unif}(0,10)$.
+Compare the first two panels for $B$, then the last two for $n$.
+
+## The iid model
+
+$X_1,\ldots,X_n$ are **independent and identically distributed**:
+
+- Each observation has the same distribution, with mean $\mu$ and variance $\sigma^2$.
+- Learning one observation gives no information about another.
+- Sampling with replacement from a fixed population produces this model.
+
+Sampling without replacement creates dependence. When the sampling
+fraction is small, treating observations as independent may be a useful approximation.
+
+Clustering, shared shocks, or selective participation need additional attention.
+
+## The mean of the sample mean
+
+$$
+\begin{aligned}
+E[\overline X]
+&=E\left[\frac{1}{n}\sum_{i=1}^{n}X_i\right]\\
+&=\frac{1}{n}\sum_{i=1}^{n}E[X_i]
+=\frac{n\mu}{n}=\mu.
+\end{aligned}
+$$
+
+This is an **exact** result at every sample size.
+Linearity of expectation does not require independence.
+
+An individual sample mean will usually differ from $\mu$.
+
+## The variance of the sample mean
+
+Under independence and a common finite variance,
+
+$$
+\begin{aligned}
+\operatorname{Var}(\overline X)
+&=\frac{1}{n^2}\operatorname{Var}\left(\sum_{i=1}^{n}X_i\right)\\
+&=\frac{1}{n^2}\sum_{i=1}^{n}\operatorname{Var}(X_i)
+=\frac{\sigma^2}{n}.
+\end{aligned}
+$$
+
+Thus $\operatorname{SD}(\overline X)=\sigma/\sqrt n$.
+This is the **standard error** of the sample mean under our model.
+
+## Standard deviation and standard error
+
+For an indicator with success probability $p=0.6$:
+
+$$\sigma=\sqrt{0.6(0.4)}\approx0.490,
+\qquad \operatorname{SE}(\widehat p)=\sqrt{\frac{0.6(0.4)}{n}}.$$
+
+| Sample size | SD of an individual indicator | SE of sample proportion |
+|---:|---:|---:|
+| 25 | 0.490 | 0.098 |
+| 100 | 0.490 | 0.049 |
+| 400 | 0.490 | 0.0245 |
+
+Quadrupling $n$ halves the SE.
+Increasing the number of simulated samples $B$ leaves this SE unchanged.
+
+## The law of large numbers
+
+For iid observations with a finite mean,
+
+$$\overline X_n\xrightarrow{P}\mu.$$
+
+For every fixed tolerance $\epsilon>0$,
+
+$$P(|\overline X_n-\mu|>\epsilon)\longrightarrow0.$$
+
+Large samples make substantial errors less likely.
+The claim does not require a Normal population or a Normal sampling distribution.
+
+Simulation proportions also obey this logic: average the event indicators.
+
+## Running averages
+
+```{r}
+#| label: lln
+#| echo: false
+lln_paths()
+```
+
+Five paths from the same Bernoulli model, $p=0.6$.
+An average can temporarily move farther from the truth as more data arrive.
+
+## Center, concentration, and shape
+
+| Result | What it tells us about the sample mean |
+|---|---|
+| $E[\overline X]=\mu$ | Center, exactly |
+| $\operatorname{Var}(\overline X)=\sigma^2/n$ | Spread, exactly under iid finite variance |
+| LLN | Concentration near $\mu$ as $n$ grows |
+| CLT | Limiting shape after centering and scaling |
+
+The LLN does not make individual observations less variable.
+A large sample also cannot repair a systematically unrepresentative design.
+
+## Break
+
+When we return: the shape of sampling distributions and the role of
+random denominators.
+
+**Question to keep in mind:** What would change if we divided by an estimated
+standard error instead of the true one?
+
+## Exact Normal sampling distributions
+
+If $X_i$ are iid $\operatorname{Norm}(\mu,\sigma)$, then
+
+$$\overline X\sim\operatorname{Norm}\left(\mu,\frac{\sigma}{\sqrt n}\right),$$
+
+$$Z=\frac{\overline X-\mu}{\sigma/\sqrt n}
+\sim\operatorname{Norm}(0,1)$$
+
+**for every $n$**.
+
+As in PSD, the second Normal parameter is the SD.
+With a non-Normal population, standardizing still gives mean 0 and variance 1,
+but those two moments do not establish a Normal shape.
+
+## The central limit theorem
+
+For iid observations with mean $\mu$ and $0<\sigma^2<\infty$,
+
+$$\frac{\overline X_n-\mu}{\sigma/\sqrt n}
+\xrightarrow{d}\operatorname{Norm}(0,1).$$
+
+For sufficiently large $n$, this suggests
+
+$$\overline X_n\ \approx\ \operatorname{Norm}\left(\mu,\frac{\sigma}{\sqrt n}\right).$$
+
+The approximation concerns **sample means across repeated samples**.
+The observations themselves keep their original distribution.
+
+## Uniform observations, standardized means
+
+```{r}
+#| label: uniform-clt
+#| echo: false
+clt_panels("uniform")
+```
+
+$X_i\sim\operatorname{Unif}(0,10)$, so $\mu=5$ and $\sigma=10/\sqrt{12}$.
+The red curve is the standard Normal PDF in every panel.
+
+## A skewed population
+
+```{r}
+#| label: exponential-clt
+#| echo: false
+clt_panels("exponential")
+```
+
+$X_i\sim\operatorname{Exp}(0.2)$, with $\mu=\sigma=5$.
+Skewness can require larger samples for an adequate Normal approximation.
+
+## How close is the Normal approximation?
+
+```{r}
+#| label: cdf-checkpoints
+#| echo: false
+#| fig-height: 2.4
+cdf_checkpoint_plot()
+```
+
+```{r}
+#| eval: false
+mean(z_means <= 0)   # simulated P(Z_n <= 0)
+pnorm(0)            # standard Normal P(Z <= 0)
+```
+
+**A4:** At $z=-2,-1,0,1,2$, require every absolute gap to be at most
+0.02 (two percentage points).
+
+Agreement at five checkpoints can coexist with differences elsewhere.
+
+## No universal sample-size cutoff
+
+```{r}
+#| label: rare-clt
+#| echo: false
+rare_event_clt()
+```
+
+Thirty observations are not enough here to erase the rare-event skew.
+Approximation quality depends on the population and which probabilities matter.
+
+## A Normal approximation to a poll
+
+Suppose $p=0.6$, $n=400$, and sampling follows the iid indicator model.
+
+$$P(0.55\le\widehat p\le0.65)
+\approx P\left(-2.041\le Z\le2.041\right).$$
+
+```{r}
+#| label: poll-probability
+se <- sqrt(.6 * .4 / 400)
+c(normal = pnorm(.65, .6, se) - pnorm(.55, .6, se),
+  exact = pbinom(260, 400, .6) - pbinom(219, 400, .6))
+```
+
+The exact comparison includes counts 220 through 260.
+The uncorrected Normal calculation is approximate; a continuity correction
+would use boundaries 219.5 and 260.5 on the count scale.
+
+## Squared standardized deviations
+
+Suppose a discrepancy, divided by its known SD, follows $Z\sim\operatorname{Norm}(0,1)$.
+
+$$Q=Z^2.$$
+
+Squaring measures the **size** of a discrepancy in either direction:
+
+| $Z$ | $-2$ | $-1$ | $0$ | $1$ | $2$ |
+|---|---:|---:|---:|---:|---:|
+| $Z^2$ | 4 | 1 | 0 | 1 | 4 |
+
+By definition, $Z^2\sim\chi^2_1$ exactly.
+If a standardized discrepancy is only approximately Normal, its square may
+be approximately chi-squared.
+
+## The distribution of Z squared
+
+```{r}
+#| label: chi-one
+#| echo: false
+chi_one()
+```
+
+Values are nonnegative. Many are close to zero, with a long right tail.
+The PDF rises without bound at zero, but a single point still has probability zero.
+
+## A total discrepancy
+
+For independent standard Normal variables,
+
+$$Q=Z_1^2+\cdots+Z_\nu^2\sim\chi^2_\nu.$$
+
+Imagine independent, correctly standardized discrepancies from three polls.
+Values $2,-1,1.5$ give $Q=4+1+2.25=7.25$.
+
+- Squaring prevents positive and negative discrepancies from cancelling.
+- Standardizing puts discrepancies on comparable scales.
+- The reference distribution describes ordinary variation under the assumed model.
+
+Dependence or fitted constraints can change this reference distribution.
+
+## Degrees of freedom and total variation
+
+```{r}
+#| label: chi-family
+#| echo: false
+chi_family()
+```
+
+$$E[Q]=\nu,\qquad \operatorname{Var}(Q)=2\nu.$$
+
+With more independent components, a larger total squared discrepancy is expected.
+
+## Sample variance is also random
+
+For a sample of $n$ observations,
+
+$$S^2=\frac{1}{n-1}\sum_{i=1}^{n}(X_i-\overline X)^2.$$
+
+Each new sample has its own $\overline X$ and $S^2$.
+
+Under iid Normal sampling,
+
+$$\frac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1}.$$
+
+This distribution tells us how a sample's measured spread varies around
+the population's spread. R computes $S^2$ with `var()` and $S$ with `sd()`.
+
+## Why n minus 1?
+
+Residuals around the sample mean satisfy
+
+$$\sum_{i=1}^{n}(X_i-\overline X)=0.$$
+
+Once $n-1$ residuals are known, the last is determined.
+Estimating the center uses one degree of freedom.
+
+The residuals are **dependent**. Their squares are not $n$ independent
+chi-squared contributions.
+
+For Normal samples, the total squared residual variation has $n-1$
+independent components after a suitable change of coordinates.
+We use that result without deriving the coordinate transformation.
+
+## A sampling distribution for variance
+
+```{r}
+#| label: variance-sampling
+#| echo: false
+variance_distribution()
+```
+
+Here $n=10$ and the population SD is 4.
+Dividing by $\sigma^2$ removes the measurement scale.
+
+## The t construction
+
+Let $Z\sim\operatorname{Norm}(0,1)$ and $Q\sim\chi^2_\nu$ be independent.
+
+$$T=\frac{Z}{D},\qquad D=\sqrt{Q/\nu},\qquad T\sim t_\nu.$$
+
+$Q/\nu$ has mean 1 and variance $2/\nu$.
+Its square root is a random **relative SD**.
+
+If $D<1$, division magnifies the numerator.
+If $D>1$, division shrinks it.
+Occasional small denominators create more extreme ratios.
+
+## A random denominator
+
+```{r}
+#| label: t-denominator
+#| echo: false
+denominator_distribution()
+```
+
+As $\nu$ grows, $Q/\nu$ concentrates near 1, and so does $D$.
+The square root's mean is not exactly 1 at finite $\nu$.
+
+## Heavier tails than a Normal
+
+```{r}
+#| label: t-density
+#| echo: false
+t_shapes()
+```
+
+For $\nu>2$, $\operatorname{Var}(T)=\nu/(\nu-2)>1$.
+For $\nu\le2$, there is no finite variance.
+As $\nu$ grows, the $t$ distribution approaches standard Normal.
+
+## Why this particular denominator?
+
+For an iid Normal sample, define
+
+$$Z=\frac{\overline X-\mu}{\sigma/\sqrt n},
+\qquad Q=\frac{(n-1)S^2}{\sigma^2}.$$
+
+Then $Z$ and $Q$ are independent and
+
+$$\sqrt{\frac{Q}{n-1}}=\frac{S}{\sigma}.$$
+
+The denominator represents the ratio of the **estimated** SD to the true SD.
+It follows from sampling variation in $S$, rather than an arbitrary decision
+to widen a Normal curve.
+
+## Replacing the true standard error
+
+$$
+\begin{aligned}
+\frac{Z}{\sqrt{Q/(n-1)}}
+&=\frac{\overline X-\mu}{\sigma/\sqrt n}
+  \frac{\sigma}{S}\\
+&=\frac{\overline X-\mu}{S/\sqrt n}
+\sim t_{n-1}.
+\end{aligned}
+$$
+
+$\sigma/\sqrt n$ is the true sampling SD.
+$S/\sqrt n$ is its estimate, and changes across samples.
+
+This exact $t$ result requires iid **Normal** observations.
+For other populations, approximation quality needs separate consideration.
+
+## A t statistic from each simulated sample
+
+```{r}
+#| label: t-code
+#| eval: false
+n <- 10
+B <- 10000
+t_values <- replicate(B, {
+  sample_x <- rnorm(n, mean = 12, sd = 4)
+  (mean(sample_x) - 12) / (sd(sample_x) / sqrt(n))
+})
+hist(t_values, probability = TRUE)
+curve(dt(x, df = n - 1), add = TRUE, col = "red")
+```
+
+Compute the sample mean and SD from the **same sample**.
+The known generating mean lets us study the statistic's distribution.
+
+## The simulated statistic and its reference curve
+
+```{r}
+#| label: actual-t
+#| echo: false
+actual_t()
+```
+
+The $t$ reference anticipates uncertainty from estimating the denominator.
+We will use this relationship for inference later.
+
+## Three distributions with distinct jobs
+
+| Distribution | Construction | What varies? |
+|---|---|---|
+| Standard Normal | $(\overline X-\mu)/(\sigma/\sqrt n)$ | Mean relative to a known SE |
+| $\chi^2_{n-1}$ | $(n-1)S^2/\sigma^2$ | Estimated variance relative to true variance |
+| $t_{n-1}$ | $(\overline X-\mu)/(S/\sqrt n)$ | Mean relative to an estimated SE |
+
+These exact relationships hold for iid Normal samples.
+The CLT provides a broader, approximate route for standardized means.
+
+## Retrieval questions
+
+1. In a density histogram, what does a bar's area estimate?
+2. Which change narrows a sampling distribution: larger $n$ or larger $B$?
+3. What does the LLN tell us that differs from the CLT?
+4. Why does replacing $\sigma$ with $S$ change the reference distribution?
+
+For simulation exercises, define one experiment first.
+Then repeat it, store one statistic per repetition, and compare with a
+clearly labeled reference.
+
+## Reading and references
+
+- Speegle and Clair, *Probability, Statistics, and Data*, [Chapter 5](https://probstatsdata.com/SimulationRV.html), Sections 5.1-5.5.
+- R Core Team, [`density()` documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/density.html).
+- R help for `hist`, `dnorm`, `dchisq`, `dt`, and `replicate`.
+
+The polling illustration adapts Brad LeVeck's earlier sampling-distribution notes.
+Kernel and sampling figures are reproducible R graphics.
+
+The following two slides are optional previews.
+
+## Optional: a ratio of variance estimates
+
+For independent $Q_1\sim\chi^2_{\nu_1}$ and $Q_2\sim\chi^2_{\nu_2}$,
+
+$$F=\frac{Q_1/\nu_1}{Q_2/\nu_2}\sim F_{\nu_1,\nu_2}.$$
+
+For independent Normal samples, this becomes
+
+$$\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2}
+\sim F_{n_1-1,n_2-1}.$$
+
+It compares two relative variance estimates.
+The numerator and denominator have separate degrees of freedom.
+Testing applications can wait.
+
+## Optional: the word unbiased
+
+A statistic $\widehat\theta$ used to estimate a parameter $\theta$
+is **unbiased** if
+
+$$E[\widehat\theta]=\theta.$$
+
+We already showed $E[\overline X]=\mu$.
+This gives a name to the centering property.
+
+Unbiased does not mean every realized estimate is correct, or that it has
+the smallest possible error. Estimator comparisons, MSE, and the
+bias-variance tradeoff belong to the next seminar.

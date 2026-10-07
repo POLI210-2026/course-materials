@@ -1,0 +1,9 @@
+.quarto/
+.Rproj.user/
+.Rhistory
+.RData
+.DS_Store
+*.typ
+!typst-show.typ
+*_files/
+Rplots.pdf

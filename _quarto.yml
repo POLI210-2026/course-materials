@@ -27,6 +27,11 @@ project:
     - lectures/05-continuous-random-variables/continuous-rv-live-demo.qmd
     - lectures/05-continuous-random-variables/continuous-rv-live-demo.html
     - lectures/05-continuous-random-variables/poli210-seminar5.Rproj
+    - lectures/06-sampling-distributions/sampling-distributions-slides.html
+    - lectures/06-sampling-distributions/sampling-distributions-slides.pdf
+    - lectures/06-sampling-distributions/sampling-distributions-live-demo.qmd
+    - lectures/06-sampling-distributions/sampling-distributions-live-demo.html
+    - lectures/06-sampling-distributions/poli210-seminar6.Rproj
 
 website:
   title: "POLI 210"

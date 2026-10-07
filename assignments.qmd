@@ -42,6 +42,20 @@ All assignments are due at **1:30 p.m.**
 | **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
 
+## A4: simulation and sampling distributions
+
+**Due October 14 at 1:30 p.m. Pacific.** A4 develops PSD Exercises **5.14,
+5.30, 5.31, and 5.38** with guided simulations, density plots, and comparisons
+of cumulative probabilities. See the
+[Seminar 6 materials](meetings/06-sampling-distributions/index.qmd), especially
+Demo 8b for the probability comparisons and Demo 11 for the t statistic.
+
+Accept the invitation to your private A4 repository and clone it as a new
+RStudio project. Complete `R/a4_answers.R` and the written responses in the
+QMD. Save, run the visible checks, and render the report. Commit and push
+**the answers R file, QMD, and current HTML**. The supplied helpers produce
+the plots and tables; automated checks provide feedback rather than a grade.
+
 ## B2: random variables and decisions
 
 **Due October 7 at 1:30 p.m. Pacific.** B2 uses bargaining data to study

@@ -2,58 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://poli210-2026.github.io/course-materials/meetings/index.html</loc>
-    <lastmod>2026-09-30T19:38:34.994Z</lastmod>
+    <lastmod>2026-10-07T20:11:08.445Z</lastmod>
   </url>
   <url>
-    <loc>https://poli210-2026.github.io/course-materials/meetings/04-discrete-random-variables/index.html</loc>
-    <lastmod>2026-09-23T23:50:24.104Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/meetings/02-probability/index.html</loc>
-    <lastmod>2026-09-08T23:58:03.754Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/setup/software.html</loc>
-    <lastmod>2026-08-22T23:17:02.596Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/setup/github-rstudio.html</loc>
-    <lastmod>2026-08-23T00:06:46.051Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/setup/file-paths.html</loc>
-    <lastmod>2026-08-22T23:17:02.595Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/assignments.html</loc>
-    <lastmod>2026-09-30T19:38:35.025Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/index.html</loc>
-    <lastmod>2026-09-30T19:38:34.963Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/syllabus/index.html</loc>
-    <lastmod>2026-08-24T20:37:41.334Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/setup/git-github.html</loc>
-    <lastmod>2026-08-23T00:08:32.830Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/setup/index.html</loc>
-    <lastmod>2026-08-23T00:06:45.999Z</lastmod>
-  </url>
-  <url>
-    <loc>https://poli210-2026.github.io/course-materials/meetings/01-reproducible-workflows/index.html</loc>
-    <lastmod>2026-08-23T00:06:46.102Z</lastmod>
+    <loc>https://poli210-2026.github.io/course-materials/meetings/05-continuous-random-variables/index.html</loc>
+    <lastmod>2026-09-30T19:38:35.115Z</lastmod>
   </url>
   <url>
     <loc>https://poli210-2026.github.io/course-materials/meetings/03-conditional-probability/index.html</loc>
     <lastmod>2026-09-16T01:19:51.639Z</lastmod>
   </url>
   <url>
-    <loc>https://poli210-2026.github.io/course-materials/meetings/05-continuous-random-variables/index.html</loc>
-    <lastmod>2026-09-30T19:38:35.115Z</lastmod>
+    <loc>https://poli210-2026.github.io/course-materials/meetings/01-reproducible-workflows/index.html</loc>
+    <lastmod>2026-08-23T00:06:46.102Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/setup/index.html</loc>
+    <lastmod>2026-08-23T00:06:45.999Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/setup/git-github.html</loc>
+    <lastmod>2026-08-23T00:08:32.830Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/syllabus/index.html</loc>
+    <lastmod>2026-08-24T20:37:41.334Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/index.html</loc>
+    <lastmod>2026-10-07T20:11:08.418Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/assignments.html</loc>
+    <lastmod>2026-10-07T20:11:08.472Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/setup/file-paths.html</loc>
+    <lastmod>2026-08-22T23:17:02.595Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/setup/github-rstudio.html</loc>
+    <lastmod>2026-08-23T00:06:46.051Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/setup/software.html</loc>
+    <lastmod>2026-08-22T23:17:02.596Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/meetings/02-probability/index.html</loc>
+    <lastmod>2026-09-08T23:58:03.754Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/meetings/04-discrete-random-variables/index.html</loc>
+    <lastmod>2026-09-23T23:50:24.104Z</lastmod>
+  </url>
+  <url>
+    <loc>https://poli210-2026.github.io/course-materials/meetings/06-sampling-distributions/index.html</loc>
+    <lastmod>2026-10-07T20:11:08.497Z</lastmod>
   </url>
 </urlset>

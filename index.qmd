@@ -12,15 +12,15 @@ part of statistical reasoning: shared work is written in Quarto, managed with
 Git, and checked through GitHub.
 :::
 
-::: {.callout-important title="Seminar 5: Continuous random variables"}
-**Wednesday, September 30, 1:30-4:20 p.m.**
+::: {.callout-important title="Seminar 6: Sampling distributions"}
+**Wednesday, October 7, 1:30-4:20 p.m.**
 
 Classroom and Office Building 1, Room 205
 
-Read **Speegle and Clair, Chapter 4** and bring your laptop. A3 is due at
-1:30 p.m. See the [meeting page](meetings/05-continuous-random-variables/index.qmd)
+Read **Speegle and Clair, Chapter 5, Sections 5.1-5.5** and bring your laptop.
+B2 is due at 1:30 p.m. See the [meeting page](meetings/06-sampling-distributions/index.qmd)
 for lecture slides and the downloadable Quarto demonstration.
-B2 is distributed through private repositories and is due **October 7 at 1:30 p.m.**
+A4 is distributed through private repositories and is due **October 14 at 1:30 p.m.**
 :::
 
 ## Quick links

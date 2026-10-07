@@ -1,0 +1,56 @@
+---
+title: "Meeting 6: Sampling distributions"
+subtitle: "October 7, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[Chapter 5](https://probstatsdata.com/SimulationRV.html), Sections 5.1-5.5.
+Bring your laptop with RStudio ready to use. **B2 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/06-sampling-distributions/sampling-distributions-slides.html)
+- [Download the slide PDF](../../lectures/06-sampling-distributions/sampling-distributions-slides.pdf)
+- [Download the demonstration QMD](../../lectures/06-sampling-distributions/sampling-distributions-live-demo.qmd){download="sampling-distributions-live-demo.qmd"}
+- [Read the demonstration with its output](../../lectures/06-sampling-distributions/sampling-distributions-live-demo.html)
+- [Optional RStudio project file](../../lectures/06-sampling-distributions/poli210-seminar6.Rproj){download="poli210-seminar6.Rproj"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/06-sampling-distributions)
+
+Use the arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy.
+
+Save the demonstration QMD in your course folder and open it in RStudio.
+Each numbered chunk defines its own inputs and can run independently.
+The examples use base R and require no downloads or separate helper scripts.
+Rendering also requires `knitr` and `rmarkdown`. The HTML displays saved
+output rather than running R in your browser. Save the optional project file
+beside the QMD if you use it.
+
+## During the seminar
+
+We will connect histogram areas and kernel smoothing to last week's concept
+of density. Repeated samples let us study a statistic as another random
+variable and distinguish sample size from simulation repetitions.
+
+The LLN describes concentration of sample means, while the CLT describes
+their standardized limiting shape. We will compare simulated cumulative
+probabilities with a Normal approximation, including a repeat with a
+different seed. Squared deviations and estimated standard errors motivate
+the chi-squared and t distributions.
+
+Demo 8b explains the functions, lists, and CDF comparison used in A4.
+Demo 11 computes the t statistic from each sample and compares two-sided
+tail probabilities. The F and unbiasedness previews are optional.
+
+## After class
+
+**A4 is due October 14 at 1:30 p.m. Pacific.** Accept your private repository
+invitation and follow its README. Complete the R answers file and QMD, then
+commit and push both source files and the freshly rendered HTML.
+
+When exploring the demo, change n and B separately. Explain which change
+alters the sampling distribution and which changes the simulation's precision.
+Use the probability comparisons alongside the plots, not as a claim that
+every aspect of the distribution is Normal.
