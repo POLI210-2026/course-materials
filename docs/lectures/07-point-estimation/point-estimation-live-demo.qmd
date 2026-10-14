@@ -1,0 +1,316 @@
+---
+title: "Point estimation: live R demonstrations"
+subtitle: "POLI 210 - Seminar 7"
+author: "Brad LeVeck"
+date: "2026-10-14"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+    embed-resources: true
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-width: 9
+fig-height: 3.4
+fig-dpi: 160
+---
+
+Open this QMD in RStudio. **Each numbered code chunk runs independently in a
+fresh R session.** No downloaded data, packages beyond base R, or helper files
+are needed. Start with the experiment and the target, predict the result,
+then run the code. All data here are simulated or hypothetical.
+
+**Main seminar:** Demos 1-4 prepare for B3. **Optional extension:** Demos 5-7
+cover estimated variance and studentization; save them for later if needed.
+
+## 1. One estimate per study
+
+For a simple model inspired by the turnout example, imagine two independent
+samples of 200 voters, with turnout probabilities 0.378 and 0.315. This is
+not a reconstruction of the original experiment's assignment design or SEs.
+The true difference is 0.063, or 6.3 percentage points.
+
+**Predict:** Will every estimate equal the truth? What should its average be?
+
+```{r}
+#| label: demo-1-repeated-studies
+set.seed(210071)
+B <- 10000
+n_per_group <- 200
+p1 <- .378
+p0 <- .315
+truth <- p1 - p0
+estimates <- replicate(B, {
+  y1 <- rbinom(n_per_group, size = 1, prob = p1)
+  y0 <- rbinom(n_per_group, size = 1, prob = p0)
+  mean(y1) - mean(y0)
+})
+c(truth = truth,
+  average_estimate = mean(estimates),
+  bias = mean(estimates) - truth,
+  sampling_sd = sd(estimates),
+  theoretical_se = sqrt(p1 * (1 - p1) / n_per_group +
+                         p0 * (1 - p0) / n_per_group),
+  mse = mean((estimates - truth)^2),
+  within_one_pp = mean(abs(estimates - truth) <= .01))
+hist(100 * estimates, breaks = 30, freq = FALSE,
+     col = "#D4E7EF", border = "white",
+     xlab = "Difference in turnout (percentage points)",
+     main = "One difference in means per simulated study")
+abline(v = 100 * truth, col = "#B04C3E", lwd = 2, lty = 2)
+```
+
+**Pause:** Change `n_per_group` to 800, leaving B fixed. Then restore n and
+change B. Which change affects the estimator's actual sampling distribution?
+The one-point tolerance is `.01` because this code uses proportions.
+
+## 2. Unbiasedness versus consistency
+
+Here observations are IID Normal with mean 5 and SD 2. Compare the sample mean,
+the first observation, and the sample mean plus 2. The last estimator is
+deliberately flawed; it makes the distinction visible.
+
+```{r}
+#| label: demo-2-consistency
+set.seed(210074)
+B <- 10000
+mu <- 5
+sigma <- 2
+sizes <- c(4, 16, 64)
+results <- lapply(sizes, function(n) {
+  estimates <- replicate(B, {
+    x <- rnorm(n, mean = mu, sd = sigma)
+    c(Mean = mean(x), First = x[1], Shifted_mean = mean(x) + 2)
+  })
+  data.frame(n = n, estimator = rownames(estimates),
+             average = rowMeans(estimates),
+             sampling_sd = apply(estimates, 1, sd),
+             bias = rowMeans(estimates) - mu,
+             mse = rowMeans((estimates - mu)^2),
+             within_one = rowMeans(abs(estimates - mu) <= 1),
+             row.names = NULL)
+})
+do.call(rbind, results)
+```
+
+Which estimator remains centered at 5 but does not concentrate?
+Which becomes precise about the wrong value? Simulation illustrates this;
+the expectation and variance formulas establish the claims.
+
+## 3. Potential outcomes and every possible assignment
+
+This **four-unit** example is different from B3. Outcomes are hypothetical
+percentages. We know both potential outcomes only because we invented the
+population. Fix these four units and randomly assign exactly two to treatment.
+
+```{r}
+#| label: demo-3-potential-outcomes
+y0 <- c(10, 20, 15, 25)
+y1 <- c(15, 22, 21, 25)
+truth <- mean(y1 - y0)
+diff_means <- function(y, D) mean(y[D == 1]) - mean(y[D == 0])
+D <- as.integer((1:4) %in% c(1, 3))
+y <- ifelse(D == 1, y1, y0)
+data.frame(unit = 1:4, y0, y1, effect = y1 - y0, D, observed = y)
+c(ATE = truth, this_estimate = diff_means(y, D))
+
+# Each COLUMN is one possible treated pair. All six are equally likely.
+assignments <- combn(1:4, 2)
+assignments
+estimates <- apply(assignments, 2, function(treated) {
+  D <- as.integer((1:4) %in% treated)
+  y <- ifelse(D == 1, y1, y0)
+  diff_means(y, D)
+})
+data.frame(treated = apply(assignments, 2, paste, collapse = ", "), estimates)
+c(exact_expectation = mean(estimates), truth = truth,
+  exact_bias = mean(estimates) - truth)
+
+# Now the original pair ALWAYS selects treatment: no averaging over assignments.
+selected_difference <- diff_means(y, D)
+ATT <- mean((y1 - y0)[D == 1])
+baseline_selection <- mean(y0[D == 1]) - mean(y0[D == 0])
+c(observed_comparison = selected_difference,
+  ATT = ATT, baseline_selection = baseline_selection,
+  ATT_plus_selection = ATT + baseline_selection,
+  ATE = truth, gap_from_ATE = selected_difference - truth)
+```
+
+The temporary `D` and `y` inside the function belong to that calculation;
+the original four-unit assignment remains available outside it. The observed
+comparison is not the treated group's average individual effect, nor is that
+treated effect necessarily the ATE. This is a useful place to do the
+add-and-subtract derivation on the board.
+
+## 4. Reading concentration and simulation summaries
+
+This final illustration directly simulates **estimators**, not raw outcomes.
+Both sampling SDs shrink, but one estimator targets the wrong value. These
+Normal distributions are invented to make CDF concentration easy to see;
+they are not assumptions about B3's village estimator.
+
+```{r}
+#| label: demo-4-cdf-and-summaries
+set.seed(210076)
+B <- 10000
+truth <- 2
+sizes <- c(10, 50, 250)
+summary_rows <- list()
+old <- par(mfrow = c(1, 3), mar = c(4, 4, 2, 1))
+for (j in seq_along(sizes)) {
+  n <- sizes[j]
+  accurate <- rnorm(B, mean = truth, sd = 3 / sqrt(n))
+  shifted <- rnorm(B, mean = truth + 2, sd = 3 / sqrt(n))
+  plot(ecdf(accurate), do.points = FALSE, verticals = TRUE,
+       col = "#176B87", lwd = 2, xlim = c(-1, 7),
+       main = paste("n =", n), xlab = "Estimate", ylab = "CDF")
+  lines(ecdf(shifted), do.points = FALSE, verticals = TRUE,
+        col = "#B04C3E", lwd = 2, lty = 2)
+  abline(v = truth, lty = 3)
+  if (j == 1) legend("topleft", c("Centered at truth", "Centered at 4"),
+                     col = c("#176B87", "#B04C3E"), lty = 1:2, bty = "n", cex = .8)
+  for (design in c("accurate", "shifted")) {
+    estimates <- if (design == "accurate") accurate else shifted
+    summary_rows[[length(summary_rows) + 1]] <- data.frame(
+      n = n, design = design, mean = mean(estimates),
+      bias = mean(estimates) - truth,
+      sampling_sd = sd(estimates),
+      mse = mean((estimates - truth)^2),
+      within_one = mean(abs(estimates - truth) <= 1),
+      mcse_of_simulated_mean = sd(estimates) / sqrt(B))
+  }
+}
+par(old)
+do.call(rbind, summary_rows)
+```
+
+The Monte Carlo SE describes precision in our **simulation of the estimator's
+mean**. It is not the estimator's sampling SD. Use `sd(estimates)` for the
+latter. `sd()` uses B − 1, so the numerical identity with simulation MSE is
+exact when variance is instead calculated as
+`mean((estimates - mean(estimates))^2)`; the difference is tiny at large B.
+
+## 5. Optional: a biased but consistent variance estimator
+
+We compare the squared deviations divided by n with R's `var()`, which
+divides by n − 1. Both settle around the population variance, but only the
+latter is unbiased. The SD itself need not be unbiased.
+
+```{r}
+#| label: demo-5-variance
+set.seed(210075)
+B <- 10000
+sigma <- 2
+results <- lapply(c(5, 30, 100), function(n) {
+  estimates <- replicate(B, {
+    x <- rnorm(n, mean = 5, sd = sigma)
+    c(divide_by_n = mean((x - mean(x))^2),
+      divide_by_n_minus_1 = var(x))
+  })
+  data.frame(n = n, estimator = rownames(estimates),
+             truth = sigma^2,
+             expected = c((n - 1) / n * sigma^2, sigma^2),
+             simulated_average = rowMeans(estimates),
+             sampling_sd = apply(estimates, 1, sd), row.names = NULL)
+})
+do.call(rbind, results)
+```
+
+## 6. Optional: Normal observations and an exact t distribution
+
+Each simulated study calculates the mean and SD from the **same** sample.
+For IID Normal observations, the resulting statistic has an exact
+$t_{n-1}$ distribution. The empirical CDF only approximates that distribution.
+
+```{r}
+#| label: demo-6-normal-t
+set.seed(210072)
+B <- 20000
+mu <- 5
+sigma <- 5
+sizes <- c(5, 30, 100)
+t_values <- lapply(sizes, function(n) replicate(B, {
+  x <- rnorm(n, mean = mu, sd = sigma)
+  (mean(x) - mu) / (sd(x) / sqrt(n))
+}))
+grid <- seq(-5, 5, length.out = 1000)
+old <- par(mfrow = c(1, 3), mar = c(4, 4, 2, 1))
+for (j in seq_along(sizes)) {
+  n <- sizes[j]
+  plot(grid, ecdf(t_values[[j]])(grid), type = "l", lwd = 2,
+       col = "#176B87", ylim = c(0, 1), xlab = "Studentized mean",
+       ylab = "CDF", main = paste("n =", n))
+  lines(grid, pt(grid, df = n - 1), col = "#B04C3E", lwd = 2, lty = 2)
+  lines(grid, pnorm(grid), col = "#957000", lwd = 2, lty = 3)
+  if (j == 1) legend("topleft", c("Simulation", "t", "N(0, 1)"),
+                     col = c("#176B87", "#B04C3E", "#957000"),
+                     lty = 1:3, bty = "n", cex = .8)
+}
+par(old)
+data.frame(n = sizes,
+           left_sim = sapply(t_values, function(z) mean(z < -2)),
+           right_sim = sapply(t_values, function(z) mean(z > 2)),
+           each_t_tail = pt(-2, df = sizes - 1),
+           each_Normal_tail = pnorm(-2))
+```
+
+`ecdf(t_values[[j]])` constructs a function. Applying it to `grid` evaluates
+the fraction of simulated statistics less than or equal to each grid point.
+The grid is for drawing curves; the full simulated vector is used for tail
+probabilities, including values beyond the displayed range.
+
+## 7. Optional: Exponential observations and the t reference
+
+Keep mean = 5 and SD = 5 but use a strongly right-skewed population.
+For an Exponential, both moments equal `1 / rate`. The simulation is otherwise
+the same. Look at the **two separate tails**, not just their sum.
+
+```{r}
+#| label: demo-7-exponential-t
+set.seed(210073)
+B <- 20000
+mu <- 5
+sizes <- c(5, 30, 100)
+t_values <- lapply(sizes, function(n) replicate(B, {
+  x <- rexp(n, rate = 1 / mu)
+  (mean(x) - mu) / (sd(x) / sqrt(n))
+}))
+grid <- seq(-5, 5, length.out = 1000)
+old <- par(mfrow = c(1, 3), mar = c(4, 4, 2, 1))
+for (j in seq_along(sizes)) {
+  n <- sizes[j]
+  plot(grid, ecdf(t_values[[j]])(grid), type = "l", lwd = 2,
+       col = "#176B87", ylim = c(0, 1), xlab = "Studentized mean",
+       ylab = "CDF", main = paste("n =", n))
+  lines(grid, pt(grid, df = n - 1), col = "#B04C3E", lwd = 2, lty = 2)
+  lines(grid, pnorm(grid), col = "#957000", lwd = 2, lty = 3)
+  if (j == 1) legend("topleft", c("Simulation", "t reference", "N(0, 1)"),
+                     col = c("#176B87", "#B04C3E", "#957000"),
+                     lty = 1:3, bty = "n", cex = .8)
+}
+par(old)
+data.frame(n = sizes,
+           left_sim = sapply(t_values, function(z) mean(z < -2)),
+           right_sim = sapply(t_values, function(z) mean(z > 2)),
+           each_t_tail = pt(-2, df = sizes - 1),
+           each_Normal_tail = pnorm(-2))
+```
+
+**Discuss:** A small sample containing mostly small observations can produce
+both a low sample mean and a small sample SD. This can create a large negative
+ratio. The exact Normal-sampling independence result does not carry over.
+Finite positive variance still supports the CLT and the large-n studentized
+Normal limit. Do not interpret the t reference as an exact result here.
+
+## References
+
+Instructional structure and the turnout motivation adapt Matthew Blackwell's
+[Estimation and Inference slides](https://www.mattblackwell.org/files/teaching/gov2000/s05-estimation-inference-slides-print.pdf),
+Sections 1-2, with permission. Potential-outcomes framing follows Gerber and
+Green (2012), *Field Experiments*, Chapter 2. Point estimation follows
+[PSD Section 5.6](https://probstatsdata.com/SimulationRV.html#pointestimators).
+All code and figures in this demonstration are original course illustrations.

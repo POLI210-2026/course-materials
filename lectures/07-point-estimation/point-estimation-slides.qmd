@@ -1,0 +1,553 @@
+---
+title: "Point estimation"
+subtitle: "POLI 210 - Seminar 7"
+author: "Brad LeVeck"
+date: "2026-10-14"
+date-format: "MMMM D, YYYY"
+format:
+  revealjs:
+    theme: [simple, slides.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    center: false
+    transition: none
+    embed-resources: true
+    code-overflow: wrap
+  typst:
+    fontsize: 21pt
+    template-partials: [typst-show.typ]
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 10
+fig-height: 3.1
+---
+
+```{r}
+#| label: setup
+#| include: false
+source("R/figures.R")
+```
+
+## The question behind an estimate
+
+- We observe one study, but could have observed different outcomes.
+- How does the rule producing our estimate behave across repeated studies?
+- Does it target the right quantity? Does more data help?
+
+Today: **point estimates → sampling distributions → causal comparisons.**
+
+Optional extension: estimated standard errors and the t distribution.
+
+Reading: PSD 5.6; a return to the CLT and t distribution from last week.
+
+## A motivating field experiment
+
+Gerber, Green, and Larimer studied social-pressure mailings and turnout.
+
+| Mailing | Observed turnout |
+|---|---:|
+| Neighbors | 37.8% |
+| Civic Duty | 31.5% |
+
+The observed difference is about **6.3 percentage points**.
+
+Is this the effect of the mailing, or could the groups differ for other reasons?
+**Random assignment is the key design feature.**
+
+::: {.source}
+Example and rounded figures from Blackwell's estimation slides, based on Gerber, Green, and Larimer (2008). Civic Duty is an alternative mailing, not the no-mail control.
+:::
+
+## Estimand, estimator, estimate
+
+| Object | Meaning | Example |
+|---|---|---|
+| Estimand | Quantity we want | Average causal effect, $\tau$ |
+| Estimator | Rule applied to random data | $\widehat\tau=\bar Y_1-\bar Y_0$ |
+| Estimate | Realized numerical result | About 6.3 percentage points |
+
+Before collecting data, the estimator is a **random variable**.
+
+Its distribution depends on both the population and how we conduct the study.
+
+## What is a causal effect?
+
+For unit $i$, imagine two potential outcomes:
+
+$$Y_i(1):\text{ outcome under treatment},\qquad
+Y_i(0):\text{ outcome under control}.$$
+
+The individual effect is $\tau_i=Y_i(1)-Y_i(0)$.
+
+For a fixed population of $N$ units:
+
+$$\tau=\frac1N\sum_{i=1}^N\bigl[Y_i(1)-Y_i(0)\bigr].$$
+
+We observe only one potential outcome for each unit, not its individual effect.
+
+## Assignment determines what we observe
+
+If $D_i=1$ means treated, the observed outcome is
+
+$$Y_i=D_iY_i(1)+(1-D_i)Y_i(0).$$
+
+Our estimate compares **different people**:
+
+$$\widehat\tau=\underbrace{\bar Y_1}_{\text{treated mean}}-
+\underbrace{\bar Y_0}_{\text{control mean}}.$$
+
+A simulation can reveal both potential outcomes. An actual experiment cannot.
+
+Assume well-defined treatments, no spillovers, and observation of assigned outcomes.
+
+## Two sources of randomness
+
+| Random assignment | Random sampling |
+|---|---|
+| Who receives treatment? | Who enters the study? |
+| Can change while the units stay fixed | Produces a new set of units |
+| Justifies treatment/control comparability | Connects a sample to a population |
+
+An experiment can use random assignment without a random population sample.
+
+When describing a sampling distribution, ask: **What gets repeated?**
+
+## From repeated studies to a distribution
+
+```{r}
+#| echo: false
+#| fig-alt: "One population and study design generate repeated studies; each yields an estimate; these estimates form a sampling distribution."
+sampling_flow()
+```
+
+Each repetition produces **one estimate**, not one observation.
+
+The sampling distribution is the distribution of that estimator.
+
+## A simple model for repeated turnout studies
+
+For illustration, suppose two independent samples of 200 voters have
+turnout probabilities 0.378 and 0.315.
+
+```{r}
+#| eval: false
+set.seed(210071)
+B <- 10000
+estimates <- rbinom(B, 200, .378) / 200 -
+             rbinom(B, 200, .315) / 200
+```
+
+This model's true difference is $0.063$.
+
+These are **invented repeated studies**, not a reconstruction of the original
+experiment's household assignment or standard errors.
+
+## One estimator, many possible estimates
+
+```{r}
+#| echo: false
+#| fig-alt: "Sampling distribution of turnout differences centered near the true difference of 6.3 percentage points, with substantial variation among studies."
+turnout_plot()
+```
+
+The spread measures uncertainty across studies; the center addresses bias.
+
+## Unbiasedness: correct on average
+
+$$\operatorname{Bias}(\widehat\theta)
+=E[\widehat\theta]-\theta.$$
+
+An estimator is **unbiased** if $E[\widehat\theta]=\theta$.
+
+Under complete random assignment of a fixed number to each arm:
+
+$$E_D[\bar Y_1]=\overline{Y(1)},\qquad E_D[\bar Y_0]=\overline{Y(0)},$$
+$$E_D[\widehat\tau]=\overline{Y(1)}-\overline{Y(0)}=\tau.$$
+
+The expectation averages over **assignments**, holding potential outcomes fixed.
+
+## Unbiased does not mean exact
+
+- Each particular assignment can produce imbalance.
+- Some estimates are too high; others are too low.
+- Unbiasedness describes their average, not a guarantee for your study.
+
+**In simulation:** compare `mean(estimates)` with the known truth.
+
+**In a small experiment:** enumerate every possible assignment for an exact expectation.
+
+## Precision and standard error
+
+The **standard error** is the SD of an estimator's sampling distribution:
+
+$$\operatorname{SE}(\widehat\theta)=\sqrt{\operatorname{Var}(\widehat\theta)}.$$
+
+For two **independent IID samples**:
+
+$$\operatorname{Var}(\bar Y_1-\bar Y_0)
+=\frac{\sigma_1^2}{n_1}+\frac{\sigma_0^2}{n_0}.$$
+
+This is the model on slide 9. In a fixed pool allocated without replacement,
+the arm means are not independent; the variance calculation is different.
+
+## Mean squared error combines bias and spread
+
+$$\operatorname{MSE}(\widehat\theta)
+=E\bigl[(\widehat\theta-\theta)^2\bigr]
+=\operatorname{Var}(\widehat\theta)+\operatorname{Bias}(\widehat\theta)^2.$$
+
+- Variance: spread around the estimator's own expectation.
+- Squared bias: how far that expectation is from the target.
+
+A very precise estimate can still be systematically wrong.
+
+**In simulation:** `mean((estimates - truth)^2)`.
+
+## Consistency: concentration as n grows
+
+$\widehat\theta_n$ is **consistent** for $\theta$ if, for every $\epsilon>0$,
+
+$$P\bigl(|\widehat\theta_n-\theta|>\epsilon\bigr)\longrightarrow0.$$
+
+Equivalently, $\widehat\theta_n\xrightarrow{p}\theta$.
+
+This is about a **sequence of larger studies**, not more repetitions
+of the same-sized study.
+
+Unbiasedness asks about the center at a given $n$; consistency asks about
+concentration as $n$ grows.
+
+## Centering and concentration are different
+
+```{r}
+#| echo: false
+#| fig-alt: "For Normal observations with mean 5 and SD 2, the sample mean concentrates at 5, the first observation stays spread out, and the sample mean plus 2 concentrates at 7."
+consistency_plot()
+```
+
+Here $X_i\overset{\mathrm{iid}}\sim N(5,2^2)$.
+Which estimator is unbiased? Which is consistent for 5?
+
+## Unbiasedness is neither enough nor necessary
+
+**Not enough:** $X_1$ estimates $\mu$ without bias, but ignores additional data.
+Its spread does not shrink.
+
+**Not necessary:** for IID data with variance $\sigma^2$,
+
+$$V_n=\frac1n\sum_{i=1}^n(X_i-\bar X)^2,\qquad
+E[V_n]=\frac{n-1}{n}\sigma^2.$$
+
+$V_n$ is biased downward at finite $n$, yet $V_n\xrightarrow{p}\sigma^2$.
+
+Finite-sample bias can vanish as the sample grows.
+
+## A useful route to consistency
+
+Apply Markov's inequality to $(\widehat\theta_n-\theta)^2$:
+
+$$P(|\widehat\theta_n-\theta|\ge\epsilon)
+\le\frac{E[(\widehat\theta_n-\theta)^2]}{\epsilon^2}
+=\frac{\operatorname{MSE}(\widehat\theta_n)}{\epsilon^2}.$$
+
+So **MSE going to zero is sufficient** for consistency.
+
+For $\bar X_n$, bias is zero and variance is $\sigma^2/n$.
+This recovers our finite-variance proof of the weak LLN.
+
+## More data must address the right problem
+
+For independent samples, both group sizes must grow to drive
+
+$$\frac{\sigma_1^2}{n_1}+\frac{\sigma_0^2}{n_0}\longrightarrow0.$$
+
+But shrinking this variance does not remove a persistent difference
+between **the comparison we estimate** and **the causal effect we want**.
+
+We'll return to this distinction with self-selection after the break.
+
+## Break
+
+When we return:
+
+1. Why large observational studies can miss a causal effect.
+2. Work through potential outcomes and the B3 simulation workflow.
+3. If time permits: estimated standard errors and the t distribution.
+
+## Return to the causal question
+
+In an observational study, people may choose treatment.
+
+The comparison we observe is
+
+$$E[Y\mid D=1]-E[Y\mid D=0]
+=E[Y(1)\mid D=1]-E[Y(0)\mid D=0].$$
+
+But the population ATE is $E[Y(1)-Y(0)]$.
+
+Why might these differ even with a huge sample?
+
+## Add and subtract the missing comparison
+
+Add and subtract $E[Y(0)\mid D=1]$:
+
+$$\begin{aligned}
+E[Y\mid D=1]-E[Y\mid D=0]
+&=E[Y(1)\mid D=1]-E[Y(0)\mid D=1]\\
+&\quad+E[Y(0)\mid D=1]-E[Y(0)\mid D=0]\\
+&=\mathrm{ATT}+\text{baseline selection}.
+\end{aligned}$$
+
+ATT is the average treatment effect among the treated.
+
+The treated and control groups may differ **even without treatment**.
+
+## ATT is not automatically ATE
+
+$$\text{Observed population comparison}-\mathrm{ATE}
+=(\mathrm{ATT}-\mathrm{ATE})+\text{baseline selection}.$$
+
+- **ATT:** average effect for those who choose treatment.
+- **ATE:** average effect for the entire target population.
+- People may select on baseline outcomes, treatment effects, or both.
+
+Population-level random assignment makes treatment independent of potential
+outcomes. In a finite experiment, the corresponding equalities hold
+**in expectation over assignments**, not for every realized allocation.
+
+## Build the observed outcomes in R
+
+A different four-unit toy example for the live demonstration:
+
+```{r}
+#| eval: false
+y0 <- c(10, 20, 15, 25)
+y1 <- c(15, 22, 21, 25)
+D <- as.integer((1:4) %in% c(1, 3))
+y <- ifelse(D == 1, y1, y0)
+mean(y[D == 1]) - mean(y[D == 0])
+```
+
+`%in%` identifies treated units; `ifelse()` chooses which outcome we observe.
+Square brackets select a group. Only `y` and `D` enter the estimator.
+
+## Two B3 thought experiments
+
+| First: fixed seven villages | Later: larger studies |
+|---|---|
+| Keep potential outcomes fixed | Draw new villages from seven types |
+| Vary which two are treated | Compare random assignment and self-selection |
+| Enumerate $\binom72=21$ assignments | Simulate studies at several $n$ |
+| Study unbiasedness exactly | Explore concentration and limiting targets |
+
+**n:** villages per study. **B:** simulated repetitions.
+
+Increasing B sharpens the simulation; it does not fix the study design.
+
+## Summarize estimates, not raw outcomes
+
+For `estimates`, a vector of B repeated estimates:
+
+```{r}
+#| eval: false
+mean(estimates) - truth                # simulated bias
+sd(estimates)                         # sampling SD
+mean((estimates - truth)^2)            # MSE
+mean(abs(estimates - truth) <= 1)      # within 1 point
+```
+
+`sd(estimates)` estimates the estimator's standard error.
+
+Dividing by $\sqrt B$ instead estimates the Monte Carlo uncertainty in the
+**average simulated estimate**. It is a different quantity.
+
+## Read concentration from a CDF
+
+```{r}
+#| echo: false
+#| fig-alt: "As n grows, two hypothetical estimator CDFs become steeper, one near the true value 2 and the other near the incorrect value 4."
+cdf_concentration()
+```
+
+A narrow range containing most estimates creates a **steep CDF transition**.
+Where is the transition? Steeper does not necessarily mean more accurate.
+
+## Takeaways and B3
+
+- Unbiasedness concerns an expectation; consistency concerns concentration.
+- Random assignment supports causal comparisons; sample size alone does not.
+- Increasing n and increasing B answer different questions.
+
+**B3:** one hypothetical village example, supplied simulation helpers,
+and short explanations. Use MSE and CDFs to distinguish precision from accuracy.
+
+**Retrieval question:** Can an estimator become increasingly precise while
+remaining inconsistent for the ATE? Explain without using a formula.
+
+## Optional extension: estimated SEs and t
+
+How does estimating $\sigma$ change the distribution of a standardized mean?
+
+An extension to revisit when we study statistical inference.
+
+## SD of observations versus SE of a mean
+
+For IID observations:
+
+$$\operatorname{SD}(X_i)=\sigma,\qquad
+\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt n}.$$
+
+Usually $\sigma$ is unknown. Estimate it with the sample SD:
+
+$$S^2=\frac1{n-1}\sum_{i=1}^n(X_i-\bar X)^2,\qquad
+\widehat{\operatorname{SE}}(\bar X)=\frac S{\sqrt n}.$$
+
+R: `sd(x)` estimates the spread of observations;
+`sd(x) / sqrt(length(x))` estimates the SE of their mean.
+
+## Why divide by n − 1?
+
+Estimating the center from the data makes squared deviations smaller:
+
+$$\sum_i(X_i-\bar X)^2
+=\sum_i(X_i-\mu)^2-n(\bar X-\mu)^2.$$
+
+Taking expectations for IID data with finite variance:
+
+$$E\!\left[\sum_i(X_i-\bar X)^2\right]
+=n\sigma^2-n\frac{\sigma^2}{n}=(n-1)\sigma^2.$$
+
+Thus $E[S^2]=\sigma^2$. The sample variance is unbiased.
+This does **not** imply $E[S]=\sigma$.
+
+## Why does the estimated SD settle down?
+
+Write the sample variance in terms of two averages:
+
+$$S^2=\frac n{n-1}\left(\frac1n\sum_i X_i^2-\bar X^2\right).$$
+
+For IID data with finite second moment, the LLN gives
+
+$$S^2\xrightarrow{p}E[X^2]-\mu^2=\sigma^2.$$
+
+If $\sigma>0$, then $S\xrightarrow{p}\sigma$.
+**Consistency**, rather than unbiasedness, is what we need next.
+
+## Studentizing the sample mean
+
+$$T_n=\frac{\bar X-\mu}{S/\sqrt n}
+=\underbrace{\frac{\bar X-\mu}{\sigma/\sqrt n}}_{\xrightarrow{d}N(0,1)}
+\underbrace{\frac{\sigma}{S}}_{\xrightarrow{p}1}
+\xrightarrow{d}N(0,1).$$
+
+This is an application of **Slutsky's theorem**.
+
+We need IID observations with $0<\sigma^2<\infty$.
+The estimated SE becomes correct **relative to** the true SE:
+
+$$\frac{S/\sqrt n}{\sigma/\sqrt n}=\frac S\sigma\xrightarrow{p}1.$$
+
+## A finite-sample answer under Normal sampling
+
+If $X_i\overset{\mathrm{iid}}\sim N(\mu,\sigma^2)$, then
+
+$$Z=\frac{\bar X-\mu}{\sigma/\sqrt n}\sim N(0,1),\qquad
+U=\frac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1},$$
+
+and $Z$ and $U$ are independent. Therefore
+
+$$T_n=\frac{Z}{\sqrt{U/(n-1)}}\sim t_{n-1}\quad\textbf{exactly}.$$
+
+The random denominator reflects **estimating the variance**, not an arbitrary
+way to add spread. Small estimated SDs can produce large ratios.
+
+## Exact t: compare the CDFs
+
+```{r}
+#| echo: false
+#| fig-alt: "For IID Normal observations, simulated studentized-mean CDFs track t with n minus 1 degrees of freedom; the t and Normal CDFs become similar as n increases."
+t_cdf_plot("Normal")
+```
+
+Normal observations: $\mu=5$, $\sigma=5$; 20,000 repetitions per $n$.
+Simulation estimates the CDF; the t result itself is exact.
+
+## Make a small tail difference visible
+
+For Normal observations, compare $P(T_n<-2)$ and $P(T_n>2)$.
+
+```{r}
+#| echo: false
+knitr::kable(t_tail_table("Normal"), digits = 3,
+             col.names = c("n", "Left (sim.)", "Right (sim.)", "Each t tail", "Each Normal tail"))
+```
+
+At $n=5$, $t_4$ has variance $4/(4-2)=2$, not 1.
+The t variance is $\nu/(\nu-2)$ when $\nu>2$.
+
+These are **event probabilities**, not hypothesis tests yet.
+
+## Change the population, keep its moments
+
+```{r}
+#| echo: false
+#| fig-alt: "A Normal and an Exponential distribution have mean 5 and SD 5; the Exponential has positive support and strong right skew."
+population_plot()
+```
+
+Same $\mu$ and $\sigma$ does not mean the same small-sample behavior.
+Use `rexp(n, rate = 1/5)` instead of `rnorm(n, 5, 5)`.
+
+## Studentized does not automatically mean t
+
+```{r}
+#| echo: false
+#| fig-alt: "For Exponential observations, the studentized-mean CDF departs from both symmetric reference distributions at small n; the Normal approximation improves as n increases."
+t_cdf_plot("Exponential")
+```
+
+Exponential observations: the small-sample distribution is **not exactly t**.
+The estimated denominator and numerator can move together asymmetrically.
+
+## Check both tails, not just total spread
+
+```{r}
+#| echo: false
+knitr::kable(t_tail_table("Exponential"), digits = 3,
+             col.names = c("n", "Left (sim.)", "Right (sim.)", "Each t tail", "Each Normal tail"))
+```
+
+- A symmetric t curve cannot reproduce this finite-sample asymmetry.
+- Increasing $n$ improves the Normal approximation here, but not instantly.
+- There is no universal sample-size cutoff guaranteeing a good approximation.
+
+## The lesson we will reuse for inference
+
+| Claim | What supports it? |
+|---|---|
+| $T_n\sim t_{n-1}$ exactly | IID Normal observations |
+| $T_n\xrightarrow{d}N(0,1)$ | IID, finite positive variance |
+| A reference curve works at a particular $n$ | Assumptions and approximation quality |
+
+In the live demo, compare `ecdf(t_values)` with `pt()` and `pnorm()`.
+
+Confidence intervals and tests will use these ideas later.
+
+## Reading and references
+
+::: {.small}
+- Speegle and Clair, *Probability, Statistics, and Data*, [Section 5.6](https://probstatsdata.com/SimulationRV.html#pointestimators); revisit the t distribution in Section 5.5.
+- Matthew Blackwell, [Estimation and Inference slides](https://www.mattblackwell.org/files/teaching/gov2000/s05-estimation-inference-slides-print.pdf), Sections 1-2. Instructional structure and turnout example adapted with permission.
+- Gerber, Green, and Larimer (2008), “Social Pressure and Voter Turnout,” *American Political Science Review* 102(1): 33-48.
+- Gerber and Green (2012), *Field Experiments*, Chapter 2, especially Table 2.1 and Section 2.6. Potential outcomes and selection-bias decomposition.
+- R documentation: [`TDist`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/TDist.html).
+
+Figures and simulation code were created for this seminar. The village and
+four-unit examples are hypothetical, not empirical effect estimates.
+:::

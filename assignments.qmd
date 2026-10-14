@@ -35,12 +35,27 @@ All assignments are due at **1:30 p.m.**
 | **A3** | Discrete random variables in R | Sep. 30 |
 | **B2** | Random variables and simulation in an applied setting | Oct. 7 |
 | **A4** | Sampling distributions and the central limit theorem | Oct. 14 |
-| **B3** | Sampling theory and the behavior of estimators | Oct. 21 |
+| **B3** | Random assignment and causal estimation | Oct. 21 |
 | **A5** | Data wrangling with `dplyr` | Oct. 28 |
 | **B4** | Political-data visualization and descriptive analysis | Nov. 4 |
 | **A6** | Standard errors and confidence intervals | Nov. 18 |
 | **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
+
+## B3: random assignment and causal estimation
+
+**Due October 21 at 1:30 p.m. Pacific.** B3 uses hypothetical village data to
+compare random assignment with self-selection. Exact enumeration and repeated
+studies connect unbiasedness, consistency, and mean squared error to causal
+estimation. See the [Seminar 7 materials](meetings/07-point-estimation/index.qmd),
+especially Demos 1-4.
+
+Accept the invitation to your private B3 repository and clone it as a new
+RStudio project. The data and simulation helpers are supplied. Complete the
+code and written responses in the QMD, enable all completed answer chunks,
+and run the completion check. Render, inspect, and commit **both the QMD and
+current HTML** before pushing. The automated checks assess completion and
+basic structure, not statistical accuracy or written reasoning.
 
 ## A4: simulation and sampling distributions
 

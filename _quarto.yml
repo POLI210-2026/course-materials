@@ -32,6 +32,11 @@ project:
     - lectures/06-sampling-distributions/sampling-distributions-live-demo.qmd
     - lectures/06-sampling-distributions/sampling-distributions-live-demo.html
     - lectures/06-sampling-distributions/poli210-seminar6.Rproj
+    - lectures/07-point-estimation/point-estimation-slides.html
+    - lectures/07-point-estimation/point-estimation-slides.pdf
+    - lectures/07-point-estimation/point-estimation-live-demo.qmd
+    - lectures/07-point-estimation/point-estimation-live-demo.html
+    - lectures/07-point-estimation/poli210-seminar7.Rproj
 
 website:
   title: "POLI 210"

@@ -1,0 +1,54 @@
+---
+title: "Meeting 7: Point estimation"
+subtitle: "October 14, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[Section 5.6](https://probstatsdata.com/SimulationRV.html#pointestimators).
+Review sampling distributions and the CLT from last week's seminar.
+Bring your laptop with RStudio ready to use. **A4 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/07-point-estimation/point-estimation-slides.html)
+- [Download the slide PDF](../../lectures/07-point-estimation/point-estimation-slides.pdf)
+- [Download the demonstration QMD](../../lectures/07-point-estimation/point-estimation-live-demo.qmd){download="point-estimation-live-demo.qmd"}
+- [Read the demonstration with its output](../../lectures/07-point-estimation/point-estimation-live-demo.html)
+- [Optional RStudio project file](../../lectures/07-point-estimation/poli210-seminar7.Rproj){download="poli210-seminar7.Rproj"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/07-point-estimation)
+
+Use the arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy. Save the demonstration QMD in your course folder and open it
+in RStudio. Each numbered chunk defines its own inputs and runs independently.
+The examples use base R and need no downloads or separate helper scripts.
+Rendering also requires `knitr` and `rmarkdown`. The HTML displays saved
+output rather than running R in your browser. Save the optional project file
+beside the QMD if you use it.
+
+## During the seminar
+
+A field experiment motivates the difference-in-means estimator. We distinguish
+an estimand, an estimator, and an estimate, then examine unbiasedness,
+sampling variability, mean squared error, and consistency.
+
+Potential outcomes help separate random assignment from random sampling and
+explain why a comparison under self-selection can miss the average treatment
+effect. Demos 1-4 prepare for B3, including exact enumeration of assignments,
+repeated studies, and summaries and CDFs of their estimates.
+
+The final slide sequence and Demos 5-7 are optional. They revisit estimated
+standard errors, the exact t distribution under Normal observations, and
+the large-sample Normal approximation.
+
+## After class
+
+**B3 is due October 21 at 1:30 p.m. Pacific.** Accept your private repository
+invitation and follow its README. The hypothetical village data and helpers
+are included. Complete the QMD's code and written responses, run the completion
+check, and render a fresh HTML. Commit and push **both the QMD and current HTML**.
+
+Keep track of what changes in each simulation: treatment assignment, sampled
+villages, the number of villages per study, or the number of simulation
+repetitions. These produce different kinds of variation.
