@@ -37,6 +37,11 @@ project:
     - lectures/07-point-estimation/point-estimation-live-demo.qmd
     - lectures/07-point-estimation/point-estimation-live-demo.html
     - lectures/07-point-estimation/poli210-seminar7.Rproj
+    - lectures/08-data-wrangling/data-wrangling-slides.html
+    - lectures/08-data-wrangling/data-wrangling-slides.pdf
+    - lectures/08-data-wrangling/data-wrangling-live-demo.qmd
+    - lectures/08-data-wrangling/data-wrangling-live-demo.html
+    - lectures/08-data-wrangling/seminar8-demo.zip
 
 website:
   title: "POLI 210"

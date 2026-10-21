@@ -1,0 +1,725 @@
+---
+title: "Data wrangling with dplyr"
+subtitle: "POLI 210 - Seminar 8 live demo and reference"
+author: "Brad LeVeck"
+date: "2026-10-21"
+date-format: "MMMM D, YYYY"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    code-copy: true
+execute:
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 8
+fig-height: 4.5
+---
+
+# Before running the code
+
+Open `poli210-seminar8.Rproj` in RStudio, then open this document. Keep the
+`data` and `R` folders beside it. Paths such as `data/ug.csv` are relative to
+this project folder, on both macOS and Windows. Do not use a path to the
+instructor's computer or move the QMD away from its data.
+
+Install these packages **once**, in the Console if needed:
+
+```{r}
+#| eval: false
+install.packages(c("dplyr", "tidyr", "readr", "stringr"))
+```
+
+Load packages and data **each new R session**. Run this setup before jumping
+to an example. The later join and reshape examples build on their preceding
+chunks. Rendering runs everything in order in a fresh session.
+
+```{r}
+#| label: setup
+library(dplyr)
+library(tidyr)
+library(readr)
+library(stringr)
+
+elections <- read_csv("data/elections.csv", show_col_types = FALSE)
+ug <- read_csv("data/ug.csv", show_col_types = FALSE)
+turk <- read_csv("data/mturk.csv", show_col_types = FALSE)
+states <- read_csv("data/states.csv", show_col_types = FALSE)
+members <- read_csv("data/house114.csv", show_col_types = FALSE)
+options(width = 85, pillar.width = 85)
+```
+
+`read_csv()` is from **readr** and returns a tibble. `filter()` and the other
+data verbs are from **dplyr**; pivoting is from **tidyr**; text tools are from
+**stringr**. These packages belong to the tidyverse. `library(tidyverse)`
+is an alternative that loads these and several more packages.
+
+No download is needed during class. The local CSVs are frozen teaching copies.
+`source("R/setup.R")` reloads the original input objects if you want to start over.
+
+# 1. What does one row represent?
+
+## The ultimatum game
+
+`ug` contains 234 participants: 102 elites and 132 undergraduates. Each person
+provided a proposal and a minimum acceptable offer (MAO), when recorded.
+These are different choices by the same respondent, not an observed matched pair.
+
+| Column | Meaning |
+|---|---|
+| `participant_id` | Teaching ID tied to a row in the source file |
+| `population`, `elite` | Sample label; `elite` is 1 for elites and 0 for undergraduates |
+| `mao`, `offer` | Minimum acceptable offer and proposed offer, on a 0–100 scale |
+| `age` | Age in years |
+| `levelk`, `patience` | Original reasoning and patience measures |
+| `experience` | Experience in years, collected for elites only |
+
+Unlike B2's prepared file, this table **keeps missing MAOs** and additional
+variables. A zero MAO is a valid response, not missing. The original incentives
+involved lotteries; we continue to use the simplified 100-point interpretation.
+
+```{r}
+ug
+glimpse(ug)
+dim(ug)
+names(ug)
+```
+
+A tibble's truncated display is not a subset of the data. `head()` displays a
+small subset; `as_tibble()` converts an ordinary data frame to a tibble.
+
+```{r}
+as_tibble(as.data.frame(ug)) %>% head(n = 3)
+```
+
+## The elections
+
+`elections` has one row per retained district-election, 9,337 rows across
+28 election years from 1946 through 2014. It is the selected CSV used in the
+old course, **not all House elections**. For example, it has 328 races in 2014,
+not 435. Some election years are absent. Do not interpret its mean as a
+national popular-vote share or its counts as national seat totals.
+
+| Column | Meaning |
+|---|---|
+| `year`, `stcd` | Election year and original state-district code |
+| `state` | State number in alphabetical order, **not FIPS or ICPSR** |
+| `dv`, `dvp` | Democratic two-party House vote percentage, current/prior election |
+| `dpres` | Democratic two-party presidential vote percentage; for midterms, two years earlier |
+| `inc3` | 1 Democratic incumbent, −1 Republican incumbent, 0 no incumbent |
+| `ptynow` | Party holding the seat before the election: 1 D, −1 R, 0 neither/new |
+| `south` | 1 for an old-Confederacy state, 0 otherwise |
+| `source_row` | Row in the local source CSV, not a substantive variable |
+
+The original archive treats unopposed races as missing for `dv`. All `dv`
+and `dvp` values in this selected CSV are observed. Missing `dpres` values remain.
+
+```{r}
+elections %>% select(year, stcd, inc3, dv, dvp) %>% head()
+elections %>% count(year) %>% print(n = 30)
+```
+
+# 2. Verbs and pipes
+
+## Keep rows with `filter()`
+
+```{r}
+filter(elections, year == 2014, inc3 == 0)
+```
+
+Commas between conditions mean **AND**. Use `|` for OR and `%in%` for membership.
+Use `==` to compare values, not `=`. Column names are unquoted inside these
+verbs; literal text values are quoted.
+
+```{r}
+ug %>% filter(population == "Elites", mao >= 50) %>% head()
+elections %>% filter(year %in% c(2010, 2014)) %>% head()
+ug %>% filter(mao < 20 | mao > 50) %>% head()
+```
+
+`filter()` keeps conditions that evaluate to `TRUE`. It drops both `FALSE`
+and `NA`. Test missingness with `is.na()`, never `mao == NA`.
+
+```{r}
+ug %>% filter(is.na(mao)) %>% select(participant_id, population, mao)
+```
+
+## Select and rename columns
+
+```{r}
+select(ug, participant_id, population, mao, offer) %>% head()
+ug %>% select(-experience) %>% head(n = 2)
+
+elections %>%
+  select(year, stcd, dv, dvp) %>%
+  rename(dem_vote = dv, prior_dem_vote = dvp) %>%
+  head()
+```
+
+`rename(new_name = old_name)` retains other columns. `select()` chooses which
+columns remain. Printing either result does **not** overwrite the input.
+
+## Read a pipe as “then”
+
+```{r}
+open_2014 <- elections %>%
+  filter(year == 2014, inc3 == 0) %>%
+  select(year, stcd, dv, dvp) %>%
+  arrange(desc(dv))
+open_2014
+```
+
+`x %>% f(y)` usually means `f(x, y)`. The book uses `%>%`; the native R pipe
+`|>` works for these examples too. The assignment arrow saves the result.
+
+## Sort versus choose the largest/smallest
+
+```{r}
+elections %>% filter(year == 2014) %>% arrange(dv) %>% head()
+elections %>% filter(year == 2014) %>% slice_max(dv, n = 3)
+elections %>% filter(year == 2014) %>% slice_min(dv, n = 3)
+```
+
+`arrange()` reorders all rows. `slice_max()`/`slice_min()` retain selected
+rows; ties are included by default, so `n = 3` can return more than three.
+`with_ties = FALSE` caps the result, but it does not provide a substantive
+reason to prefer one tied case. These are the largest/smallest Democratic
+vote percentages **in this selected sample**.
+
+## Compute columns with `mutate()`
+
+```{r}
+elections_derived <- elections %>%
+  mutate(
+    dem_share = dv / 100,
+    dem_swing = dv - dvp,
+    distance_from_50 = abs(dv - 50),
+    incumbent = inc3 != 0
+  )
+elections_derived %>%
+  select(year, stcd, dv, dem_share, dem_swing, incumbent) %>% head()
+```
+
+`dem_share` is a proportion. `dem_swing` is a **percentage-point** change.
+Do not call `abs(dv - 50)` the two-candidate victory margin: that margin is
+`abs(2 * dv - 100)` percentage points. Neither is a causal incumbency effect.
+
+## Conditional transformations
+
+`mutate()` can create logical flags and readable categories, as well as
+arithmetic transformations. `if_else(condition, yes, no)` chooses a value
+for each row. `case_when()` checks alternatives in order; the first match wins.
+
+```{r}
+ug_flags <- ug %>% mutate(
+  mao_missing = is.na(mao),
+  offers_half_or_more = offer >= 50,
+  sample_label = if_else(elite == 1, "Elite", "Undergraduate")
+)
+elections_labels <- elections %>% mutate(
+  incumbent_party = case_when(
+    inc3 == 1 ~ "Democratic incumbent",
+    inc3 == -1 ~ "Republican incumbent",
+    inc3 == 0 ~ "No incumbent",
+    TRUE ~ NA_character_
+  )
+)
+ug_flags %>% select(participant_id, mao, mao_missing, offers_half_or_more) %>% head()
+```
+
+These labels follow the source codebook, not an assumption that every numeric
+code has a self-evident meaning. `sample_label` is specific to the two-sample
+`ug` table: it would mislabel MTurk respondents if used after appending them.
+
+## Missing responses and worst-case bounds
+
+How much could the unobserved MAOs change the mean among **all 102 elites**?
+First check the data, rather than assuming which variable is missing:
+
+```{r}
+ug %>% group_by(population) %>% summarize(
+  n_total = n(),
+  missing_mao = sum(is.na(mao)),
+  missing_offer = sum(is.na(offer)), .groups = "drop"
+)
+```
+
+Four elite MAOs are missing; elite offers are all observed. Two undergraduate
+MAOs are missing. For each variable, preserve observed values and replace only
+missing values by the endpoints of its allowed 0–100 range.
+
+```{r}
+ug_bounds <- ug %>% mutate(
+  mao_lower = if_else(is.na(mao), 0, mao),
+  mao_upper = if_else(is.na(mao), 100, mao),
+  offer_lower = if_else(is.na(offer), 0, offer),
+  offer_upper = if_else(is.na(offer), 100, offer)
+)
+ug_bounds %>%
+  filter(elite == 1, is.na(mao)) %>%
+  select(participant_id, mao, mao_lower, mao_upper, offer, offer_lower, offer_upper)
+```
+
+`coalesce(x, replacement)` is a compact alternative: take `x` when observed,
+otherwise take the replacement. Thus `coalesce(mao, 0)` produces the same
+lower-bound variable. It is different from replacing every value by zero.
+
+```{r}
+stopifnot(identical(ug_bounds$mao_lower, coalesce(ug$mao, 0)))
+elite_bounds <- ug_bounds %>% filter(elite == 1) %>% summarize(
+  n_total = n(),
+  n_observed = sum(!is.na(mao)),
+  observed_mao_mean = mean(mao, na.rm = TRUE),
+  full_sample_lower = mean(mao_lower),
+  full_sample_upper = mean(mao_upper),
+  offer_lower_mean = mean(offer_lower),
+  offer_upper_mean = mean(offer_upper)
+)
+elite_bounds
+```
+
+The observed-case MAO mean uses 98 people. Both bounds use all 102. If `m`
+responses are missing out of `N`, the full-sample mean lies in
+
+$$
+\left[\frac{\sum_{i:\,M_i\text{ observed}} M_i}{N},
+\quad \frac{\sum_{i:\,M_i\text{ observed}} M_i+100m}{N}\right].
+$$
+
+For elites the bounds are about **29.4 to 33.4**, a width of
+`100 * 4 / 102`, or 3.92 points. The observed-case mean is about 30.6.
+Both offer bounds equal the observed offer mean, about 43.0, because there
+are no missing offers in this table.
+
+These are **worst-case bounds for this finite sample**, assuming the missing
+values are in [0, 100] and observed values are correct. They are not confidence
+intervals, population bounds, or claims that anyone actually chose 0 or 100.
+We do not need to assume the responses are missing at random for these bounds.
+The original `mao` and `offer` columns remain unchanged.
+
+We will return to `summarize()` and `group_by()` just below. **Try it then:**
+compute the same MAO bounds separately for elites and undergraduates. Which
+group has wider bounds, and how does that follow from its missing fraction?
+
+## Unique values with `distinct()`
+
+```{r}
+ug %>% distinct(population)
+elections %>% distinct(year, stcd) %>% nrow()
+ug %>% distinct(mao) %>% nrow()
+```
+
+The last command counts distinct MAO values, including `NA`, **not people**.
+Never deduplicate participants just because they chose the same MAO.
+
+**Try it:** Among the retained 2014 races, find the five closest to 50%.
+Show year, district code, Democratic vote percentage, and distance from 50%.
+Start from `elections_derived`; combine `filter()`, `slice_min()`, and `select()`.
+
+# 3. Summaries, groups, and missing values
+
+## Collapse to a summary row
+
+```{r}
+ug %>% summarize(mean_mao = mean(mao))
+ug %>% summarize(
+  n_rows = n(),
+  n_mao = sum(!is.na(mao)),
+  n_missing = sum(is.na(mao)),
+  mean_mao = mean(mao, na.rm = TRUE),
+  sd_mao = sd(mao, na.rm = TRUE)
+)
+```
+
+`summarise()` and `summarize()` are the same function. `n()` counts rows,
+including rows with missing MAO. `na.rm = TRUE` uses observed values for that
+calculation; it does not delete rows or make nonresponse harmless.
+
+## Repeat the same calculation within groups
+
+```{r}
+ug_summary <- ug %>%
+  group_by(population) %>%
+  summarize(
+    n_rows = n(),
+    n_mao = sum(!is.na(mao)),
+    mean_mao = mean(mao, na.rm = TRUE),
+    mean_offer = mean(offer, na.rm = TRUE),
+    .groups = "drop"
+  )
+ug_summary
+```
+
+Before: one row per participant. After: one row per population. Elite versus
+undergraduate status was not randomly assigned; this is a descriptive comparison.
+If you use `group_by(elite)` instead, the two groups are identical in `ug`.
+
+## Grouping persists until removed
+
+```{r}
+year_incumbency <- elections %>%
+  group_by(year, inc3) %>%
+  summarize(n_races = n(), mean_dv = mean(dv))
+group_vars(year_incumbency)
+year_incumbency %>% slice_max(n_races, n = 1) %>% head()
+year_incumbency %>% ungroup() %>% slice_max(n_races, n = 1)
+```
+
+With one summary row per group, the default drops the last grouping variable,
+leaving `year`. Thus the first `slice_max()` finds a maximum **per year**.
+Use `ungroup()` or `.groups = "drop"` when subsequent operations should be global.
+
+## Grouped `mutate()` preserves participant rows
+
+```{r}
+ug_centered <- ug %>%
+  group_by(population) %>%
+  mutate(
+    group_mean = mean(mao, na.rm = TRUE),
+    mao_centered = mao - group_mean
+  ) %>%
+  ungroup()
+ug_centered %>% select(participant_id, population, mao, group_mean, mao_centered) %>% head()
+```
+
+`summarize()` makes group-level rows. `mutate()` adds group-based calculations
+to the original participant rows. Do not average group means without thinking
+about group sizes and the target population.
+
+## Revisit B2's empirical PMF
+
+```{r}
+mao_pmf <- ug %>%
+  filter(!is.na(mao)) %>%
+  count(population, mao, name = "frequency") %>%
+  group_by(population) %>%
+  mutate(probability = frequency / sum(frequency)) %>%
+  ungroup()
+mao_pmf %>% filter(mao %in% c(0, 25, 50))
+mao_pmf %>% group_by(population) %>% summarize(total = sum(probability))
+```
+
+`count(population, mao)` is a shortcut for grouped row counts. The denominator
+is the number of **observed MAOs within that population**, not all 234 people.
+Missingness is excluded explicitly for this empirical distribution.
+
+**Try it:** Add an empirical CDF using `arrange(mao)` and
+`mutate(cdf = cumsum(probability))` *within each population*. Check that the
+final CDF value is 1. This is the same probability calculation as B2.
+
+# 4. Character strings
+
+The book's string tools are handy for labels and inspection. They are not a
+substitute for a validated identifier when merging people.
+
+```{r}
+ca_names <- members %>% filter(state_abbrev == "CA") %>% select(icpsr, bioname)
+ca_names %>% filter(str_detect(bioname, "SÁNCHEZ|PELOSI"))
+ca_names %>% mutate(surname = str_extract(bioname, "^[^,]+")) %>% head()
+```
+
+`|` means OR in this regular expression. `^` anchors the beginning;
+`[^,]+` matches one or more characters other than a comma. This extracts the
+text before the first comma; it is a display label, not a unique person ID.
+
+The remaining tools in PSD §6.5, with real member names:
+
+```{r}
+name_examples <- ca_names$bioname[1:3]
+length(name_examples)                 # Number of strings
+str_length(name_examples)             # Characters in each string
+str_count(name_examples, ",")         # Number of commas in each string
+str_extract(name_examples, "[A-Z]")   # First ASCII capital letter
+str_extract_all(name_examples, "[A-Z]") # All matches: a list
+str_remove_all(name_examples, "[aeiou]") # A text operation, not name cleaning
+str_split(name_examples, ",")         # List of vectors
+str_split_fixed(name_examples, ",", n = 2) # Matrix with two columns
+str_flatten(name_examples, collapse = "; ") # One display string
+```
+
+Do not treat `[A-Z]` as an inclusive definition of letters in names: accents,
+non-Latin scripts, suffixes, and naming conventions all matter. Nor does this
+extract-all example compute initials (the surnames here are uppercase).
+
+Column-selection helpers can also match names:
+
+```{r}
+members %>% select(state_abbrev, bioname, matches("^nominate_")) %>% head()
+```
+
+# 5. Changing the shape of a table
+
+## Wide and long representations
+
+The UG table is useful with one row per person and separate `mao` and `offer`
+columns. For a comparison across *choice types*, use one row per person-choice.
+Neither shape is inherently wrong: define the unit needed for the question.
+
+```{r}
+ug_long <- ug %>%
+  select(participant_id, population, mao, offer) %>%
+  pivot_longer(
+    cols = c(mao, offer),
+    names_to = "choice", values_to = "amount"
+  )
+ug_long %>% head(n = 8)
+```
+
+The column names become values of `choice`. Their contents become `amount`.
+There are now 468 rows, **still 234 people**. We retained missing amounts;
+`values_drop_na = TRUE` would remove those rows, which is not the same as zero.
+
+```{r}
+choice_summary <- ug_long %>%
+  group_by(population, choice) %>%
+  summarize(n_observed = sum(!is.na(amount)),
+            mean_amount = mean(amount, na.rm = TRUE), .groups = "drop")
+choice_summary
+```
+
+## Widen a summary for presentation
+
+```{r}
+choice_summary %>%
+  select(population, choice, mean_amount) %>%
+  pivot_wider(id_cols = population, names_from = choice, values_from = mean_amount)
+```
+
+Each population-choice key must identify one value. Do not ask `pivot_wider()`
+to silently average multiple people into one cell. Summarize first when that
+is the intended calculation. `values_fill = 0` is appropriate only when an
+absent combination means zero, not an unrecorded response or unknown mean.
+
+Recover the person-level wide data without losing missingness:
+
+```{r}
+ug_wide_again <- ug_long %>%
+  pivot_wider(id_cols = c(participant_id, population),
+              names_from = choice, values_from = amount)
+stopifnot(nrow(ug_wide_again) == nrow(ug))
+```
+
+# 6. Append observations with `bind_rows()`
+
+`turk` has one row per MTurk respondent, with the repeated elite block already
+excluded. Align the common variables, then stack the observations:
+
+```{r}
+all_ug <- bind_rows(
+  ug %>% select(participant_id, population, elite, mao, offer, age),
+  turk %>% select(participant_id, population, elite, mao, offer, age)
+)
+all_ug %>% count(population)
+all_ug %>% filter(!is.na(mao)) %>% count(population)
+```
+
+The second count reproduces B2: 98 elites, 130 undergraduates, 1,006 MTurk
+respondents. Retaining missing MAOs yields 1,241 rows instead of B2's 1,234.
+
+`bind_rows()` adds observations and aligns columns by name. A join matches
+keys and attaches information. The original UG files have no validated shared
+participant ID for a general person-level join. Equal MAOs or equal row numbers
+across separate files are not evidence of a match.
+
+After appending, `elite == 0` pools **two different comparison samples**.
+Use `population` when you want to keep undergraduates and MTurk separate.
+
+# 7. Join elections to Voteview
+
+## First a simple lookup
+
+The source codebook defines `state` as alphabetical position among the 50
+states. `states.csv` is the matching lookup from R's state names/abbreviations.
+It is not a crosswalk between numeric FIPS and ICPSR codes.
+
+```{r}
+states %>% head()
+elections_2014 <- elections %>%
+  filter(year == 2014) %>%
+  mutate(district = stcd %% 100, congress = 114) %>%
+  left_join(states, by = "state", relationship = "many-to-one")
+elections_2014 %>% select(year, state_name, district, dv) %>% head()
+```
+
+`%% 100` takes the remainder after division by 100: `1304` becomes district 4.
+The 2014 election precedes the **114th Congress, 2015–2017**. We are describing
+the district's subsequent representation, not its incumbent before the election.
+
+## Check the keys before the substantive join
+
+Voteview has one record per member appearance in a Congress. Some districts
+had replacements during the term. `state_abbrev + district_code` is therefore
+not necessarily unique, even after filtering to House members in Congress 114.
+
+```{r}
+duplicate_districts <- members %>%
+  count(state_abbrev, district_code) %>%
+  filter(n > 1)
+duplicate_districts
+
+members %>%
+  filter(state_abbrev == "IL", district_code == 18) %>%
+  select(bioname, nominate_dim1)
+```
+
+A raw left join illustrates the consequence:
+
+```{r}
+raw_join <- elections_2014 %>%
+  left_join(members, by = c("congress", "state_abbrev", "district" = "district_code"))
+c(before = nrow(elections_2014), after = nrow(raw_join))
+```
+
+328 election rows become 333 matched rows. A left join retains every left
+observation, but **does not promise the same number of rows**. No warning is
+required for a one-to-many join. Repeating the election outcome gives those
+districts extra weight in later calculations.
+
+## A conservative classroom rule
+
+Keep a NOMINATE match only if exactly one member record is available for the
+district in that Congress. Leave ambiguous election rows unmatched; do not
+claim the person with the first row or largest score was the election winner.
+
+```{r}
+members_unique <- members %>%
+  group_by(congress, state_abbrev, district_code) %>%
+  filter(n() == 1) %>%
+  ungroup() %>%
+  select(congress, state_abbrev, district_code, icpsr, bioname, nominate_dim1)
+
+joined <- elections_2014 %>%
+  left_join(members_unique,
+            by = c("congress", "state_abbrev", "district" = "district_code"),
+            relationship = "many-to-one")
+
+joined %>% select(year, state_abbrev, district, dv, bioname, nominate_dim1) %>% head()
+stopifnot(nrow(joined) == nrow(elections_2014))
+```
+
+`relationship = "many-to-one"` checks that each left row matches at most one
+right row. It requires dplyr 1.1.0 or later. It does **not** check whether a
+match exists, whether the key is substantively correct, or whether a matched
+score is missing.
+
+## Audit unmatched keys and missing measurements separately
+
+```{r}
+unmatched <- anti_join(elections_2014, members_unique,
+                      by = c("congress", "state_abbrev", "district" = "district_code"))
+unmatched %>% select(state_abbrev, district, dv)
+
+joined %>% summarize(
+  rows = n(),
+  no_member_match = sum(is.na(icpsr)),
+  matched_but_missing_score = sum(!is.na(icpsr) & is.na(nominate_dim1))
+)
+```
+
+The five unmatched election rows are the ambiguous districts HI-1, IL-18,
+KY-1, MS-1, and PA-2. The sixth duplicate district in Voteview, OH-8, is absent
+from the selected elections CSV. No election row was discarded by the safe join.
+
+For another year, recheck the Congress, district boundaries, at-large coding,
+and duplicate records. Do not extrapolate this one-year merge automatically.
+
+## Other join choices
+
+```{r}
+inner_result <- inner_join(elections_2014, members_unique,
+                          by = c("congress", "state_abbrev", "district" = "district_code"))
+semi_result <- semi_join(elections_2014, members_unique,
+                        by = c("congress", "state_abbrev", "district" = "district_code"))
+c(left = nrow(joined), inner = nrow(inner_result), semi = nrow(semi_result))
+```
+
+| Join | What remains? |
+|---|---|
+| `left_join(x, y)` | Every left row, with right-side fields where keys match |
+| `inner_join(x, y)` | Matched keys only; adds right-side fields |
+| `right_join(x, y)` | Every right row, plus matching left-side information |
+| `full_join(x, y)` | Keys from either side, with missing fields as needed |
+| `semi_join(x, y)` | Left rows with a match, without adding right-side fields |
+| `anti_join(x, y)` | Left rows without a match |
+
+## Describe the merged data
+
+```{r}
+plot_data <- joined %>% filter(!is.na(nominate_dim1))
+plot(plot_data$dv, plot_data$nominate_dim1,
+     xlab = "Democratic two-party vote, 2014 (%)",
+     ylab = "Representative's first-dimension NOMINATE score",
+     pch = 19, col = "#005a8b88")
+abline(h = 0, col = "grey70", lty = 2)
+```
+
+This describes retained district elections and unambiguous subsequent member
+records. The first dimension broadly orders liberal–conservative roll-call
+positions; it is not an ideological scale for the district's voters. The plot
+does not identify a causal effect of votes on ideology. NOMINATE values are
+estimates in the current frozen release, not forecasts available in 2014.
+
+# 8. Save a result
+
+Use a new filename rather than overwriting raw input:
+
+```{r}
+#| eval: false
+write_csv(joined, "elections-2014-with-nominate.csv")
+```
+
+Keep the script or QMD that produced it. An exported table alone does not
+record the exclusions, definitions, and join rules that created it.
+
+# 9. Optional reference: the apply family
+
+PSD §6.7 provides an alternative way to repeat calculations. You already used
+`replicate()` for repeated simulations. Here `apply()` works on rows or columns;
+`sapply()` applies a function to elements of a vector/list and tries to simplify.
+
+```{r}
+amounts <- as.matrix(select(ug, mao, offer))
+apply(amounts, MARGIN = 2, FUN = mean, na.rm = TRUE)
+# This repeats mean() for each column. MARGIN = 1 would operate per row.
+
+offer_values <- c(20, 30, 40, 50)
+acceptance <- sapply(offer_values, function(o) mean(ug$mao <= o, na.rm = TRUE))
+tibble(offer = offer_values, acceptance,
+       expected_payoff = (100 - offer_values) * acceptance)
+```
+
+The acceptance calculation pools the observed MAOs in these two samples,
+with weight proportional to sample size. It is not a population-weighted estimate
+for society. In a real analysis, choose and defend the population first.
+
+Avoid `apply()` on a mixed numeric/character data frame: coercing it to a
+matrix can turn all columns into strings. `sapply()` can return different
+shapes depending on the results. `lapply()` always returns a list; `vapply()`
+lets you specify the expected output type. Those distinctions are reference
+material, not a second programming curriculum for today.
+
+# Sources and help
+
+- Reading: Speegle and Clair, [PSD Chapter 6](https://probstatsdata.com/datamanipulation.html).
+- [dplyr introduction](https://dplyr.tidyverse.org/articles/dplyr.html),
+  [grouping](https://dplyr.tidyverse.org/articles/grouping.html),
+  and [join documentation](https://dplyr.tidyverse.org/reference/mutate-joins.html).
+- [tidyr pivoting](https://tidyr.tidyverse.org/articles/pivot.html) and
+  [stringr introduction](https://stringr.tidyverse.org/articles/stringr.html).
+- Jacobson, Gary (2015), *It's Nothing Personal: The Decline of the Incumbency
+  Advantage in U.S. House Elections*, [replication archive](https://doi.org/10.7910/DVN/29559).
+  The course CSV is a selected extract, checked against the aggregate archive.
+- LeVeck et al. (2014), *The Role of Self Interest in Elite Bargaining*,
+  [replication archive](https://doi.org/10.7910/DVN/27894). See `data/SOURCES.txt`.
+- Lewis et al. (2026), [Voteview](https://voteview.com/),
+  [member-file documentation](https://voteview.com/articles/data_help_members).
+  Frozen download: October 20, 2026; teaching subset: House, Congress 114.
+
+For an individual function, type `?filter`, `?pivot_longer`, or `?left_join`
+in the Console. If a different package masks a function, use its explicit name,
+such as `dplyr::filter()`.

@@ -42,6 +42,22 @@ All assignments are due at **1:30 p.m.**
 | **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
 
+## A5: data wrangling with dplyr
+
+**Due October 28 at 1:30 p.m. Pacific.** A5 develops PSD Exercises **6.3(a, c,
+d), 6.35, and 6.36** with guided practice in filtering, transforming,
+grouping, joining, and reshaping data. The datasets and report-formatting
+helpers are supplied; no data downloads are needed. See the
+[Seminar 8 materials](meetings/08-data-wrangling/index.qmd) for worked examples.
+
+Accept the invitation to your private A5 repository and clone it as a new
+RStudio project. Complete `R/a5_answers.R` and the three short written
+responses in the QMD. Save your files, run `Rscript checks/check-a5.R` in
+the Terminal, and render and inspect the report. Commit and push **the
+answers R file, QMD, and current HTML**, then inspect the GitHub Actions
+result. Automated checks provide feedback on results and completion,
+not a grade for your reasoning.
+
 ## B3: random assignment and causal estimation
 
 **Due October 21 at 1:30 p.m. Pacific.** B3 uses hypothetical village data to

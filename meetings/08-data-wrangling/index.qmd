@@ -1,0 +1,56 @@
+---
+title: "Meeting 8: Data wrangling with dplyr"
+subtitle: "October 21, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[Chapter 6](https://probstatsdata.com/datamanipulation.html).
+Bring your laptop with RStudio ready to use. **B3 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/08-data-wrangling/data-wrangling-slides.html)
+- [Download the slide PDF](../../lectures/08-data-wrangling/data-wrangling-slides.pdf)
+- [Download the complete demo bundle (ZIP)](../../lectures/08-data-wrangling/seminar8-demo.zip){download="seminar8-demo.zip"}
+- [Read the demonstration with its output](../../lectures/08-data-wrangling/data-wrangling-live-demo.html)
+- [View the demonstration QMD](../../lectures/08-data-wrangling/data-wrangling-live-demo.qmd){download="data-wrangling-live-demo.qmd"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/08-data-wrangling)
+
+Use the arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy. The demo HTML shows saved code and results; it does not run R
+in your browser.
+
+::: {.callout-important title="Download and extract the whole demo bundle"}
+The demonstration QMD needs the accompanying data and helper script.
+Download the ZIP, extract it, and open `poli210-seminar8.Rproj` in RStudio.
+Keep all of its files and folders together. Open the QMD, follow its package
+setup instructions, run the setup chunk, and then work through the numbered
+sections in order. **The QMD alone is not a complete runnable project.**
+:::
+
+## During the seminar
+
+Congressional elections and ultimatum-game data provide examples of selecting
+columns, filtering and sorting rows, creating variables with `mutate()`,
+and summarizing groups. We distinguish missing values from zeros and explore
+lower and upper bounds for missing minimum acceptable offers.
+
+We then practice working with text, reshaping tables, combining rows, and
+joining datasets. Join audits check whether keys are unique, whether rows
+were unexpectedly duplicated, and whether any records failed to match.
+The demo includes frozen teaching datasets and source documentation, so no
+in-class data downloads are required.
+
+## After class
+
+**A5 is due October 28 at 1:30 p.m. Pacific.** Accept your private repository
+invitation and follow its README. Complete `R/a5_answers.R` and the QMD's
+three short written responses. Save, run `Rscript checks/check-a5.R` in the
+Terminal, and render a fresh HTML. Commit and push **the answers R file,
+QMD, and current HTML**, then check GitHub Actions.
+
+Keep track of what each row represents before and after a transformation.
+In particular, counting rows is not always the same as summing the counts
+stored in a column.

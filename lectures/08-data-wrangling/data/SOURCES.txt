@@ -1,0 +1,106 @@
+POLI 210 Seminar 8: teaching data, October 21, 2026
+
+These are frozen classroom extracts. In the complete instructor project,
+R/prepare-data.R regenerates them from preserved raw sources in data/raw/.
+The lightweight student demo bundle contains the five prepared CSVs and
+this provenance record, not the full source archive or preparation script.
+The demo requires no Internet connection once its R packages are installed.
+
+1. House elections
+Gary Jacobson (2015), It's Nothing Personal: The Decline of the Incumbency
+Advantage in U.S. House Elections. Harvard Dataverse, version 1.0, CC0 1.0.
+https://doi.org/10.7910/DVN/29559
+Aggregate archive: https://dataverse.harvard.edu/api/access/datafile/2547168
+Codebook: https://dataverse.harvard.edu/api/access/datafile/2547164
+Metadata: https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/29559
+Archive/codebook/metadata retrieved October 20, 2026.
+
+The instructor's existing final_exam/gary_j_data.csv is preserved in raw/.
+It is a selected extract (9,337 district-elections, 28 years, 1946-2014),
+not the complete 435-race-per-year House universe. The original extraction
+rule is not documented in that CSV. Do not infer national seat totals or
+national popular-vote shares from its row counts or unweighted means.
+All 9,337 year/stcd keys match the archive. Shared variables dv, dvp,
+state, ptynow, inc3, south, dpres agree, including missingness, to 1e-4.
+The downloaded archive includes blank-key rows; the preparation comparison
+ignores these, without modifying the preserved archive.
+
+elections.csv: same substantive values/rows as the local CSV, with its first
+unnamed row-index column called source_row. No new exclusions or imputations.
+states.csv: alphabetical state index (1-50), state_name and state_abbrev,
+from R's built-in state.name and state.abb. The original codebook explicitly
+defines alphabetical state ordering. This is not a FIPS/ICPSR numeric mapping.
+stcd combines that state number with a two-digit district suffix.
+dv/dvp: current/prior Democratic two-party vote percentage. Source dv
+is missing for unopposed races; the selected local CSV has no missing dv/dvp.
+dpres: Democratic two-party presidential percentage, using the preceding
+presidential election for midterms. There are 1,125 missing values here.
+inc3: 1 Democratic incumbent, -1 Republican incumbent, 0 no incumbent.
+ptynow: 1 Democrat holds seat, -1 Republican, 0 neither/new seat.
+south: 1 for an old-Confederacy state; 0 otherwise.
+
+2. Ultimatum game
+LeVeck, Brad L.; Hughes, D. Alex; Hafner-Burton, Emilie; Fowler, James H.;
+Victor, David G. (2014), Replication data for The Role of Self Interest in
+Elite Bargaining. Harvard Dataverse, version 1, CC0 1.0.
+https://doi.org/10.7910/DVN/27894
+Article: https://doi.org/10.1073/pnas.1409885111
+Raw files previously downloaded for B2, September 29, 2026:
+https://dataverse.harvard.edu/api/access/datafile/2508995
+https://dataverse.harvard.edu/api/access/datafile/2508997
+https://dataverse.harvard.edu/api/access/datafile/2508998
+
+ug.csv: all 234 rows of elite.ug_1.csv. elite 1 -> Elites (102),
+elite 0 -> Undergraduates (132). ult.min renamed mao, ult.propose renamed
+offer. Other variables retain original values. Added population label and
+teaching ID eu-NNNN, referring to the original row number excluding header.
+Four elite MAOs and two undergraduate MAOs are missing. Offers are complete.
+Missing observations are retained; zeros are valid. Experience was collected
+for elites only, so undergraduates' missing experience is not a zero.
+
+mturk.csv: only elite == 0 rows of pnas.elite.turk.data_1.csv (1,007 people).
+demand renamed mao, propose renamed offer; population MTurk. ID mt-NNNN
+uses original row number BEFORE filtering. One MAO is missing. The raw
+file's elite block (102 rows) repeats the elite sample in the other file:
+age, MAO, proposal and their missingness agree. It is excluded by source
+and elite status, not by dropping participants with equal responses.
+The original codebook calls elite == 0 in this file "undergraduate"; its
+file description and study identify the sample as MTurk. We use MTurk.
+
+After appending ug and mturk there are 1,241 participants; excluding missing
+MAOs yields B2's 1,234: 98 elites, 130 undergraduates, 1,006 MTurk.
+Teaching IDs do not justify person-level joins between original raw files.
+No validated shared identifier is supplied for a join with the additional
+reasoning/patience file, so it is not merged for this lesson.
+MAO and proposal use the original 0-100 scale; original incentives involved
+lotteries. The seminar uses the simplified 100-point game.
+
+3. Voteview
+Lewis, Jeffrey B.; Poole, Keith; Rosenthal, Howard; Boche, Adam;
+Rudkin, Aaron; Sonnet, Luke (2026). Voteview: Congressional Roll-Call Votes Database.
+https://voteview.com/
+CSV: https://voteview.com/static/data/out/members/Hall_members.csv
+Documentation: https://voteview.com/articles/data_help_members
+Retrieved October 20, 2026. Complete downloaded file preserved in raw/.
+
+house114.csv filters chamber == House and congress == 114 (2015-2017),
+then keeps named ID, geographic, name and score fields. No value imputation
+or district recoding. There are 441 member records and 435 district keys.
+District numbers in this specific subset run from 1 to 53; single-member
+states use 1. Historical at-large codes differ and require separate checks.
+The 2014 election selects representation for the following 114th Congress.
+The lesson matches only districts with one member record and retains
+ambiguous elections with unmatched member information. This is not a
+general winner-ID algorithm. NOMINATE scores describe members' roll-call
+positions, not voters; the frozen estimates need not have been available
+at the time of the election and may incorporate later career information.
+
+4. Raw file MD5 checksums
+gary_j_data.csv              a0bd3289991c80dc3d1a114035544a51
+JOPrepfile1.tsv              acafb28aea7eebaba9a535a3036f03da
+jacobson-codebook.doc        705561ec334ce222aaee982257799c7b
+elections-metadata.json      c64f27571949f0f2d09ea47ea14d7976
+elite.ug_1.csv               694c008f36a7d51525f8996ddcb748a7
+pnas.elite.turk.data_1.csv    00a8bd0cd9f92d0b6ae17d77bca1e403
+ug-codebook.txt              075aaac0a37f2b740b033c63075625c4
+Hall_members.csv            79914c58e5d4bf5aa5f1bdfd2244b656

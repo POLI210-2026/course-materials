@@ -1,0 +1,15 @@
+POLI 210 Seminar 8: Data wrangling with dplyr
+
+1. Extract the entire ZIP before opening files. Keep its folders together.
+2. Open poli210-seminar8.Rproj in RStudio.
+3. Open data-wrangling-live-demo.qmd. Its first section explains package setup.
+4. Run the setup chunk, then work through the numbered sections in order.
+5. The companion HTML is a rendered reference with code and results.
+
+The data/ folder contains the five frozen teaching CSVs. No downloads are
+required in class. R/setup.R can reload the original tables if necessary.
+data/SOURCES.txt documents definitions, sources, and preparation choices.
+
+The lightweight demo bundle does not contain the private instructor notes,
+practice answers, raw archive downloads, or the instructor preparation script.
+All paths are relative to this project and work on macOS and Windows.
