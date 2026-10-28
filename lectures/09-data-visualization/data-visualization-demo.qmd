@@ -1,0 +1,283 @@
+---
+title: "Data visualization: live R demonstration"
+subtitle: "POLI 210 - Seminar 9 - October 28, 2026"
+author: "Brad LeVeck"
+format:
+  html:
+    toc: true
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  cache: false
+fig-width: 8
+fig-height: 4.5
+fig-format: png
+fig-dpi: 160
+---
+
+Open `poli210-seminar9.Rproj`, then this file. Run from the top or render in a
+fresh session. The bundled data are the same selected election extract used
+last week, plus a carefully checked election-to-member match.
+
+## 1. Setup and the unit of observation
+
+Install `dplyr`, `tidyr`, `readr`, and `ggplot2` once if needed. Load them each session.
+The setup script below reads the local CSVs, creates the subsets, and sets colors.
+
+```{r}
+source("R/setup.R")
+elections |> count(year)
+glimpse(e2014)
+```
+
+`elections`: one retained district-election. `dv`, `dvp`, and `dpres` are
+percentages (0–100), not proportions (0–1). `dvp` is prior House vote;
+`dpres` is current or most recent presidential vote. There are 328 retained
+2014 races, not a census of 435 districts. An unweighted district mean is not
+the national popular vote.
+
+## 2. The first scatterplot
+
+```{r}
+p <- ggplot(e2014, aes(x = dvp, y = dv)) +
+  geom_point(alpha = 0.55) +
+  labs(x = "Prior Democratic House vote (%)",
+       y = "Democratic House vote, 2014 (%)")
+p
+```
+
+Try adding an equality line. The added layer does not change the saved `p`
+unless you assign the result back to `p`.
+
+```{r}
+p + geom_abline(intercept = 0, slope = 1, linetype = 2)
+```
+
+## 3. Map a variable; set a constant
+
+```{r}
+ggplot(e2014, aes(dvp, dv)) +
+  geom_point(aes(color = incumbent), alpha = 0.7) +
+  scale_color_manual(values = inc_colors)
+ggplot(e2014, aes(dvp, dv)) + geom_point(color = "blue", alpha = 0.5)
+```
+
+Try `aes(color = "blue")`. It creates a category named “blue”; it does not
+instruct ggplot to use the literal color blue.
+
+## 4. Global mappings versus layer mappings
+
+Color in the point layer: **one** fitted line.
+
+```{r}
+ggplot(e2014, aes(dvp, dv)) +
+  geom_point(aes(color = incumbent), alpha = 0.7) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "black") +
+  scale_color_manual(values = inc_colors)
+```
+
+Color in the global mapping: **separate** fitted lines for the incumbent categories.
+This is an exercise in grouping, not a causal model of incumbency.
+
+```{r}
+ggplot(e2014, aes(dvp, dv, color = incumbent)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  scale_color_manual(values = inc_colors)
+```
+
+## 5. Facet by election
+
+The last five years in the extract are 2004, 2006, 2008, 2010, and 2014.
+Keep the same axis scales to make comparisons meaningful.
+
+```{r}
+ggplot(recent, aes(dvp, dv)) +
+  geom_point(alpha = 0.4, size = 0.8) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = "grey50") +
+  facet_wrap(~year, nrow = 2) +
+  labs(x = "Prior Democratic House vote (%)", y = "Democratic House vote (%)")
+```
+
+## 6. Presidential vote and a continuous color scale
+
+First, all rows with observed presidential vote:
+
+```{r}
+nrow(pres)
+ggplot(pres, aes(dpres, dv)) +
+  geom_point(alpha = 0.14, size = 0.7) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "black") +
+  labs(x = "Democratic presidential vote (%)", y = "Democratic House vote (%)")
+```
+
+The prepared match links each election to its following Congress, by state
+and district. Multiple-member keys and unmatched keys are not guessed. The
+match never duplicates an election row. See `SOURCES.txt` for construction details.
+
+```{r}
+linked |> count(match_status)
+nrow(matched)  # Unique member matches with observed dpres
+p_ideology <- ggplot(matched, aes(dpres, dv)) +
+  geom_point(aes(color = nominate_dim1), alpha = 0.35, size = 0.8) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "black") +
+  scale_color_gradient2(low = "#2166ac", mid = "#dedede", high = "#b35806",
+                        midpoint = 0) +
+  labs(x = "Democratic presidential vote (%)", y = "Democratic House vote (%)",
+       color = "Following member's\nNOMINATE dimension 1")
+p_ideology
+```
+
+The score describes the member, not the electorate; it is not a pre-election
+predictor. The black line is pooled, not fitted conditional on the score.
+For a clearer view of observations, rebuild with 2014 only:
+
+```{r}
+matched2014 <- matched |> filter(year == 2014)
+ggplot(matched2014, aes(dpres, dv)) +
+  geom_point(aes(color = nominate_dim1), alpha = 0.75, size = 1.8) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "black") +
+  scale_color_gradient2(low = "#2166ac", mid = "#dedede", high = "#b35806",
+                        midpoint = 0) +
+  labs(x = "Democratic presidential vote (%)", y = "Democratic House vote, 2014 (%)",
+       color = "Following member's\nNOMINATE dimension 1")
+```
+
+## 7. Histograms and category counts
+
+```{r}
+ggplot(e2014, aes(dpres)) +
+  geom_histogram(binwidth = 5, boundary = 0, fill = "steelblue", color = "white") +
+  labs(x = "Democratic presidential vote (%)", y = "Retained districts")
+ggplot(e2014, aes(incumbent)) + geom_bar(fill = "steelblue") +
+  labs(x = "Incumbent", y = "Retained districts")
+```
+
+Try histogram widths 2 and 10. For a density scale, use
+`aes(dpres, y = after_stat(density))`. With unequal bin widths, area rather
+than raw height is especially important. Our examples use equal-width bins.
+
+## 8. From summarise to ggplot
+
+First make a small dataset with one row per group. Print it before plotting.
+
+```{r}
+means <- e2014 |>
+  group_by(incumbent) |>
+  summarise(mean_dv = mean(dv), sd_dv = sd(dv), n = n(),
+            sem = sd_dv / sqrt(n), .groups = "drop")
+knitr::kable(means, digits = 2)
+ggplot(means, aes(incumbent, mean_dv)) +
+  geom_col(fill = "steelblue", width = 0.7) +
+  geom_errorbar(aes(ymin = mean_dv - sem, ymax = mean_dv + sem), width = 0.15) +
+  labs(x = "Incumbent", y = "Mean Democratic House vote (%)",
+       caption = "Whiskers: ±1 illustrative IID SEM; selected teaching extract.")
+```
+
+`sd_dv` measures variation across districts. `sem` is the standard error of
+the mean **under IID sampling assumptions**. The extract is not a random
+sample, so these are an illustration of the plotting workflow, not justified
+national-election uncertainty statements. A small whisker does not remove
+selection bias. With missing values, filter the relevant outcome first so
+the mean, SD, and denominator use the same observations.
+
+## 9. Reshape, summarise, then draw grouped bars
+
+```{r}
+vote_long <- e2014 |>
+  select(incumbent, dv, dvp) |>
+  pivot_longer(c(dv, dvp), names_to = "election", values_to = "vote") |>
+  mutate(election = factor(election, levels = c("dvp", "dv"),
+                            labels = c("Prior", "2014")))
+head(vote_long)
+vote_summary <- vote_long |>
+  filter(!is.na(vote)) |>
+  group_by(incumbent, election) |>
+  summarise(mean_vote = mean(vote), n = n(),
+            sem = sd(vote) / sqrt(n()), .groups = "drop")
+knitr::kable(vote_summary, digits = 2)
+dodge <- position_dodge(width = 0.8)
+p_grouped <- ggplot(vote_summary, aes(incumbent, mean_vote, fill = election)) +
+  geom_col(position = dodge, width = 0.7) +
+  geom_errorbar(aes(ymin = mean_vote - sem, ymax = mean_vote + sem),
+                position = dodge, width = 0.18) +
+  scale_fill_manual(values = c(Prior = "#b3cde3", `2014` = "#2166ac")) +
+  labs(x = "Incumbent", y = "Mean Democratic House vote (%)", fill = "Election",
+       caption = "Whiskers: ±1 illustrative IID SEM, not 95% intervals.")
+p_grouped
+```
+
+The same district appears at two times; those are not independent samples.
+Do not infer a test of change by looking at overlap of these whiskers. The
+exercise is how to turn group summaries and endpoints into aligned layers.
+
+## 10. Boxplots show observations' distributions
+
+```{r}
+ggplot(house, aes(party, nominate_dim1, fill = party)) +
+  geom_boxplot(width = 0.55) +
+  scale_fill_manual(values = party_colors, guide = "none") +
+  labs(x = "Party", y = "NOMINATE dimension 1")
+```
+
+Box: middle 50%; line: median; whiskers: observations within 1.5 IQR of box
+edges. Outside points are not automatically mistakes. This is not an interval
+for the mean. Optional: add `geom_jitter(width = 0.08, height = 0, alpha = 0.2)`
+(and set `outlier.shape = NA` in the box layer to avoid duplicate outlier points).
+
+## 11. Plotting supplied model tables
+
+Here we supply an ordinary table of fitted values and endpoints from a
+descriptive election model. The preparation is provided; regression is not
+today's learning objective. B4 supplies analogous robust-regression tables.
+
+```{r}
+fit <- lm(dv ~ dpres, data = e2014)
+grid <- data.frame(dpres = seq(min(e2014$dpres, na.rm = TRUE),
+                              max(e2014$dpres, na.rm = TRUE), length.out = 100))
+predictions <- bind_cols(grid, as.data.frame(predict(fit, newdata = grid,
+                                                     interval = "confidence")))
+head(predictions)
+ggplot() +
+  geom_ribbon(data = predictions,
+    aes(x = dpres, ymin = lwr, ymax = upr), fill = "grey75") +
+  geom_point(data = e2014, aes(dpres, dv), alpha = 0.3) +
+  geom_line(data = predictions, aes(dpres, fit), color = "#2166ac", linewidth = 1) +
+  labs(x = "Democratic presidential vote (%)", y = "Democratic House vote (%)",
+       caption = "Descriptive fit; band uses conventional model-based 95% uncertainty.")
+```
+
+Different layers use different tables. The grid's rows are not extra districts.
+The band concerns the fitted mean, not the spread of individual outcomes.
+Its interpretation depends on model/sampling assumptions.
+
+## 12. Save and render
+
+```{r}
+#| eval: false
+ggsave("grouped-vote.png", plot = p_grouped, width = 7, height = 4.5, dpi = 300)
+```
+
+This optional command writes a standalone image to the project folder. The
+plot is already embedded in the rendered HTML. Restart R and render to verify
+that the report does not depend on objects left in the Console.
+
+## Optional: Normal Q–Q plots
+
+```{r}
+ggplot(house, aes(sample = nominate_dim1)) +
+  stat_qq(alpha = 0.6) +
+  stat_qq_line(color = "#b35806") +
+  facet_wrap(~party) +
+  labs(x = "Standard Normal quantile", y = "Observed NOMINATE quantile")
+```
+
+At matching cumulative probabilities, compare an observed score with a Normal
+quantile. Approximate straightness is compatible with a Normal shape; it does
+not require a zero mean or unit SD. The reference line uses the first and third
+quartiles. Departures are diagnostic, not an automatic hypothesis test. A
+variable's distribution is not its mean's sampling distribution.
+
+Sources and match construction: `SOURCES.txt`. Reading: [PSD Chapter 7](https://probstatsdata.com/ggplotviz.html).

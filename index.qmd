@@ -12,15 +12,15 @@ part of statistical reasoning: shared work is written in Quarto, managed with
 Git, and checked through GitHub.
 :::
 
-::: {.callout-important title="Seminar 8: Data wrangling with dplyr"}
-**Wednesday, October 21, 1:30-4:20 p.m.**
+::: {.callout-important title="Seminar 9: Data visualization with ggplot2"}
+**Wednesday, October 28, 1:30-4:20 p.m.**
 
 Classroom and Office Building 1, Room 205
 
-Read **Speegle and Clair, Chapter 6** and bring your laptop.
-B3 is due at 1:30 p.m. See the [meeting page](meetings/08-data-wrangling/index.qmd)
+Read **Speegle and Clair, Chapter 7** and bring your laptop.
+A5 is due at 1:30 p.m. See the [meeting page](meetings/09-data-visualization/index.qmd)
 for lecture slides and the complete Quarto demo bundle, including its data.
-A5 is distributed through private repositories and is due **October 28 at 1:30 p.m.**
+B4 will be released separately after the seminar.
 :::
 
 ## Quick links

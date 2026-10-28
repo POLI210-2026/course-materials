@@ -1,0 +1,472 @@
+---
+title: "Data visualization with ggplot2"
+subtitle: "POLI 210 - Seminar 9"
+author: "Brad LeVeck"
+date: "2026-10-28"
+date-format: "MMMM D, YYYY"
+format:
+  revealjs:
+    theme: [simple, slides.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    center: false
+    transition: none
+    embed-resources: true
+    code-overflow: wrap
+  typst:
+    fontsize: 21pt
+    template-partials: [typst-show.typ]
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 10
+fig-height: 3.3
+---
+
+```{r}
+#| include: false
+source("R/plots.R")
+```
+
+## Questions for this seminar
+
+- How persistent is a district's Democratic vote?
+- How do House and presidential voting line up?
+- What does the distribution of congressional ideology look like within parties?
+- How can we display the summaries and fitted results in a published paper?
+
+Reading: PSD Chapter 7. Today we build a few useful plots, one layer at a time.
+
+## What does one row mean?
+
+| Data | One row | Important limitation |
+|---|---|---|
+| `elections` | Retained district-election | Selected extract, not all races |
+| `matched` | Retained district-election with a unique member match | Following Congress; not voter ideology |
+| `house` | Member record, 114th House | May include replacements |
+
+The election file has 9,337 rows, 1946–2014. Its 2014 subset has 328 rows.
+Do not turn these counts into national seat totals.
+
+## A small grammar of graphics
+
+```{r}
+#| eval: false
+ggplot(data = e2014, mapping = aes(x = dvp, y = dv)) +
+  geom_point() +
+  labs(x = "Prior Democratic House vote (%)",
+       y = "Democratic House vote, 2014 (%)")
+```
+
+- **Data:** which rows and columns?
+- **Mapping:** which variables control positions, colors, or other features?
+- **Geometry:** points, bars, lines, boxes ...
+- **Labels/scales/theme:** explain and refine the display.
+
+## Each point is a district-election
+
+```{r}
+#| echo: false
+p_scatter
+```
+
+`dvp`: prior House election. `dv`: current House election. Both are percentages.
+
+## Add a variable through a mapping
+
+```{r}
+#| eval: false
+ggplot(e2014, aes(dvp, dv)) +
+  geom_point(aes(color = incumbent), alpha = 0.7) +
+  scale_color_manual(values = inc_colors)
+```
+
+`aes(color = incumbent)` says: look up each row's incumbent category and map it to color.
+
+`alpha = 0.7` says: make **every** point partly transparent.
+
+## Incumbency provides additional context
+
+```{r}
+#| echo: false
+p_color
+```
+
+This is a descriptive pattern, not an estimate of the causal effect of incumbency.
+
+## Mapping versus setting
+
+```{r}
+#| eval: false
+geom_point(aes(color = incumbent)) # Variable -> colors + legend
+geom_point(color = "blue")        # One fixed color
+geom_point(aes(color = "blue"))   # A category called "blue"!
+```
+
+Inside `aes()`: map a variable (or expression) to a visual feature.
+Outside `aes()`: set a constant appearance.
+
+`color` controls points/lines/outlines; `fill` controls interiors of bars and ribbons.
+
+## Layers inherit mappings
+
+```{r}
+#| eval: false
+ggplot(e2014, aes(dvp, dv)) +
+  geom_point(aes(color = incumbent), alpha = 0.7) +
+  geom_smooth(method = "lm", formula = y ~ x,
+              se = FALSE, color = "black")
+```
+
+Color is mapped **only in the point layer**. The fitted line uses all rows.
+Putting a categorical color mapping in `ggplot()` would normally fit a line for each group.
+
+We specify a straight-line fit explicitly. Regression interpretation comes later.
+
+## One fitted line, several point colors
+
+```{r}
+#| echo: false
+p_fit
+```
+
+The line summarizes the relationship; it does not establish causation.
+
+## Facets repeat a plot for subsets
+
+```{r}
+#| eval: false
+ggplot(recent, aes(dvp, dv)) +
+  geom_point(alpha = 0.4) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  facet_wrap(~year, nrow = 2)
+```
+
+The dashed line marks unchanged Democratic vote share, not a fitted relationship.
+Fixed axes make panels comparable. These are the five latest years in our extract.
+
+## Comparing elections on the same axes
+
+```{r}
+#| echo: false
+#| fig-height: 3.7
+p_facets
+```
+
+In which panels do observations tend to fall below the equality line?
+
+## House vote and presidential vote
+
+`dpres` measures district Democratic two-party presidential vote (%).
+For a midterm House election, it refers to the preceding presidential election.
+
+```{r}
+#| eval: false
+pres <- elections |> filter(!is.na(dpres))
+ggplot(pres, aes(dpres, dv)) +
+  geom_point(alpha = 0.14, size = 0.7) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE)
+```
+
+There are 8,212 usable rows. Transparency helps with overlapping points.
+
+## Pooled elections: a strong descriptive pattern
+
+```{r}
+#| echo: false
+p_pres
+```
+
+Pooling years can conceal change. A fitted line is not a substitute for checking subsets.
+
+## Matching elections to member ideology
+
+The prepared file matches an election to the **following Congress**:
+2014 → 114th Congress (2015–2017), using state and district.
+
+- The color plot includes only keys with exactly one House member record.
+- Ambiguous or unmatched keys are retained in the data, not guessed.
+- Of 8,212 rows with `dpres`, 8,061 have a usable unique match.
+
+NOMINATE dimension 1 describes the member's roll-call ideology. It is **not**
+a district opinion measure or a predictor known before that election.
+
+## Continuous color: member ideology
+
+```{r}
+#| echo: false
+p_ideology
+```
+
+Blue = more liberal; orange = more conservative. The black fit ignores the color mapping.
+
+## Presidential vote and member ideology in 2014
+
+```{r}
+#| echo: false
+p_ideology_recent
+```
+
+2014 only: easier to see the observations; still a selected, descriptive comparison.
+
+## Interpreting the House-vote scatterplot {#try-it-make-one-purposeful-change}
+
+With prior House vote (`dvp`) on x and current House vote (`dv`) on y:
+
+- **Equality line (`dv = dvp`):** points above it indicate an increase in Democratic vote share.
+- **Incumbent colors:** distinguish districts with Republican incumbents, Democratic incumbents, and open seats.
+- **Facets by election:** reveal whether patterns persist or change across years.
+
+Why might a line fitted to all districts differ from separate lines fitted within incumbent categories?
+
+## Break
+
+Next: move from individual observations to distributions and summaries.
+
+The key question remains: **What quantity does the height or position represent?**
+
+## Count rows or plot an existing value?
+
+| Goal | Geometry | Input |
+|---|---|---|
+| Count cases in categories | `geom_bar()` | Individual rows |
+| Count cases in numeric intervals | `geom_histogram()` | Individual rows |
+| Show a calculated mean/proportion | `geom_col()` | Summary rows |
+
+`geom_bar()` counts by default. `geom_col()` uses your y values.
+Using the wrong one changes the question the plot answers.
+
+## Histograms: numeric intervals
+
+```{r}
+#| eval: false
+ggplot(e2014, aes(dpres)) +
+  geom_histogram(binwidth = 5, boundary = 0,
+                 fill = "steelblue", color = "white")
+```
+
+Bin width is **5 percentage points**. Each height counts retained districts in that interval.
+
+Bin widths of 2, 5, and 10 show different levels of detail using the same observations.
+For a density-scaled histogram, map `y = after_stat(density)` instead.
+
+## Distribution of presidential vote, 2014 districts
+
+```{r}
+#| echo: false
+p_hist
+```
+
+These are district counts, not counts of voters.
+
+## Bars for counts of categories
+
+```{r}
+#| echo: false
+p_counts
+```
+
+`ggplot(e2014, aes(incumbent)) + geom_bar()` counts the rows in each category.
+
+## Bars for calculated means
+
+```{r}
+#| echo: false
+p_means
+```
+
+`ggplot(means, aes(incumbent, mean_dv)) + geom_col()` uses the summary table's y column.
+
+## Reshape first, then map
+
+Our original data have separate columns `dv` and `dvp`.
+For grouped bars, one column should name the election; another should contain the vote.
+
+```{r}
+#| eval: false
+vote_long <- e2014 |>
+  select(incumbent, dv, dvp) |>
+  pivot_longer(c(dv, dvp),
+               names_to = "election", values_to = "vote")
+```
+
+One row now represents a district's vote at **one of two times**.
+This does not create additional independent districts.
+
+## Calculate before drawing
+
+```{r}
+#| eval: false
+vote_summary <- vote_long |>
+  group_by(incumbent, election) |>
+  summarise(mean_vote = mean(vote), n = n(),
+            se = sd(vote) / sqrt(n()), .groups = "drop")
+```
+
+One row now represents an incumbent category × election summary.
+
+The `se` formula is an **illustrative IID calculation**. This selected election
+extract does not justify treating it as a representative random sample.
+
+## The summary table behind the plot
+
+```{r}
+#| echo: false
+knitr::kable(vote_summary, digits = 2)
+```
+
+`sd(vote)` describes variation across districts. `sd(vote)/sqrt(n)` estimates
+the standard error of a mean under IID sampling. They answer different questions.
+
+## Side by side, not stacked
+
+```{r}
+#| echo: false
+p_dodge
+```
+
+Map election to `fill`; use `position_dodge(width = 0.8)`. Keep bar baselines at zero.
+
+## Add uncertainty to the same positions
+
+```{r}
+#| eval: false
+dodge <- position_dodge(width = 0.8)
+ggplot(vote_summary, aes(incumbent, mean_vote, fill = election)) +
+  geom_col(position = dodge) +
+  geom_errorbar(aes(ymin = mean_vote - se,
+                    ymax = mean_vote + se),
+                position = dodge, width = 0.18)
+```
+
+Use the same dodge for bars and whiskers. Whisker width is a graphical choice;
+interval height comes from the calculated endpoints.
+
+## Interpreting the whiskers
+
+```{r}
+#| echo: false
+p_error
+```
+
+Here: mean ±1 illustrative IID SE. Not ±1 SD; not a 95% confidence interval.
+B4 supplies bootstrap endpoints for Figure 1 instead.
+
+## A boxplot summarizes a distribution
+
+- Center line: median.
+- Box: 25th to 75th percentile (the interquartile range, IQR).
+- Whiskers: most extreme observations within 1.5 IQR of the box edges.
+- Points beyond the whiskers: observations, not automatically errors.
+
+A box is **not a confidence interval for the mean**.
+Compare spread, asymmetry, and location, not just one number.
+
+## Member ideology within parties
+
+```{r}
+#| echo: false
+p_box
+```
+
+`geom_boxplot()` calculates the summaries from member-level rows.
+114th House, Democratic and Republican member records with available scores.
+
+## Lines and ribbons can use supplied results
+
+Suppose `predictions` has `x`, `estimate`, `lower`, `upper`, and `series`.
+
+```{r}
+#| eval: false
+ggplot(predictions, aes(x, estimate)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper,
+                  fill = series, group = series), alpha = 0.2) +
+  geom_line(aes(color = series))
+```
+
+Draw the ribbon first so it does not cover the line.
+These rows are **predictions at a grid of x values**, not new observations.
+
+## Different layers can use different tables
+
+```{r}
+#| eval: false
+ggplot() +
+  geom_point(data = observed, aes(x, outcome), alpha = 0.5) +
+  geom_line(data = predictions, aes(x, estimate))
+```
+
+Start with an empty `ggplot()` and supply each layer's `data` and mappings.
+Otherwise a layer may inherit a column name that its own table does not have.
+
+This is the pattern for B4's observed experience points and supplied fitted curves.
+
+## Finish and save a reproducible plot
+
+```{r}
+#| eval: false
+p <- ggplot(e2014, aes(dvp, dv)) +
+  geom_point(alpha = 0.5) +
+  labs(x = "Prior Democratic vote (%)", y = "2014 Democratic vote (%)") +
+  theme_minimal(base_size = 13)
+p
+ggsave("house-vote.png", plot = p, width = 7, height = 4.5, dpi = 300)
+```
+
+In Quarto, printing `p` includes it in the report. `ggsave()` is for a separate file.
+Check labels and units at the size the reader will actually see.
+
+## B4: seven panels, three kinds of input
+
+| Figure | What you prepare or receive | Plot |
+|---|---|---|
+| 1A–C | Group means/proportions + bootstrap endpoints | Bars + whiskers |
+| 2A | Supplied patience predictions | Lines + 95% ribbons |
+| 2B | Supplied differences relative to K=0 | Bars + SE whiskers |
+| 3A–B | Elite observations + supplied log-experience fits | Points + lines + ribbons |
+
+Download the archive files; do not join overlapping samples by row number.
+Each source table determines the quantity shown by a panel's heights or positions.
+
+## Optional: a Normal Q–Q plot
+
+Compare the observed quantile at each probability with a Normal quantile at that probability.
+
+If a distribution is approximately Normal, the points should follow roughly a straight line.
+The intercept and slope can reflect a nonzero mean and a nonunit SD.
+
+The reference line passes through the first and third quartiles by default.
+Systematic curvature or tail departures are useful diagnostics, not a pass/fail test.
+
+## Optional: compare within parties
+
+```{r}
+#| eval: false
+ggplot(house, aes(sample = nominate_dim1)) +
+  stat_qq() + stat_qq_line() + facet_wrap(~party)
+```
+
+```{r}
+#| echo: false
+#| fig-height: 2.65
+p_qq
+```
+
+## Optional: what a Q–Q plot does not establish
+
+- NOMINATE scores need not be Normal for these descriptive plots to be useful.
+- A mixture of parties can be non-Normal even when within-party shapes look simpler.
+- A variable's distribution is not the sampling distribution of its mean.
+
+## Reading and sources
+
+- [PSD Chapter 7: Data visualization](https://probstatsdata.com/ggplotviz.html).
+- Jacobson (2015), [election replication archive](https://doi.org/10.7910/DVN/29559); selected teaching extract.
+- [Voteview member data documentation](https://voteview.com/articles/data_help_members); frozen October 20, 2026 download.
+- LeVeck et al. (2014), [The role of self-interest in elite bargaining](https://doi.org/10.1073/pnas.1409885111), *PNAS* 111(52): 18536–18541; [replication data](https://doi.org/10.7910/DVN/27894).
+- [ggplot2 reference](https://ggplot2.tidyverse.org/reference/): geoms, mappings, scales, and facets.

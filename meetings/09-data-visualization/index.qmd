@@ -1,0 +1,49 @@
+---
+title: "Meeting 9: Data visualization with ggplot2"
+subtitle: "October 28, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[Chapter 7](https://probstatsdata.com/ggplotviz.html).
+Bring your laptop with RStudio ready to use. **A5 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/09-data-visualization/data-visualization-slides.html)
+- [Download the slide PDF](../../lectures/09-data-visualization/data-visualization-slides.pdf)
+- [Download the complete demo bundle (ZIP)](../../lectures/09-data-visualization/seminar9-demo.zip){download="seminar9-demo.zip"}
+- [Read the demonstration with its output](../../lectures/09-data-visualization/data-visualization-demo.html)
+- [View the demonstration QMD](../../lectures/09-data-visualization/data-visualization-demo.qmd){download="data-visualization-demo.qmd"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/09-data-visualization)
+
+Use the arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy. The demo HTML shows saved code and results; it does not run R
+in your browser.
+
+::: {.callout-important title="Download and extract the whole demo bundle"}
+The demonstration QMD needs the accompanying data and helper script.
+Download the ZIP, extract it, and open `poli210-seminar9.Rproj` in RStudio.
+Keep all of its files and folders together. Open `data-visualization-demo.qmd`,
+follow its package setup instructions, and run the sections from the top.
+**The QMD alone is not a complete runnable project.**
+:::
+
+## During the seminar
+
+Congressional election data and NOMINATE scores illustrate how ggplot2 combines
+data, aesthetic mappings, and geometric layers. We build scatterplots, add
+fitted lines, and use color and facets to compare groups and elections.
+
+Histograms, bar plots, and box plots display different kinds of summaries.
+We use `group_by()` and `summarise()` to prepare a plotting dataset, then
+add standard-error whiskers to grouped means. Later examples cover supplied
+prediction curves and uncertainty bands, saving plots, and optional Q–Q plots.
+The complete demo bundle includes the teaching data and their source notes.
+
+## After class
+
+**B4 will be released separately after the seminar.** Its private repository
+will contain the assignment instructions. For now, the demonstration provides
+worked examples to revisit and modify.

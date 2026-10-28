@@ -7,333 +7,256 @@
     "text": "Read the listed textbook material before class. Meeting pages and shared files will be added as the semester progresses.\nPSD refers to Speegle and Clair, Probability, Statistics, and Data. B&H refers to Blitzstein and Hwang, Introduction to Probability.\n\n\n\nMeeting\nDate\nTopic and preparation\n\n\n\n\n1\nAug. 26\nReproducible workflows; Git, GitHub, R, and Quarto. PSD Ch. 1.\n\n\n-\nSep. 2\nNo class - APSA week.\n\n\n2\nSep. 9\nProbability foundations and simulation. PSD §§2.1, 2.2, 2.4.\n\n\n3\nSep. 16\nConditional probability, independence, and Bayes’ rule. B&H Ch. 2.\n\n\n4\nSep. 23\nDiscrete random variables, expectation, and variance. PSD Ch. 3.\n\n\n5\nSep. 30\nContinuous random variables and the normal distribution. PSD Ch. 4.\n\n\n6\nOct. 7\nSimulation, sampling distributions, the LLN, and the CLT. PSD §§5.1-5.5, including chi-squared and t distributions.\n\n\n7\nOct. 14\nSampling distributions and point estimation. PSD §5.6, with review of sampling distributions and the CLT.\n\n\n8\nOct. 21\nData structures, tidy data, and transformation. PSD Ch. 6.\n\n\n9\nOct. 28\nVisualization and descriptive statistics. PSD Ch. 7.\n\n\n10\nNov. 4\nStandard errors and confidence intervals. PSD Ch. 8.\n\n\n-\nNov. 11\nNo class - Veterans Day.\n\n\n11\nNov. 18\nHypothesis tests, two-sample comparisons, power, and resampling. PSD Ch. 8.\n\n\n-\nNov. 25\nNo class - Thanksgiving week.\n\n\n12\nDec. 2\nSimple linear regression: fitting, interpretation, and inference. PSD Ch. 11.\n\n\n13\nDec. 9\nRegression diagnostics, prediction, causal interpretation, and synthesis. PSD Ch. 11."
   },
   {
-    "objectID": "meetings/07-point-estimation/index.html",
-    "href": "meetings/07-point-estimation/index.html",
-    "title": "Meeting 7: Point estimation",
+    "objectID": "meetings/08-data-wrangling/index.html",
+    "href": "meetings/08-data-wrangling/index.html",
+    "title": "Meeting 8: Data wrangling with dplyr",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Section 5.6. Review sampling distributions and the CLT from last week’s seminar. Bring your laptop with RStudio ready to use. A4 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 6. Bring your laptop with RStudio ready to use. B3 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/07-point-estimation/index.html#before-class",
-    "href": "meetings/07-point-estimation/index.html#before-class",
-    "title": "Meeting 7: Point estimation",
+    "objectID": "meetings/08-data-wrangling/index.html#before-class",
+    "href": "meetings/08-data-wrangling/index.html#before-class",
+    "title": "Meeting 8: Data wrangling with dplyr",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Section 5.6. Review sampling distributions and the CLT from last week’s seminar. Bring your laptop with RStudio ready to use. A4 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 6. Bring your laptop with RStudio ready to use. B3 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/07-point-estimation/index.html#lecture-materials",
-    "href": "meetings/07-point-estimation/index.html#lecture-materials",
-    "title": "Meeting 7: Point estimation",
+    "objectID": "meetings/08-data-wrangling/index.html#lecture-materials",
+    "href": "meetings/08-data-wrangling/index.html#lecture-materials",
+    "title": "Meeting 8: Data wrangling with dplyr",
     "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy. Save the demonstration QMD in your course folder and open it in RStudio. Each numbered chunk defines its own inputs and runs independently. The examples use base R and need no downloads or separate helper scripts. Rendering also requires knitr and rmarkdown. The HTML displays saved output rather than running R in your browser. Save the optional project file beside the QMD if you use it."
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the complete demo bundle (ZIP)\nRead the demonstration with its output\nView the demonstration QMD\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy. The demo HTML shows saved code and results; it does not run R in your browser.\n\n\n\n\n\n\nImportantDownload and extract the whole demo bundle\n\n\n\nThe demonstration QMD needs the accompanying data and helper script. Download the ZIP, extract it, and open poli210-seminar8.Rproj in RStudio. Keep all of its files and folders together. Open the QMD, follow its package setup instructions, run the setup chunk, and then work through the numbered sections in order. The QMD alone is not a complete runnable project."
   },
   {
-    "objectID": "meetings/07-point-estimation/index.html#during-the-seminar",
-    "href": "meetings/07-point-estimation/index.html#during-the-seminar",
-    "title": "Meeting 7: Point estimation",
+    "objectID": "meetings/08-data-wrangling/index.html#during-the-seminar",
+    "href": "meetings/08-data-wrangling/index.html#during-the-seminar",
+    "title": "Meeting 8: Data wrangling with dplyr",
     "section": "During the seminar",
-    "text": "During the seminar\nA field experiment motivates the difference-in-means estimator. We distinguish an estimand, an estimator, and an estimate, then examine unbiasedness, sampling variability, mean squared error, and consistency.\nPotential outcomes help separate random assignment from random sampling and explain why a comparison under self-selection can miss the average treatment effect. Demos 1-4 prepare for B3, including exact enumeration of assignments, repeated studies, and summaries and CDFs of their estimates.\nThe final slide sequence and Demos 5-7 are optional. They revisit estimated standard errors, the exact t distribution under Normal observations, and the large-sample Normal approximation."
+    "text": "During the seminar\nCongressional elections and ultimatum-game data provide examples of selecting columns, filtering and sorting rows, creating variables with mutate(), and summarizing groups. We distinguish missing values from zeros and explore lower and upper bounds for missing minimum acceptable offers.\nWe then practice working with text, reshaping tables, combining rows, and joining datasets. Join audits check whether keys are unique, whether rows were unexpectedly duplicated, and whether any records failed to match. The demo includes frozen teaching datasets and source documentation, so no in-class data downloads are required."
   },
   {
-    "objectID": "meetings/07-point-estimation/index.html#after-class",
-    "href": "meetings/07-point-estimation/index.html#after-class",
-    "title": "Meeting 7: Point estimation",
+    "objectID": "meetings/08-data-wrangling/index.html#after-class",
+    "href": "meetings/08-data-wrangling/index.html#after-class",
+    "title": "Meeting 8: Data wrangling with dplyr",
     "section": "After class",
-    "text": "After class\nB3 is due October 21 at 1:30 p.m. Pacific. Accept your private repository invitation and follow its README. The hypothetical village data and helpers are included. Complete the QMD’s code and written responses, run the completion check, and render a fresh HTML. Commit and push both the QMD and current HTML.\nKeep track of what changes in each simulation: treatment assignment, sampled villages, the number of villages per study, or the number of simulation repetitions. These produce different kinds of variation."
+    "text": "After class\nA5 is due October 28 at 1:30 p.m. Pacific. Accept your private repository invitation and follow its README. Complete R/a5_answers.R and the QMD’s three short written responses. Save, run Rscript checks/check-a5.R in the Terminal, and render a fresh HTML. Commit and push the answers R file, QMD, and current HTML, then check GitHub Actions.\nKeep track of what each row represents before and after a transformation. In particular, counting rows is not always the same as summing the counts stored in a column."
   },
   {
-    "objectID": "meetings/05-continuous-random-variables/index.html",
-    "href": "meetings/05-continuous-random-variables/index.html",
-    "title": "Meeting 5: Continuous random variables",
+    "objectID": "meetings/06-sampling-distributions/index.html",
+    "href": "meetings/06-sampling-distributions/index.html",
+    "title": "Meeting 6: Sampling distributions",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 4, especially Sections 4.1-4.4.2. Bring your laptop with RStudio ready to use. A3 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 5, Sections 5.1-5.5. Bring your laptop with RStudio ready to use. B2 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/05-continuous-random-variables/index.html#before-class",
-    "href": "meetings/05-continuous-random-variables/index.html#before-class",
-    "title": "Meeting 5: Continuous random variables",
+    "objectID": "meetings/06-sampling-distributions/index.html#before-class",
+    "href": "meetings/06-sampling-distributions/index.html#before-class",
+    "title": "Meeting 6: Sampling distributions",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 4, especially Sections 4.1-4.4.2. Bring your laptop with RStudio ready to use. A3 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 5, Sections 5.1-5.5. Bring your laptop with RStudio ready to use. B2 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/05-continuous-random-variables/index.html#lecture-materials",
-    "href": "meetings/05-continuous-random-variables/index.html#lecture-materials",
-    "title": "Meeting 5: Continuous random variables",
+    "objectID": "meetings/06-sampling-distributions/index.html#lecture-materials",
+    "href": "meetings/06-sampling-distributions/index.html#lecture-materials",
+    "title": "Meeting 6: Sampling distributions",
     "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy.\nSave the demonstration QMD in your course folder and open it in RStudio. Each numbered chunk defines its own inputs and can run independently. The examples use base R and require no downloaded data. Rendering also requires knitr and rmarkdown. The HTML displays saved output rather than running R in your browser. If using the optional project file, save it beside the QMD and open the project first."
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy.\nSave the demonstration QMD in your course folder and open it in RStudio. Each numbered chunk defines its own inputs and can run independently. The examples use base R and require no downloads or separate helper scripts. Rendering also requires knitr and rmarkdown. The HTML displays saved output rather than running R in your browser. Save the optional project file beside the QMD if you use it."
   },
   {
-    "objectID": "meetings/05-continuous-random-variables/index.html#during-the-seminar",
-    "href": "meetings/05-continuous-random-variables/index.html#during-the-seminar",
-    "title": "Meeting 5: Continuous random variables",
+    "objectID": "meetings/06-sampling-distributions/index.html#during-the-seminar",
+    "href": "meetings/06-sampling-distributions/index.html#during-the-seminar",
+    "title": "Meeting 6: Sampling distributions",
     "section": "During the seminar",
-    "text": "During the seminar\nWe will distinguish point probabilities, densities, and cumulative probabilities. Integrals describe accumulated area, with geometry and R doing the calculations. No hand evaluation of complicated integrals is needed.\nWe will examine normal CDFs, forecast probabilities, quantiles, and simulation. A discrete vote-count model illustrates the normal approximation and continuity correction. Bargaining and contract examples show how transformations change the distribution of payoffs, and why a mean alone does not describe a decision."
+    "text": "During the seminar\nWe will connect histogram areas and kernel smoothing to last week’s concept of density. Repeated samples let us study a statistic as another random variable and distinguish sample size from simulation repetitions.\nThe LLN describes concentration of sample means, while the CLT describes their standardized limiting shape. We will compare simulated cumulative probabilities with a Normal approximation, including a repeat with a different seed. Squared deviations and estimated standard errors motivate the chi-squared and t distributions.\nDemo 8b explains the functions, lists, and CDF comparison used in A4. Demo 11 computes the t statistic from each sample and compares two-sided tail probabilities. The F and unbiasedness previews are optional."
   },
   {
-    "objectID": "meetings/05-continuous-random-variables/index.html#after-class",
-    "href": "meetings/05-continuous-random-variables/index.html#after-class",
-    "title": "Meeting 5: Continuous random variables",
+    "objectID": "meetings/06-sampling-distributions/index.html#after-class",
+    "href": "meetings/06-sampling-distributions/index.html#after-class",
+    "title": "Meeting 6: Sampling distributions",
     "section": "After class",
-    "text": "After class\nRerun the demonstrations and change one input at a time. Explain the difference between a density height and an interval probability, and between changing a forecast’s standard deviation and increasing the number of simulated draws.\nB2 is due October 7 at 1:30 p.m. Pacific. The instructions, prepared data, and plotting helpers are in your private B2 repository. Submit the QMD and current HTML there. Keep individual submissions private."
+    "text": "After class\nA4 is due October 14 at 1:30 p.m. Pacific. Accept your private repository invitation and follow its README. Complete the R answers file and QMD, then commit and push both source files and the freshly rendered HTML.\nWhen exploring the demo, change n and B separately. Explain which change alters the sampling distribution and which changes the simulation’s precision. Use the probability comparisons alongside the plots, not as a claim that every aspect of the distribution is Normal."
   },
   {
-    "objectID": "meetings/03-conditional-probability/index.html",
-    "href": "meetings/03-conditional-probability/index.html",
-    "title": "Meeting 3: Conditional probability and Bayes’ rule",
+    "objectID": "meetings/04-discrete-random-variables/index.html",
+    "href": "meetings/04-discrete-random-variables/index.html",
+    "title": "Meeting 4: Discrete random variables",
     "section": "",
-    "text": "Read Blitzstein and Hwang, Introduction to Probability, Chapter 2 (official free reader). Bring your laptop with RStudio ready to use. A2 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 3. Bring your laptop with RStudio ready to use. B1 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/03-conditional-probability/index.html#before-class",
-    "href": "meetings/03-conditional-probability/index.html#before-class",
-    "title": "Meeting 3: Conditional probability and Bayes’ rule",
+    "objectID": "meetings/04-discrete-random-variables/index.html#before-class",
+    "href": "meetings/04-discrete-random-variables/index.html#before-class",
+    "title": "Meeting 4: Discrete random variables",
     "section": "",
-    "text": "Read Blitzstein and Hwang, Introduction to Probability, Chapter 2 (official free reader). Bring your laptop with RStudio ready to use. A2 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 3. Bring your laptop with RStudio ready to use. B1 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/03-conditional-probability/index.html#lecture-materials",
-    "href": "meetings/03-conditional-probability/index.html#lecture-materials",
-    "title": "Meeting 3: Conditional probability and Bayes’ rule",
+    "objectID": "meetings/04-discrete-random-variables/index.html#lecture-materials",
+    "href": "meetings/04-discrete-random-variables/index.html#lecture-materials",
+    "title": "Meeting 4: Discrete random variables",
     "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the R demonstration script\nEditable Quarto source and build instructions\n\nUse the arrow keys to navigate the browser slides. The Typst PDF is a printable and offline copy. Run the demonstration script a section at a time in RStudio; the examples use base R."
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy.\nSave the demonstration .qmd to your course folder and open it in RStudio. Each numbered example is independently runnable: use its green arrow or Run Current Chunk. The examples use base R. Rendering the document also requires knitr and rmarkdown. The HTML preview displays evaluated output; it does not run R in your browser. If using the optional project file, save it beside the QMD and open the project first."
   },
   {
-    "objectID": "meetings/03-conditional-probability/index.html#during-the-seminar",
-    "href": "meetings/03-conditional-probability/index.html#during-the-seminar",
-    "title": "Meeting 3: Conditional probability and Bayes’ rule",
+    "objectID": "meetings/04-discrete-random-variables/index.html#during-the-seminar",
+    "href": "meetings/04-discrete-random-variables/index.html#during-the-seminar",
+    "title": "Meeting 4: Discrete random variables",
     "section": "During the seminar",
-    "text": "During the seminar\nWe will distinguish conditional from marginal probabilities, examine independence, and use the law of total probability. A hypothetical arrest tree will provide the derivation of Bayes’ rule before the break.\nAfter the break, we will solve Monty Hall analytically and simulate the host’s actions. A model of competing coalitions will illustrate conditioning on a first step and simulating a complete process. In each example, identify the reference group used in the denominator of a conditional probability."
+    "text": "During the seminar\nWe will map outcomes to numerical values, construct probability mass functions, and compare exact calculations with simulated experiments. A voter-mobilization example connects enumeration and counting to treatment counts.\nWe will use a polling model to study binomial counts and cumulative probabilities, then examine transformations, expectation, variance, and independence. A waiting-time example distinguishes failures before a first success from the total number of calls."
   },
   {
-    "objectID": "meetings/03-conditional-probability/index.html#after-class",
-    "href": "meetings/03-conditional-probability/index.html#after-class",
-    "title": "Meeting 3: Conditional probability and Bayes’ rule",
+    "objectID": "meetings/04-discrete-random-variables/index.html#after-class",
+    "href": "meetings/04-discrete-random-variables/index.html#after-class",
+    "title": "Meeting 4: Discrete random variables",
     "section": "After class",
-    "text": "After class\nComplete B1: Interpreting Cease-Fire Monitoring Reports in your private GitHub repository. It is due September 23 at 1:30 p.m. The assignment combines calculation, simulation, and interpretation in a hypothetical case.\nSave your source, render and inspect the HTML, then commit and push both the .qmd and .html files. GitHub Actions does not commit its rendered copy back to your repository. See the assignment’s submission checklist and Quarto quick reference for details."
+    "text": "After class\nRerun the demonstrations and change one input at a time. Explain the difference between increasing the number of voters in a poll and increasing the number of simulated polls. Practice translating each probability inequality into an R expression.\nAssignment instructions and submission repositories are distributed separately through the private-repository workflow."
   },
   {
-    "objectID": "meetings/01-reproducible-workflows/index.html",
-    "href": "meetings/01-reproducible-workflows/index.html",
-    "title": "Meeting 1: Reproducible workflows",
+    "objectID": "meetings/02-probability/index.html",
+    "href": "meetings/02-probability/index.html",
+    "title": "Meeting 2: Probability and simulation",
     "section": "",
-    "text": "Complete the computing setup checklist.\nCreate a GitHub account and send the instructor your username privately.\nRead PSD Chapter 1: Data in R.\nBring your laptop and GitHub sign-in information.\n\nYour private A1 repository invitation may arrive shortly before class. Accept it when it appears, but do not download the repository as a ZIP file."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, §§2.1, 2.2, and 2.4. Bring your laptop with RStudio ready to use. A1 is due at the beginning of class.\nConditional probability and Bayes’ rule (§2.3) are for September 16, alongside the assigned Blitzstein and Hwang Chapter 2 reading."
   },
   {
-    "objectID": "meetings/01-reproducible-workflows/index.html#before-class",
-    "href": "meetings/01-reproducible-workflows/index.html#before-class",
-    "title": "Meeting 1: Reproducible workflows",
+    "objectID": "meetings/02-probability/index.html#before-class",
+    "href": "meetings/02-probability/index.html#before-class",
+    "title": "Meeting 2: Probability and simulation",
     "section": "",
-    "text": "Complete the computing setup checklist.\nCreate a GitHub account and send the instructor your username privately.\nRead PSD Chapter 1: Data in R.\nBring your laptop and GitHub sign-in information.\n\nYour private A1 repository invitation may arrive shortly before class. Accept it when it appears, but do not download the repository as a ZIP file."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, §§2.1, 2.2, and 2.4. Bring your laptop with RStudio ready to use. A1 is due at the beginning of class.\nConditional probability and Bayes’ rule (§2.3) are for September 16, alongside the assigned Blitzstein and Hwang Chapter 2 reading."
   },
   {
-    "objectID": "meetings/01-reproducible-workflows/index.html#learning-goals",
-    "href": "meetings/01-reproducible-workflows/index.html#learning-goals",
-    "title": "Meeting 1: Reproducible workflows",
-    "section": "Learning goals",
-    "text": "Learning goals\nBy the end of the meeting, you should be able to:\n\nfind the Source, Console, Environment, Files, Terminal, and Git panes in RStudio;\nrun basic Chapter 1 R code and save it in a script;\nclone and open a private repository as an RStudio Project;\ndistinguish saving, staging, committing, and pushing;\nrender a Quarto document to HTML; and\nlocate the first useful message in a failed local or GitHub check.\n\nThe central principle is: saved source files - not objects left in the current Environment - must be sufficient to reproduce the result."
+    "objectID": "meetings/02-probability/index.html#lecture-materials",
+    "href": "meetings/02-probability/index.html#lecture-materials",
+    "title": "Meeting 2: Probability and simulation",
+    "section": "Lecture materials",
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the R demonstration script\nEditable Quarto source and build instructions\n\nUse the arrow keys in the browser slides. The PDF is an offline backup, compiled with Typst. Run the R script a section at a time in RStudio; it uses only base R."
   },
   {
-    "objectID": "meetings/01-reproducible-workflows/index.html#one-reproducible-loop",
-    "href": "meetings/01-reproducible-workflows/index.html#one-reproducible-loop",
-    "title": "Meeting 1: Reproducible workflows",
-    "section": "One reproducible loop",
-    "text": "One reproducible loop\nprivate GitHub repository\n        | clone once\n        v\nlocal RStudio Project → edit → run → render → inspect\n        |                                  |\n        +──────── stage → commit ──────────+\n                             |\n                             +→ push → GitHub Actions"
+    "objectID": "meetings/02-probability/index.html#by-the-end-of-the-seminar",
+    "href": "meetings/02-probability/index.html#by-the-end-of-the-seminar",
+    "title": "Meeting 2: Probability and simulation",
+    "section": "By the end of the seminar",
+    "text": "By the end of the seminar\nYou should be able to define a sample space and event, distinguish equally likely from unequally likely outcomes, use complement and union rules, and calculate finite probabilities by counting when the assumptions permit it.\nYou should also be able to simulate a complete trial with sample(), repeat trials with replicate(), and estimate an event probability using a logical comparison and mean(). We will compare exact and simulated answers using dice, random treatment assignment, hypothetical polling, and committee selection."
   },
   {
-    "objectID": "meetings/01-reproducible-workflows/index.html#rstudio-and-r",
-    "href": "meetings/01-reproducible-workflows/index.html#rstudio-and-r",
-    "title": "Meeting 1: Reproducible workflows",
-    "section": "RStudio and R",
-    "text": "RStudio and R\nWe will use R for arithmetic, functions, vectors, indexing, missing values, and small data frames. Useful diagnostic commands include:\ngetwd()\nlist.files()\nfile.exists(\"data/district_turnout.csv\")\nRestarting R clears the Environment. A saved script can rebuild objects after a restart; an unsaved Console history cannot serve as a reproducible analysis."
-  },
-  {
-    "objectID": "meetings/01-reproducible-workflows/index.html#git-and-github-demonstration",
-    "href": "meetings/01-reproducible-workflows/index.html#git-and-github-demonstration",
-    "title": "Meeting 1: Reproducible workflows",
-    "section": "Git and GitHub demonstration",
-    "text": "Git and GitHub demonstration\nThe instructor will demonstrate this cycle in a disposable private repository:\n\nclone through File → New Project → Version Control → Git;\nopen the .Rproj file;\nreplace the name placeholders;\nsave and inspect the diff;\ncommit with Add my name;\ncomplete the first R section and make another commit;\npush to GitHub; and\ninspect the resulting failed Action.\n\nThe failure is intentional: only the beginning of the assignment will be complete. The useful skill is finding what remains and distinguishing an unfinished answer from a software or file-path problem."
-  },
-  {
-    "objectID": "meetings/01-reproducible-workflows/index.html#terminal-check",
-    "href": "meetings/01-reproducible-workflows/index.html#terminal-check",
-    "title": "Meeting 1: Reproducible workflows",
-    "section": "Terminal check",
-    "text": "Terminal check\nFrom the root of an A1 repository, run:\nRscript checks/check-a1.R\nThis belongs in RStudio’s Terminal. It does not belong in the R Console. Read the first failure, make one focused change, and run the check again."
-  },
-  {
-    "objectID": "meetings/01-reproducible-workflows/index.html#after-class",
-    "href": "meetings/01-reproducible-workflows/index.html#after-class",
-    "title": "Meeting 1: Reproducible workflows",
+    "objectID": "meetings/02-probability/index.html#after-class",
+    "href": "meetings/02-probability/index.html#after-class",
+    "title": "Meeting 2: Probability and simulation",
     "section": "After class",
-    "text": "After class\n\nContinue A1 in your own private repository.\nUse the Git and GitHub field guide when you need the workflow, command reference, or troubleshooting steps.\nMake several meaningful commits rather than one final upload.\nRender and inspect the HTML before submitting.\nPush and confirm the newest GitHub Action before September 9 at 1:30 p.m."
+    "text": "After class\nComplete A2, due September 16 at 1:30 p.m., in your private repository. Exercises 2.7, 2.9, and 2.36 explicitly pair analytical solutions with simulations. The assignment page summarizes the selected exercises and submission workflow."
   },
   {
-    "objectID": "setup/index.html",
-    "href": "setup/index.html",
-    "title": "Computing setup",
+    "objectID": "setup/software.html",
+    "href": "setup/software.html",
+    "title": "Install and verify the software",
     "section": "",
-    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
+    "text": "Install the tools in this order: R, RStudio Desktop, Git, then your GitHub account. Restart RStudio after installing or updating Git."
   },
   {
-    "objectID": "setup/index.html#checklist",
-    "href": "setup/index.html#checklist",
-    "title": "Computing setup",
+    "objectID": "setup/software.html#r",
+    "href": "setup/software.html#r",
+    "title": "Install and verify the software",
+    "section": "R",
+    "text": "R\nDownload R from CRAN and choose the installer for your operating system. After installation, open RStudio and run this in the Console:\nR.version.string\nYou should see an R version rather than an error."
+  },
+  {
+    "objectID": "setup/software.html#rstudio-desktop-and-quarto",
+    "href": "setup/software.html#rstudio-desktop-and-quarto",
+    "title": "Install and verify the software",
+    "section": "RStudio Desktop and Quarto",
+    "text": "RStudio Desktop and Quarto\nInstall the free desktop version from Posit. RStudio includes Quarto, so no separate Quarto installation is normally required. In RStudio’s Terminal, verify it with:\nquarto --version"
+  },
+  {
+    "objectID": "setup/software.html#git",
+    "href": "setup/software.html#git",
+    "title": "Install and verify the software",
+    "section": "Git",
+    "text": "Git\nInstall Git from git-scm.com. In RStudio’s Terminal, run:\ngit --version\nThen record the name that should appear on your commits:\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"YOUR_GITHUB_EMAIL\"\nUse an email recognized by your GitHub account or the private noreply address shown in GitHub’s email settings. These commands configure authorship; they do not sign you into GitHub."
+  },
+  {
+    "objectID": "setup/software.html#github-account",
+    "href": "setup/software.html#github-account",
+    "title": "Install and verify the software",
+    "section": "GitHub account",
+    "text": "GitHub account\nCreate an account at github.com. Choose a professional username you are comfortable using for course work and send that username - not your password - to the instructor. Verify the account’s email address so that repository invitations and workflow notifications arrive."
+  },
+  {
+    "objectID": "setup/software.html#a-local-course-folder",
+    "href": "setup/software.html#a-local-course-folder",
+    "title": "Install and verify the software",
+    "section": "A local course folder",
+    "text": "A local course folder\nCreate a parent folder such as:\nmacOS:   /Users/avery/Documents/POLI210\nWindows: C:/Users/Avery/Documents/POLI210\nAvoid a folder managed by Dropbox, iCloud Drive, OneDrive, or a network drive. Cloud-sync software can lock, duplicate, or make files inside Git’s hidden .git directory online-only."
+  },
+  {
+    "objectID": "setup/github-rstudio.html",
+    "href": "setup/github-rstudio.html",
+    "title": "GitHub and RStudio workflow",
     "section": "",
-    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
+    "text": "For definitions, essential commands, common problems, and an end-of-assignment checklist, keep the Git and GitHub field guide nearby."
   },
   {
-    "objectID": "setup/index.html#guides",
-    "href": "setup/index.html#guides",
-    "title": "Computing setup",
-    "section": "Guides",
-    "text": "Guides\n\nInstall and verify the software\nGit and GitHub field guide\nClone and work through RStudio\nUnderstand file paths\n\n\n\n\n\n\n\nTipAsk early\n\n\n\nBring installation or authentication problems to the first seminar or office hours. Include the exact error text and what you were trying to do; never send a password, personal access token, or other secret."
+    "objectID": "setup/github-rstudio.html#accept-the-invitation",
+    "href": "setup/github-rstudio.html#accept-the-invitation",
+    "title": "GitHub and RStudio workflow",
+    "section": "Accept the invitation",
+    "text": "Accept the invitation\nGitHub sends access to your private assignment repository by email and through GitHub notifications. Accept the invitation before trying to clone. You need to do this once for each assignment."
   },
   {
-    "objectID": "setup/git-github.html",
-    "href": "setup/git-github.html",
-    "title": "Git and GitHub field guide",
+    "objectID": "setup/github-rstudio.html#clone-through-rstudio",
+    "href": "setup/github-rstudio.html#clone-through-rstudio",
+    "title": "GitHub and RStudio workflow",
+    "section": "Clone through RStudio",
+    "text": "Clone through RStudio\n\nOpen the private repository on GitHub.\nSelect Code, choose HTTPS, and copy the repository URL.\nIn RStudio, choose File → New Project → Version Control → Git.\nPaste the URL into Repository URL.\nChoose your local Documents/POLI210 folder as the parent directory.\nSelect Create Project.\n\nCloning is a one-time operation. It creates the working files and a hidden .git directory containing the repository history. Downloading a ZIP file does not create that history and is not a substitute for cloning."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#the-cycle-you-repeat",
+    "href": "setup/github-rstudio.html#the-cycle-you-repeat",
+    "title": "GitHub and RStudio workflow",
+    "section": "The cycle you repeat",
+    "text": "The cycle you repeat\nedit → save → inspect diff → stage → commit → push → inspect Actions\n\nSave writes the current file on your computer.\nDiff shows exactly what changed.\nStage selects changes for the next snapshot.\nCommit records that snapshot locally with a message.\nPush sends local commits to GitHub.\nActions repeats the assignment’s checks on a clean remote computer.\n\nUse short, descriptive commit messages such as Add my name, Complete vector exercises, or Render final report. Do not use one enormous final commit."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#local-checks",
+    "href": "setup/github-rstudio.html#local-checks",
+    "title": "GitHub and RStudio workflow",
+    "section": "Local checks",
+    "text": "Local checks\nAssignments may include a command such as:\nRscript checks/check-a1.R\nRun it in RStudio’s Terminal, not the R Console. Read the first failed check, make one focused repair, and rerun it. After pushing, repeat that process with the newest run in GitHub’s Actions tab."
+  },
+  {
+    "objectID": "setup/github-rstudio.html#authentication-problems",
+    "href": "setup/github-rstudio.html#authentication-problems",
+    "title": "GitHub and RStudio workflow",
+    "section": "Authentication problems",
+    "text": "Authentication problems\nGitHub account passwords cannot be used as Git passwords. If cloning or pushing opens a browser, sign into the correct GitHub account and authorize the request. If the repository cannot be found, first confirm that you accepted its invitation and that RStudio is using the expected account.\nNever paste a password or token into a Quarto file, R script, commit, screenshot, or help request."
+  },
+  {
+    "objectID": "setup/file-paths.html",
+    "href": "setup/file-paths.html",
+    "title": "File paths and project folders",
     "section": "",
-    "text": "You do not need to master all of Git to succeed in this course. POLI 210 uses a simple workflow: each assignment begins in a private GitHub repository, you work on a local copy in RStudio, and you push a sequence of commits back to GitHub. This page is the course reference for that workflow."
+    "text": "A file path tells the computer where a file or folder is located. An absolute path begins at the top of one computer’s file system:\nThose paths work only on Avery’s computer. Course code should instead use a path relative to the project root - the folder containing the .Rproj file:\nThat path works on macOS, Windows, another student’s computer, and GitHub Actions."
   },
   {
-    "objectID": "setup/git-github.html#what-the-tools-are",
-    "href": "setup/git-github.html#what-the-tools-are",
-    "title": "Git and GitHub field guide",
-    "section": "What the tools are",
-    "text": "What the tools are\n\n\n\n\n\n\n\nTerm\nMeaning in this course\n\n\n\n\nGit\nSoftware on your computer that records changes to files as a history of snapshots.\n\n\nGitHub\nA website that stores a remote copy of a Git repository and runs assignment checks.\n\n\nRepository\nA project folder together with its Git history. We often shorten this to repo.\n\n\nRStudio Project\nThe local working folder you open through its .Rproj file. RStudio’s Git pane gives you buttons for common Git operations.\n\n\nGitHub Actions\nThe automated checks that run on GitHub after you push.\n\n\n\nGit and GitHub are related but not identical. Git works locally and can record commits without an internet connection. GitHub stores the remote repository; it only receives a local commit after you push it.\nGitHub: private remote repository and Actions\n                  ^ push\n                  |                 clone once / pull updates\n                  |                           |\nYour computer: edit -&gt; save -&gt; stage -&gt; commit\n\n\n\n\n\n\nImportantSave, commit, and push are different\n\n\n\nSave updates a file on your computer. Commit records a selected set of saved changes in the local Git history. Push sends local commits to GitHub. A saved answer is not submitted until its commit has been pushed."
+    "objectID": "setup/file-paths.html#symbols-and-separators",
+    "href": "setup/file-paths.html#symbols-and-separators",
+    "title": "File paths and project folders",
+    "section": "Symbols and separators",
+    "text": "Symbols and separators\n\nUse forward slashes / in R paths on both macOS and Windows.\nA single period . means the current folder.\nTwo periods .. mean the parent folder.\nPut a path containing spaces inside quotation marks.\nMatch capitalization exactly: Data/file.csv and data/file.csv may be different paths on GitHub’s Linux runner."
   },
   {
-    "objectID": "setup/git-github.html#vocabulary-for-the-homework-workflow",
-    "href": "setup/git-github.html#vocabulary-for-the-homework-workflow",
-    "title": "Git and GitHub field guide",
-    "section": "Vocabulary for the homework workflow",
-    "text": "Vocabulary for the homework workflow\n\nClone: Make the initial local copy of a GitHub repository, including its history and connection back to GitHub. Clone once per assignment.\nDiff: A line-by-line view of what changed since the last commit. Green lines were added; red lines were removed.\nStage: Select the saved changes that belong in the next commit. In RStudio, check a file in the Git pane to stage it.\nCommit: Record the staged changes as a local snapshot with a short message explaining the work.\nPush: Send local commits to the GitHub repository.\nPull: Bring remote commits into the local repository. In an individual assignment this is usually needed only if the instructor has updated the repository or you edited it from another computer.\nWorking tree: Git’s name for the files currently in your local project folder.\nmain: The single branch used for POLI 210 assignments. You do not need to create other branches."
+    "objectID": "setup/file-paths.html#three-diagnostic-questions",
+    "href": "setup/file-paths.html#three-diagnostic-questions",
+    "title": "File paths and project folders",
+    "section": "Three diagnostic questions",
+    "text": "Three diagnostic questions\nRun these in the R Console:\ngetwd()                                  # Where is R starting?\nlist.files()                             # What is in that folder?\nfile.exists(\"data/district_turnout.csv\") # Can R find this path?\nIf the answers are surprising, open the .Rproj file and repair the relative path. Do not solve a submitted path problem with setwd() or file.choose(); those depend on one computer or on interactive input."
   },
   {
-    "objectID": "setup/git-github.html#the-course-workflow",
-    "href": "setup/git-github.html#the-course-workflow",
-    "title": "Git and GitHub field guide",
-    "section": "The course workflow",
-    "text": "The course workflow\n\nOnce for each assignment\n\nAccept the private repository invitation from GitHub.\nOn GitHub, select Code, choose HTTPS, and copy the URL.\nIn RStudio, choose File -&gt; New Project -&gt; Version Control -&gt; Git.\nPaste the URL and clone into your local Documents/POLI210 folder.\nOpen the project through its .Rproj file.\n\nSee GitHub and RStudio workflow for the illustrated menu sequence and authentication advice. Do not download the assignment as a ZIP file; a ZIP does not include the Git history or the connection to GitHub.\n\n\nDuring every work session\n\nOpen the correct .Rproj file and confirm the project name in RStudio.\nRun git status in the Terminal. If the working tree is clean and you need an instructor update, run git pull --ff-only.\nEdit and save a small, meaningful part of the assignment.\nRender the Quarto document and run the assignment’s local check.\nInspect each changed file’s diff in the Git pane.\nStage the files that belong together.\nCommit with a descriptive message such as Complete Part 2.\nPush, then inspect the newest run under GitHub’s Actions tab.\n\nRepeat the edit-to-push cycle several times. Small commits are easier to understand and recover than one enormous final commit."
-  },
-  {
-    "objectID": "setup/git-github.html#commands-you-will-actually-use",
-    "href": "setup/git-github.html#commands-you-will-actually-use",
-    "title": "Git and GitHub field guide",
-    "section": "Commands you will actually use",
-    "text": "Commands you will actually use\nRun these in RStudio’s Terminal, from the assignment’s project folder. They are Git commands, not R code, so do not enter them in the R Console. The commands are the same on macOS and Windows; only the terminal prompt and the way a full file path is written may look different.\n\n\n\n\n\n\n\nCommand\nWhat it tells Git to do\n\n\n\n\ngit status\nSummarize the current branch, saved changes, staged changes, and commits not yet pushed. This is the best first diagnostic command.\n\n\ngit diff\nShow saved changes that have not been staged. RStudio’s Diff button shows the same basic information.\n\n\ngit diff --staged\nShow exactly what the next commit will contain.\n\n\ngit add a1-reproducible-workflow.qmd\nStage one file. For later assignments, substitute the actual filename. Checking a file in RStudio’s Git pane does this too.\n\n\ngit commit -m \"Complete Part 2\"\nRecord the staged changes locally with a message. RStudio’s Commit window does the same thing.\n\n\ngit push\nSend local commits to GitHub.\n\n\ngit pull --ff-only\nBring down remote commits, but stop instead of creating an unexpected merge commit.\n\n\ngit log --oneline -5\nShow the five most recent local commits.\n\n\ngit remote -v\nShow which GitHub repository the local project is connected to.\n\n\n\nYou may also see the command-line form git clone REPOSITORY-URL. In this course, use RStudio’s new-project menu to clone so that it creates and opens the RStudio Project correctly.\n\n\n\n\n\n\nTipRead git status literally\n\n\n\n\nChanges not staged for commit means Git sees saved changes that are not yet selected for a commit.\nChanges to be committed means files are staged for the next commit.\nYour branch is ahead of 'origin/main' means you have local commits to push.\nnothing to commit, working tree clean means Git sees no uncommitted saved changes."
-  },
-  {
-    "objectID": "setup/git-github.html#common-problems",
-    "href": "setup/git-github.html#common-problems",
-    "title": "Git and GitHub field guide",
-    "section": "Common problems",
-    "text": "Common problems\n\nMy change is not in the Git pane\nSave the file, then run git status. Also confirm that you opened the correct .Rproj file and edited the copy inside that project. See the file-path guide if you may have two copies of the assignment.\n\n\nGitHub does not show my latest work\nA save or local commit does not update GitHub. Run git status, commit any intended changes, and push. On GitHub, confirm that the newest commit message matches the one you just made.\n\n\nPush was rejected or mentions non-fast-forward\nDo not force-push. First run git status. If the working tree is clean, run git pull --ff-only and read the result. If Git refuses or reports a conflict, stop and send the instructor the exact message before trying more commands.\n\n\nI staged the wrong file\nUncheck it in RStudio’s Git pane, or run:\ngit restore --staged FILENAME\nThis removes the file from the staging area without deleting your saved edits.\n\n\nThe newest GitHub Action failed\nOpen the newest run, expand the failed step, and read the first useful error. Confirm that the run used your newest commit. An Action failure does not erase your work; it means the remote check found something to repair."
-  },
-  {
-    "objectID": "setup/git-github.html#safety-rules",
-    "href": "setup/git-github.html#safety-rules",
-    "title": "Git and GitHub field guide",
-    "section": "Safety rules",
-    "text": "Safety rules\n\nWork in the RStudio Project copy, not in a downloaded ZIP or a second copy.\nDo not edit the same assignment alternately in RStudio and GitHub’s web editor; that creates two changing copies that must be reconciled.\nDo not run git init inside a cloned assignment.\nDo not use git push --force, git reset --hard, or delete the hidden .git folder. Ask for help before using a command that discards or rewrites work.\nNever commit passwords, access tokens, or other secrets.\nBefore following a Git command from a web search or AI tool, make sure you understand what it changes. When uncertain, show the proposed command and current git status to the instructor first."
-  },
-  {
-    "objectID": "setup/git-github.html#before-you-finish-an-assignment",
-    "href": "setup/git-github.html#before-you-finish-an-assignment",
-    "title": "Git and GitHub field guide",
-    "section": "Before you finish an assignment",
-    "text": "Before you finish an assignment\n\nThe Quarto document renders successfully.\nThe local assignment check completes as expected.\nThe diff contains your intended work and no secrets or accidental files.\nYour commits have descriptive messages.\ngit status says the working tree is clean and the branch is up to date with origin/main.\nGitHub shows your newest commit and its newest Action run."
-  },
-  {
-    "objectID": "setup/git-github.html#optional-deeper-references",
-    "href": "setup/git-github.html#optional-deeper-references",
-    "title": "Git and GitHub field guide",
-    "section": "Optional deeper references",
-    "text": "Optional deeper references\nThe material above is sufficient for the normal POLI 210 workflow. If you want more detail:\n\nGitHub’s About Git explains version control, repositories, and how GitHub relates to Git.\nGitHub’s Getting changes from a remote repository explains clone, fetch, and pull.\nHappy Git and GitHub for the useR is the broader R-oriented tutorial previously used in this course. Its Git commands chapter is a useful extended reference, but most of the book goes beyond what you need for A1."
-  },
-  {
-    "objectID": "syllabus/index.html",
-    "href": "syllabus/index.html",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "",
-    "text": "NoteDownload\n\n\n\nDownload the PDF syllabus. The final exam’s exact 24-hour window remains TBD and will be scheduled in consultation with the class near the end of the semester."
-  },
-  {
-    "objectID": "syllabus/index.html#required-text",
-    "href": "syllabus/index.html#required-text",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "4.1 Required text",
-    "text": "4.1 Required text\nDarrin Speegle and Bryan Clair, Probability, Statistics, and Data: A Fresh Approach Using R. The complete text is available free at probstatsdata.com. The online and printed first-edition content is the same.\nFor the September 16 meeting, the required supplementary reading is Joseph K. Blitzstein and Jessica Hwang, Introduction to Probability, Chapter 2, “Conditional Probability.” A free online version is linked from the book’s official Harvard Stat 110 course site.\nOther assigned political science articles, data, and short supplementary readings will be posted on CatCourses or linked in the weekly materials."
-  },
-  {
-    "objectID": "syllabus/index.html#optional-references",
-    "href": "syllabus/index.html#optional-references",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "4.2 Optional references",
-    "text": "4.2 Optional references\n\nWill H. Moore and David A. Siegel, A Mathematics Course for Political and Social Research.\nKieran Healy, Data Visualization: A Practical Introduction, available at socviz.co.\nHadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund, R for Data Science (2e), available at r4ds.hadley.nz."
-  },
-  {
-    "objectID": "syllabus/index.html#software-and-accounts",
-    "href": "syllabus/index.html#software-and-accounts",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "4.3 Software and accounts",
-    "text": "4.3 Software and accounts\nStudents need a laptop on which they can install software and the following free tools:\n\na current version of R;\nRStudio Desktop, which includes Quarto;\nGit; and\na GitHub account.\n\nNew course materials and assignments will use Quarto (.qmd) rather than R Markdown. HTML is the default output for routine work. When a PDF is required, Quarto will render it with Typst. Students will not be required to install a LaTeX distribution. Setup instructions and a troubleshooting checklist are available on the course-materials site and in Assignment A1."
-  },
-  {
-    "objectID": "syllabus/index.html#github-assignment-workflow",
-    "href": "syllabus/index.html#github-assignment-workflow",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "5.1 GitHub assignment workflow",
-    "text": "5.1 GitHub assignment workflow\nEach assignment will have a private repository created from a course template. The basic workflow is:\n\nclone the repository to your computer;\ncomplete the analysis and written responses in the provided Quarto file;\nrender the document locally;\ncommit and push your work to GitHub; and\ncheck the automated tests in GitHub Actions and revise as needed.\n\nThe latest commit pushed before the deadline is the submitted version. Automated checks can verify reproducibility, required files, and many deterministic calculations; they cannot evaluate the quality of a statistical explanation or substantive argument. Passing all automated checks therefore does not guarantee full credit.\nDo not make an assignment repository public or post course solutions elsewhere. If using GitHub under a name different from the one in the university roster, tell the instructor privately."
-  },
-  {
-    "objectID": "syllabus/index.html#type-a-assignments",
-    "href": "syllabus/index.html#type-a-assignments",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "6.1 Type A assignments",
-    "text": "6.1 Type A assignments\nType A assignments develop a specific statistical or computing skill. They are shorter and more structured than Type B assignments and will make the greatest use of automated feedback. Some tests will be visible so that students can check and improve their work before the deadline. Written interpretation and code quality will still be reviewed by the instructor.\nUnless an assignment says otherwise, Type A work is individual."
-  },
-  {
-    "objectID": "syllabus/index.html#type-b-assignments",
-    "href": "syllabus/index.html#type-b-assignments",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "6.2 Type B assignments",
-    "text": "6.2 Type B assignments\nType B assignments ask students to combine statistical tools with substantive reasoning, usually using political or social data. Automated checks will focus on whether the project renders and whether core computations are reproducible; interpretation, argument, and presentation will be graded by the instructor.\nStudents may discuss Type B assignments and work through problems in groups of two or three. Each student must write, code, and submit an individual solution in their own repository, identify collaborators, and be able to explain every part of the submission. Copying another person’s code or prose is not collaboration."
-  },
-  {
-    "objectID": "syllabus/index.html#assignment-deadlines-and-extensions",
-    "href": "syllabus/index.html#assignment-deadlines-and-extensions",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "6.3 Assignment deadlines and extensions",
-    "text": "6.3 Assignment deadlines and extensions\nAssignments are due at 1:30 p.m. on the dates listed below. Because solutions and feedback may be discussed soon after a deadline, late submissions are not ordinarily accepted. If illness, disability, caregiving, religious observance, or another serious circumstance affects your work, contact the instructor as early as reasonably possible so that an appropriate plan can be made. University-approved accommodations apply."
-  },
-  {
-    "objectID": "syllabus/index.html#take-home-final",
-    "href": "syllabus/index.html#take-home-final",
-    "title": "POLI 210: Quantitative Analysis of Political Data I",
-    "section": "6.4 Take-home final",
-    "text": "6.4 Take-home final\nThe final is cumulative and will assess statistical reasoning, interpretation, and reproducible analysis. Students will receive a 24-hour window during the official December 12-18 final-examination period. The exact start and end times will be scheduled in consultation with the class near the end of the semester; permitted resources will be announced with the exam instructions."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Quantitative Analysis of Political Data I",
-    "section": "",
-    "text": "POLI 210 introduces probability, statistical inference, data analysis in R, and the foundations of simple linear regression. We treat reproducibility as part of statistical reasoning: shared work is written in Quarto, managed with Git, and checked through GitHub."
-  },
-  {
-    "objectID": "index.html#quick-links",
-    "href": "index.html#quick-links",
-    "title": "Quantitative Analysis of Political Data I",
-    "section": "Quick links",
-    "text": "Quick links\n\n\n\nSyllabus\nCourse policies, learning outcomes, grading, readings, and the complete Fall 2026 schedule.\n\n\n\n\nAssignments\nDue dates and the private-repository submission workflow.\n\n\n\n\nMeeting materials\nPreparation, shared notes, code, and resources organized by class meeting.\n\n\n\n\nComputing setup\nInstall the course tools, learn the Git/GitHub workflow, clone through RStudio, and understand file paths."
-  },
-  {
-    "objectID": "index.html#course-information",
-    "href": "index.html#course-information",
-    "title": "Quantitative Analysis of Political Data I",
-    "section": "Course information",
-    "text": "Course information\n\nInstructor: Professor Brad LeVeck\nEmail: bleveck@ucmerced.edu\nOffice: COB2 314\nOffice hours: Tuesdays and Thursdays, 1:30-2:30 p.m.\nMeetings: Wednesdays, 1:30-4:20 p.m., COB1 205\nRequired text: Speegle and Clair, Probability, Statistics, and Data\n\n\n\n\n\n\n\nNoteWhere different materials live\n\n\n\nThis site contains public shared materials. CatCourses is the official location for announcements, grades, and restricted readings. Each assignment is distributed through a private GitHub repository visible only to the student and the instructor."
+    "objectID": "setup/file-paths.html#where-to-clone",
+    "href": "setup/file-paths.html#where-to-clone",
+    "title": "File paths and project folders",
+    "section": "Where to clone",
+    "text": "Where to clone\nUse a clearly local parent folder, such as Documents/POLI210. On Windows, check whether Documents is actually inside OneDrive. On macOS, check whether Desktop and Documents are stored in iCloud Drive. Choose a nonsynchronized folder when necessary."
   },
   {
     "objectID": "assignments.html",
@@ -399,255 +322,367 @@
     "text": "Getting your repository\nGitHub sends an invitation to the account whose username you provided to the instructor. Check both your email and GitHub notifications. After accepting, the repository appears under the POLI210-2026 organization. Do not make it public, transfer it, or add other collaborators.\nIf an invitation or repository is missing, email the instructor with your GitHub username. Do not send a password or authentication token."
   },
   {
-    "objectID": "setup/file-paths.html",
-    "href": "setup/file-paths.html",
-    "title": "File paths and project folders",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Quantitative Analysis of Political Data I",
     "section": "",
-    "text": "A file path tells the computer where a file or folder is located. An absolute path begins at the top of one computer’s file system:\nThose paths work only on Avery’s computer. Course code should instead use a path relative to the project root - the folder containing the .Rproj file:\nThat path works on macOS, Windows, another student’s computer, and GitHub Actions."
+    "text": "POLI 210 introduces probability, statistical inference, data analysis in R, and the foundations of simple linear regression. We treat reproducibility as part of statistical reasoning: shared work is written in Quarto, managed with Git, and checked through GitHub."
   },
   {
-    "objectID": "setup/file-paths.html#symbols-and-separators",
-    "href": "setup/file-paths.html#symbols-and-separators",
-    "title": "File paths and project folders",
-    "section": "Symbols and separators",
-    "text": "Symbols and separators\n\nUse forward slashes / in R paths on both macOS and Windows.\nA single period . means the current folder.\nTwo periods .. mean the parent folder.\nPut a path containing spaces inside quotation marks.\nMatch capitalization exactly: Data/file.csv and data/file.csv may be different paths on GitHub’s Linux runner."
+    "objectID": "index.html#quick-links",
+    "href": "index.html#quick-links",
+    "title": "Quantitative Analysis of Political Data I",
+    "section": "Quick links",
+    "text": "Quick links\n\n\n\nSyllabus\nCourse policies, learning outcomes, grading, readings, and the complete Fall 2026 schedule.\n\n\n\n\nAssignments\nDue dates and the private-repository submission workflow.\n\n\n\n\nMeeting materials\nPreparation, shared notes, code, and resources organized by class meeting.\n\n\n\n\nComputing setup\nInstall the course tools, learn the Git/GitHub workflow, clone through RStudio, and understand file paths."
   },
   {
-    "objectID": "setup/file-paths.html#three-diagnostic-questions",
-    "href": "setup/file-paths.html#three-diagnostic-questions",
-    "title": "File paths and project folders",
-    "section": "Three diagnostic questions",
-    "text": "Three diagnostic questions\nRun these in the R Console:\ngetwd()                                  # Where is R starting?\nlist.files()                             # What is in that folder?\nfile.exists(\"data/district_turnout.csv\") # Can R find this path?\nIf the answers are surprising, open the .Rproj file and repair the relative path. Do not solve a submitted path problem with setwd() or file.choose(); those depend on one computer or on interactive input."
+    "objectID": "index.html#course-information",
+    "href": "index.html#course-information",
+    "title": "Quantitative Analysis of Political Data I",
+    "section": "Course information",
+    "text": "Course information\n\nInstructor: Professor Brad LeVeck\nEmail: bleveck@ucmerced.edu\nOffice: COB2 314\nOffice hours: Tuesdays and Thursdays, 1:30-2:30 p.m.\nMeetings: Wednesdays, 1:30-4:20 p.m., COB1 205\nRequired text: Speegle and Clair, Probability, Statistics, and Data\n\n\n\n\n\n\n\nNoteWhere different materials live\n\n\n\nThis site contains public shared materials. CatCourses is the official location for announcements, grades, and restricted readings. Each assignment is distributed through a private GitHub repository visible only to the student and the instructor."
   },
   {
-    "objectID": "setup/file-paths.html#where-to-clone",
-    "href": "setup/file-paths.html#where-to-clone",
-    "title": "File paths and project folders",
-    "section": "Where to clone",
-    "text": "Where to clone\nUse a clearly local parent folder, such as Documents/POLI210. On Windows, check whether Documents is actually inside OneDrive. On macOS, check whether Desktop and Documents are stored in iCloud Drive. Choose a nonsynchronized folder when necessary."
-  },
-  {
-    "objectID": "setup/github-rstudio.html",
-    "href": "setup/github-rstudio.html",
-    "title": "GitHub and RStudio workflow",
+    "objectID": "syllabus/index.html",
+    "href": "syllabus/index.html",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
     "section": "",
-    "text": "For definitions, essential commands, common problems, and an end-of-assignment checklist, keep the Git and GitHub field guide nearby."
+    "text": "NoteDownload\n\n\n\nDownload the PDF syllabus. The final exam’s exact 24-hour window remains TBD and will be scheduled in consultation with the class near the end of the semester."
   },
   {
-    "objectID": "setup/github-rstudio.html#accept-the-invitation",
-    "href": "setup/github-rstudio.html#accept-the-invitation",
-    "title": "GitHub and RStudio workflow",
-    "section": "Accept the invitation",
-    "text": "Accept the invitation\nGitHub sends access to your private assignment repository by email and through GitHub notifications. Accept the invitation before trying to clone. You need to do this once for each assignment."
+    "objectID": "syllabus/index.html#required-text",
+    "href": "syllabus/index.html#required-text",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "4.1 Required text",
+    "text": "4.1 Required text\nDarrin Speegle and Bryan Clair, Probability, Statistics, and Data: A Fresh Approach Using R. The complete text is available free at probstatsdata.com. The online and printed first-edition content is the same.\nFor the September 16 meeting, the required supplementary reading is Joseph K. Blitzstein and Jessica Hwang, Introduction to Probability, Chapter 2, “Conditional Probability.” A free online version is linked from the book’s official Harvard Stat 110 course site.\nOther assigned political science articles, data, and short supplementary readings will be posted on CatCourses or linked in the weekly materials."
   },
   {
-    "objectID": "setup/github-rstudio.html#clone-through-rstudio",
-    "href": "setup/github-rstudio.html#clone-through-rstudio",
-    "title": "GitHub and RStudio workflow",
-    "section": "Clone through RStudio",
-    "text": "Clone through RStudio\n\nOpen the private repository on GitHub.\nSelect Code, choose HTTPS, and copy the repository URL.\nIn RStudio, choose File → New Project → Version Control → Git.\nPaste the URL into Repository URL.\nChoose your local Documents/POLI210 folder as the parent directory.\nSelect Create Project.\n\nCloning is a one-time operation. It creates the working files and a hidden .git directory containing the repository history. Downloading a ZIP file does not create that history and is not a substitute for cloning."
+    "objectID": "syllabus/index.html#optional-references",
+    "href": "syllabus/index.html#optional-references",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "4.2 Optional references",
+    "text": "4.2 Optional references\n\nWill H. Moore and David A. Siegel, A Mathematics Course for Political and Social Research.\nKieran Healy, Data Visualization: A Practical Introduction, available at socviz.co.\nHadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund, R for Data Science (2e), available at r4ds.hadley.nz."
   },
   {
-    "objectID": "setup/github-rstudio.html#the-cycle-you-repeat",
-    "href": "setup/github-rstudio.html#the-cycle-you-repeat",
-    "title": "GitHub and RStudio workflow",
-    "section": "The cycle you repeat",
-    "text": "The cycle you repeat\nedit → save → inspect diff → stage → commit → push → inspect Actions\n\nSave writes the current file on your computer.\nDiff shows exactly what changed.\nStage selects changes for the next snapshot.\nCommit records that snapshot locally with a message.\nPush sends local commits to GitHub.\nActions repeats the assignment’s checks on a clean remote computer.\n\nUse short, descriptive commit messages such as Add my name, Complete vector exercises, or Render final report. Do not use one enormous final commit."
+    "objectID": "syllabus/index.html#software-and-accounts",
+    "href": "syllabus/index.html#software-and-accounts",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "4.3 Software and accounts",
+    "text": "4.3 Software and accounts\nStudents need a laptop on which they can install software and the following free tools:\n\na current version of R;\nRStudio Desktop, which includes Quarto;\nGit; and\na GitHub account.\n\nNew course materials and assignments will use Quarto (.qmd) rather than R Markdown. HTML is the default output for routine work. When a PDF is required, Quarto will render it with Typst. Students will not be required to install a LaTeX distribution. Setup instructions and a troubleshooting checklist are available on the course-materials site and in Assignment A1."
   },
   {
-    "objectID": "setup/github-rstudio.html#local-checks",
-    "href": "setup/github-rstudio.html#local-checks",
-    "title": "GitHub and RStudio workflow",
-    "section": "Local checks",
-    "text": "Local checks\nAssignments may include a command such as:\nRscript checks/check-a1.R\nRun it in RStudio’s Terminal, not the R Console. Read the first failed check, make one focused repair, and rerun it. After pushing, repeat that process with the newest run in GitHub’s Actions tab."
+    "objectID": "syllabus/index.html#github-assignment-workflow",
+    "href": "syllabus/index.html#github-assignment-workflow",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "5.1 GitHub assignment workflow",
+    "text": "5.1 GitHub assignment workflow\nEach assignment will have a private repository created from a course template. The basic workflow is:\n\nclone the repository to your computer;\ncomplete the analysis and written responses in the provided Quarto file;\nrender the document locally;\ncommit and push your work to GitHub; and\ncheck the automated tests in GitHub Actions and revise as needed.\n\nThe latest commit pushed before the deadline is the submitted version. Automated checks can verify reproducibility, required files, and many deterministic calculations; they cannot evaluate the quality of a statistical explanation or substantive argument. Passing all automated checks therefore does not guarantee full credit.\nDo not make an assignment repository public or post course solutions elsewhere. If using GitHub under a name different from the one in the university roster, tell the instructor privately."
   },
   {
-    "objectID": "setup/github-rstudio.html#authentication-problems",
-    "href": "setup/github-rstudio.html#authentication-problems",
-    "title": "GitHub and RStudio workflow",
-    "section": "Authentication problems",
-    "text": "Authentication problems\nGitHub account passwords cannot be used as Git passwords. If cloning or pushing opens a browser, sign into the correct GitHub account and authorize the request. If the repository cannot be found, first confirm that you accepted its invitation and that RStudio is using the expected account.\nNever paste a password or token into a Quarto file, R script, commit, screenshot, or help request."
+    "objectID": "syllabus/index.html#type-a-assignments",
+    "href": "syllabus/index.html#type-a-assignments",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "6.1 Type A assignments",
+    "text": "6.1 Type A assignments\nType A assignments develop a specific statistical or computing skill. They are shorter and more structured than Type B assignments and will make the greatest use of automated feedback. Some tests will be visible so that students can check and improve their work before the deadline. Written interpretation and code quality will still be reviewed by the instructor.\nUnless an assignment says otherwise, Type A work is individual."
   },
   {
-    "objectID": "setup/software.html",
-    "href": "setup/software.html",
-    "title": "Install and verify the software",
+    "objectID": "syllabus/index.html#type-b-assignments",
+    "href": "syllabus/index.html#type-b-assignments",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "6.2 Type B assignments",
+    "text": "6.2 Type B assignments\nType B assignments ask students to combine statistical tools with substantive reasoning, usually using political or social data. Automated checks will focus on whether the project renders and whether core computations are reproducible; interpretation, argument, and presentation will be graded by the instructor.\nStudents may discuss Type B assignments and work through problems in groups of two or three. Each student must write, code, and submit an individual solution in their own repository, identify collaborators, and be able to explain every part of the submission. Copying another person’s code or prose is not collaboration."
+  },
+  {
+    "objectID": "syllabus/index.html#assignment-deadlines-and-extensions",
+    "href": "syllabus/index.html#assignment-deadlines-and-extensions",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "6.3 Assignment deadlines and extensions",
+    "text": "6.3 Assignment deadlines and extensions\nAssignments are due at 1:30 p.m. on the dates listed below. Because solutions and feedback may be discussed soon after a deadline, late submissions are not ordinarily accepted. If illness, disability, caregiving, religious observance, or another serious circumstance affects your work, contact the instructor as early as reasonably possible so that an appropriate plan can be made. University-approved accommodations apply."
+  },
+  {
+    "objectID": "syllabus/index.html#take-home-final",
+    "href": "syllabus/index.html#take-home-final",
+    "title": "POLI 210: Quantitative Analysis of Political Data I",
+    "section": "6.4 Take-home final",
+    "text": "6.4 Take-home final\nThe final is cumulative and will assess statistical reasoning, interpretation, and reproducible analysis. Students will receive a 24-hour window during the official December 12-18 final-examination period. The exact start and end times will be scheduled in consultation with the class near the end of the semester; permitted resources will be announced with the exam instructions."
+  },
+  {
+    "objectID": "setup/git-github.html",
+    "href": "setup/git-github.html",
+    "title": "Git and GitHub field guide",
     "section": "",
-    "text": "Install the tools in this order: R, RStudio Desktop, Git, then your GitHub account. Restart RStudio after installing or updating Git."
+    "text": "You do not need to master all of Git to succeed in this course. POLI 210 uses a simple workflow: each assignment begins in a private GitHub repository, you work on a local copy in RStudio, and you push a sequence of commits back to GitHub. This page is the course reference for that workflow."
   },
   {
-    "objectID": "setup/software.html#r",
-    "href": "setup/software.html#r",
-    "title": "Install and verify the software",
-    "section": "R",
-    "text": "R\nDownload R from CRAN and choose the installer for your operating system. After installation, open RStudio and run this in the Console:\nR.version.string\nYou should see an R version rather than an error."
+    "objectID": "setup/git-github.html#what-the-tools-are",
+    "href": "setup/git-github.html#what-the-tools-are",
+    "title": "Git and GitHub field guide",
+    "section": "What the tools are",
+    "text": "What the tools are\n\n\n\n\n\n\n\nTerm\nMeaning in this course\n\n\n\n\nGit\nSoftware on your computer that records changes to files as a history of snapshots.\n\n\nGitHub\nA website that stores a remote copy of a Git repository and runs assignment checks.\n\n\nRepository\nA project folder together with its Git history. We often shorten this to repo.\n\n\nRStudio Project\nThe local working folder you open through its .Rproj file. RStudio’s Git pane gives you buttons for common Git operations.\n\n\nGitHub Actions\nThe automated checks that run on GitHub after you push.\n\n\n\nGit and GitHub are related but not identical. Git works locally and can record commits without an internet connection. GitHub stores the remote repository; it only receives a local commit after you push it.\nGitHub: private remote repository and Actions\n                  ^ push\n                  |                 clone once / pull updates\n                  |                           |\nYour computer: edit -&gt; save -&gt; stage -&gt; commit\n\n\n\n\n\n\nImportantSave, commit, and push are different\n\n\n\nSave updates a file on your computer. Commit records a selected set of saved changes in the local Git history. Push sends local commits to GitHub. A saved answer is not submitted until its commit has been pushed."
   },
   {
-    "objectID": "setup/software.html#rstudio-desktop-and-quarto",
-    "href": "setup/software.html#rstudio-desktop-and-quarto",
-    "title": "Install and verify the software",
-    "section": "RStudio Desktop and Quarto",
-    "text": "RStudio Desktop and Quarto\nInstall the free desktop version from Posit. RStudio includes Quarto, so no separate Quarto installation is normally required. In RStudio’s Terminal, verify it with:\nquarto --version"
+    "objectID": "setup/git-github.html#vocabulary-for-the-homework-workflow",
+    "href": "setup/git-github.html#vocabulary-for-the-homework-workflow",
+    "title": "Git and GitHub field guide",
+    "section": "Vocabulary for the homework workflow",
+    "text": "Vocabulary for the homework workflow\n\nClone: Make the initial local copy of a GitHub repository, including its history and connection back to GitHub. Clone once per assignment.\nDiff: A line-by-line view of what changed since the last commit. Green lines were added; red lines were removed.\nStage: Select the saved changes that belong in the next commit. In RStudio, check a file in the Git pane to stage it.\nCommit: Record the staged changes as a local snapshot with a short message explaining the work.\nPush: Send local commits to the GitHub repository.\nPull: Bring remote commits into the local repository. In an individual assignment this is usually needed only if the instructor has updated the repository or you edited it from another computer.\nWorking tree: Git’s name for the files currently in your local project folder.\nmain: The single branch used for POLI 210 assignments. You do not need to create other branches."
   },
   {
-    "objectID": "setup/software.html#git",
-    "href": "setup/software.html#git",
-    "title": "Install and verify the software",
-    "section": "Git",
-    "text": "Git\nInstall Git from git-scm.com. In RStudio’s Terminal, run:\ngit --version\nThen record the name that should appear on your commits:\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"YOUR_GITHUB_EMAIL\"\nUse an email recognized by your GitHub account or the private noreply address shown in GitHub’s email settings. These commands configure authorship; they do not sign you into GitHub."
+    "objectID": "setup/git-github.html#the-course-workflow",
+    "href": "setup/git-github.html#the-course-workflow",
+    "title": "Git and GitHub field guide",
+    "section": "The course workflow",
+    "text": "The course workflow\n\nOnce for each assignment\n\nAccept the private repository invitation from GitHub.\nOn GitHub, select Code, choose HTTPS, and copy the URL.\nIn RStudio, choose File -&gt; New Project -&gt; Version Control -&gt; Git.\nPaste the URL and clone into your local Documents/POLI210 folder.\nOpen the project through its .Rproj file.\n\nSee GitHub and RStudio workflow for the illustrated menu sequence and authentication advice. Do not download the assignment as a ZIP file; a ZIP does not include the Git history or the connection to GitHub.\n\n\nDuring every work session\n\nOpen the correct .Rproj file and confirm the project name in RStudio.\nRun git status in the Terminal. If the working tree is clean and you need an instructor update, run git pull --ff-only.\nEdit and save a small, meaningful part of the assignment.\nRender the Quarto document and run the assignment’s local check.\nInspect each changed file’s diff in the Git pane.\nStage the files that belong together.\nCommit with a descriptive message such as Complete Part 2.\nPush, then inspect the newest run under GitHub’s Actions tab.\n\nRepeat the edit-to-push cycle several times. Small commits are easier to understand and recover than one enormous final commit."
   },
   {
-    "objectID": "setup/software.html#github-account",
-    "href": "setup/software.html#github-account",
-    "title": "Install and verify the software",
-    "section": "GitHub account",
-    "text": "GitHub account\nCreate an account at github.com. Choose a professional username you are comfortable using for course work and send that username - not your password - to the instructor. Verify the account’s email address so that repository invitations and workflow notifications arrive."
+    "objectID": "setup/git-github.html#commands-you-will-actually-use",
+    "href": "setup/git-github.html#commands-you-will-actually-use",
+    "title": "Git and GitHub field guide",
+    "section": "Commands you will actually use",
+    "text": "Commands you will actually use\nRun these in RStudio’s Terminal, from the assignment’s project folder. They are Git commands, not R code, so do not enter them in the R Console. The commands are the same on macOS and Windows; only the terminal prompt and the way a full file path is written may look different.\n\n\n\n\n\n\n\nCommand\nWhat it tells Git to do\n\n\n\n\ngit status\nSummarize the current branch, saved changes, staged changes, and commits not yet pushed. This is the best first diagnostic command.\n\n\ngit diff\nShow saved changes that have not been staged. RStudio’s Diff button shows the same basic information.\n\n\ngit diff --staged\nShow exactly what the next commit will contain.\n\n\ngit add a1-reproducible-workflow.qmd\nStage one file. For later assignments, substitute the actual filename. Checking a file in RStudio’s Git pane does this too.\n\n\ngit commit -m \"Complete Part 2\"\nRecord the staged changes locally with a message. RStudio’s Commit window does the same thing.\n\n\ngit push\nSend local commits to GitHub.\n\n\ngit pull --ff-only\nBring down remote commits, but stop instead of creating an unexpected merge commit.\n\n\ngit log --oneline -5\nShow the five most recent local commits.\n\n\ngit remote -v\nShow which GitHub repository the local project is connected to.\n\n\n\nYou may also see the command-line form git clone REPOSITORY-URL. In this course, use RStudio’s new-project menu to clone so that it creates and opens the RStudio Project correctly.\n\n\n\n\n\n\nTipRead git status literally\n\n\n\n\nChanges not staged for commit means Git sees saved changes that are not yet selected for a commit.\nChanges to be committed means files are staged for the next commit.\nYour branch is ahead of 'origin/main' means you have local commits to push.\nnothing to commit, working tree clean means Git sees no uncommitted saved changes."
   },
   {
-    "objectID": "setup/software.html#a-local-course-folder",
-    "href": "setup/software.html#a-local-course-folder",
-    "title": "Install and verify the software",
-    "section": "A local course folder",
-    "text": "A local course folder\nCreate a parent folder such as:\nmacOS:   /Users/avery/Documents/POLI210\nWindows: C:/Users/Avery/Documents/POLI210\nAvoid a folder managed by Dropbox, iCloud Drive, OneDrive, or a network drive. Cloud-sync software can lock, duplicate, or make files inside Git’s hidden .git directory online-only."
+    "objectID": "setup/git-github.html#common-problems",
+    "href": "setup/git-github.html#common-problems",
+    "title": "Git and GitHub field guide",
+    "section": "Common problems",
+    "text": "Common problems\n\nMy change is not in the Git pane\nSave the file, then run git status. Also confirm that you opened the correct .Rproj file and edited the copy inside that project. See the file-path guide if you may have two copies of the assignment.\n\n\nGitHub does not show my latest work\nA save or local commit does not update GitHub. Run git status, commit any intended changes, and push. On GitHub, confirm that the newest commit message matches the one you just made.\n\n\nPush was rejected or mentions non-fast-forward\nDo not force-push. First run git status. If the working tree is clean, run git pull --ff-only and read the result. If Git refuses or reports a conflict, stop and send the instructor the exact message before trying more commands.\n\n\nI staged the wrong file\nUncheck it in RStudio’s Git pane, or run:\ngit restore --staged FILENAME\nThis removes the file from the staging area without deleting your saved edits.\n\n\nThe newest GitHub Action failed\nOpen the newest run, expand the failed step, and read the first useful error. Confirm that the run used your newest commit. An Action failure does not erase your work; it means the remote check found something to repair."
   },
   {
-    "objectID": "meetings/02-probability/index.html",
-    "href": "meetings/02-probability/index.html",
-    "title": "Meeting 2: Probability and simulation",
+    "objectID": "setup/git-github.html#safety-rules",
+    "href": "setup/git-github.html#safety-rules",
+    "title": "Git and GitHub field guide",
+    "section": "Safety rules",
+    "text": "Safety rules\n\nWork in the RStudio Project copy, not in a downloaded ZIP or a second copy.\nDo not edit the same assignment alternately in RStudio and GitHub’s web editor; that creates two changing copies that must be reconciled.\nDo not run git init inside a cloned assignment.\nDo not use git push --force, git reset --hard, or delete the hidden .git folder. Ask for help before using a command that discards or rewrites work.\nNever commit passwords, access tokens, or other secrets.\nBefore following a Git command from a web search or AI tool, make sure you understand what it changes. When uncertain, show the proposed command and current git status to the instructor first."
+  },
+  {
+    "objectID": "setup/git-github.html#before-you-finish-an-assignment",
+    "href": "setup/git-github.html#before-you-finish-an-assignment",
+    "title": "Git and GitHub field guide",
+    "section": "Before you finish an assignment",
+    "text": "Before you finish an assignment\n\nThe Quarto document renders successfully.\nThe local assignment check completes as expected.\nThe diff contains your intended work and no secrets or accidental files.\nYour commits have descriptive messages.\ngit status says the working tree is clean and the branch is up to date with origin/main.\nGitHub shows your newest commit and its newest Action run."
+  },
+  {
+    "objectID": "setup/git-github.html#optional-deeper-references",
+    "href": "setup/git-github.html#optional-deeper-references",
+    "title": "Git and GitHub field guide",
+    "section": "Optional deeper references",
+    "text": "Optional deeper references\nThe material above is sufficient for the normal POLI 210 workflow. If you want more detail:\n\nGitHub’s About Git explains version control, repositories, and how GitHub relates to Git.\nGitHub’s Getting changes from a remote repository explains clone, fetch, and pull.\nHappy Git and GitHub for the useR is the broader R-oriented tutorial previously used in this course. Its Git commands chapter is a useful extended reference, but most of the book goes beyond what you need for A1."
+  },
+  {
+    "objectID": "setup/index.html",
+    "href": "setup/index.html",
+    "title": "Computing setup",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, §§2.1, 2.2, and 2.4. Bring your laptop with RStudio ready to use. A1 is due at the beginning of class.\nConditional probability and Bayes’ rule (§2.3) are for September 16, alongside the assigned Blitzstein and Hwang Chapter 2 reading."
+    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
   },
   {
-    "objectID": "meetings/02-probability/index.html#before-class",
-    "href": "meetings/02-probability/index.html#before-class",
-    "title": "Meeting 2: Probability and simulation",
+    "objectID": "setup/index.html#checklist",
+    "href": "setup/index.html#checklist",
+    "title": "Computing setup",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, §§2.1, 2.2, and 2.4. Bring your laptop with RStudio ready to use. A1 is due at the beginning of class.\nConditional probability and Bayes’ rule (§2.3) are for September 16, alongside the assigned Blitzstein and Hwang Chapter 2 reading."
+    "text": "Install a current version of R.\nInstall RStudio Desktop.\nInstall Git.\nCreate a GitHub account.\nSend your GitHub username to the instructor privately.\nCreate a normal local course folder outside Dropbox, iCloud Drive, OneDrive, and network storage.\nAccept your private A1 repository invitation when it arrives.\n\nYou do not need to install LaTeX. RStudio includes Quarto, and assignments will normally render to HTML. When PDF output is required, Quarto will use Typst."
   },
   {
-    "objectID": "meetings/02-probability/index.html#lecture-materials",
-    "href": "meetings/02-probability/index.html#lecture-materials",
-    "title": "Meeting 2: Probability and simulation",
-    "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the R demonstration script\nEditable Quarto source and build instructions\n\nUse the arrow keys in the browser slides. The PDF is an offline backup, compiled with Typst. Run the R script a section at a time in RStudio; it uses only base R."
+    "objectID": "setup/index.html#guides",
+    "href": "setup/index.html#guides",
+    "title": "Computing setup",
+    "section": "Guides",
+    "text": "Guides\n\nInstall and verify the software\nGit and GitHub field guide\nClone and work through RStudio\nUnderstand file paths\n\n\n\n\n\n\n\nTipAsk early\n\n\n\nBring installation or authentication problems to the first seminar or office hours. Include the exact error text and what you were trying to do; never send a password, personal access token, or other secret."
   },
   {
-    "objectID": "meetings/02-probability/index.html#by-the-end-of-the-seminar",
-    "href": "meetings/02-probability/index.html#by-the-end-of-the-seminar",
-    "title": "Meeting 2: Probability and simulation",
-    "section": "By the end of the seminar",
-    "text": "By the end of the seminar\nYou should be able to define a sample space and event, distinguish equally likely from unequally likely outcomes, use complement and union rules, and calculate finite probabilities by counting when the assumptions permit it.\nYou should also be able to simulate a complete trial with sample(), repeat trials with replicate(), and estimate an event probability using a logical comparison and mean(). We will compare exact and simulated answers using dice, random treatment assignment, hypothetical polling, and committee selection."
+    "objectID": "meetings/01-reproducible-workflows/index.html",
+    "href": "meetings/01-reproducible-workflows/index.html",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "",
+    "text": "Complete the computing setup checklist.\nCreate a GitHub account and send the instructor your username privately.\nRead PSD Chapter 1: Data in R.\nBring your laptop and GitHub sign-in information.\n\nYour private A1 repository invitation may arrive shortly before class. Accept it when it appears, but do not download the repository as a ZIP file."
   },
   {
-    "objectID": "meetings/02-probability/index.html#after-class",
-    "href": "meetings/02-probability/index.html#after-class",
-    "title": "Meeting 2: Probability and simulation",
+    "objectID": "meetings/01-reproducible-workflows/index.html#before-class",
+    "href": "meetings/01-reproducible-workflows/index.html#before-class",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "",
+    "text": "Complete the computing setup checklist.\nCreate a GitHub account and send the instructor your username privately.\nRead PSD Chapter 1: Data in R.\nBring your laptop and GitHub sign-in information.\n\nYour private A1 repository invitation may arrive shortly before class. Accept it when it appears, but do not download the repository as a ZIP file."
+  },
+  {
+    "objectID": "meetings/01-reproducible-workflows/index.html#learning-goals",
+    "href": "meetings/01-reproducible-workflows/index.html#learning-goals",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "Learning goals",
+    "text": "Learning goals\nBy the end of the meeting, you should be able to:\n\nfind the Source, Console, Environment, Files, Terminal, and Git panes in RStudio;\nrun basic Chapter 1 R code and save it in a script;\nclone and open a private repository as an RStudio Project;\ndistinguish saving, staging, committing, and pushing;\nrender a Quarto document to HTML; and\nlocate the first useful message in a failed local or GitHub check.\n\nThe central principle is: saved source files - not objects left in the current Environment - must be sufficient to reproduce the result."
+  },
+  {
+    "objectID": "meetings/01-reproducible-workflows/index.html#one-reproducible-loop",
+    "href": "meetings/01-reproducible-workflows/index.html#one-reproducible-loop",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "One reproducible loop",
+    "text": "One reproducible loop\nprivate GitHub repository\n        | clone once\n        v\nlocal RStudio Project → edit → run → render → inspect\n        |                                  |\n        +──────── stage → commit ──────────+\n                             |\n                             +→ push → GitHub Actions"
+  },
+  {
+    "objectID": "meetings/01-reproducible-workflows/index.html#rstudio-and-r",
+    "href": "meetings/01-reproducible-workflows/index.html#rstudio-and-r",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "RStudio and R",
+    "text": "RStudio and R\nWe will use R for arithmetic, functions, vectors, indexing, missing values, and small data frames. Useful diagnostic commands include:\ngetwd()\nlist.files()\nfile.exists(\"data/district_turnout.csv\")\nRestarting R clears the Environment. A saved script can rebuild objects after a restart; an unsaved Console history cannot serve as a reproducible analysis."
+  },
+  {
+    "objectID": "meetings/01-reproducible-workflows/index.html#git-and-github-demonstration",
+    "href": "meetings/01-reproducible-workflows/index.html#git-and-github-demonstration",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "Git and GitHub demonstration",
+    "text": "Git and GitHub demonstration\nThe instructor will demonstrate this cycle in a disposable private repository:\n\nclone through File → New Project → Version Control → Git;\nopen the .Rproj file;\nreplace the name placeholders;\nsave and inspect the diff;\ncommit with Add my name;\ncomplete the first R section and make another commit;\npush to GitHub; and\ninspect the resulting failed Action.\n\nThe failure is intentional: only the beginning of the assignment will be complete. The useful skill is finding what remains and distinguishing an unfinished answer from a software or file-path problem."
+  },
+  {
+    "objectID": "meetings/01-reproducible-workflows/index.html#terminal-check",
+    "href": "meetings/01-reproducible-workflows/index.html#terminal-check",
+    "title": "Meeting 1: Reproducible workflows",
+    "section": "Terminal check",
+    "text": "Terminal check\nFrom the root of an A1 repository, run:\nRscript checks/check-a1.R\nThis belongs in RStudio’s Terminal. It does not belong in the R Console. Read the first failure, make one focused change, and run the check again."
+  },
+  {
+    "objectID": "meetings/01-reproducible-workflows/index.html#after-class",
+    "href": "meetings/01-reproducible-workflows/index.html#after-class",
+    "title": "Meeting 1: Reproducible workflows",
     "section": "After class",
-    "text": "After class\nComplete A2, due September 16 at 1:30 p.m., in your private repository. Exercises 2.7, 2.9, and 2.36 explicitly pair analytical solutions with simulations. The assignment page summarizes the selected exercises and submission workflow."
+    "text": "After class\n\nContinue A1 in your own private repository.\nUse the Git and GitHub field guide when you need the workflow, command reference, or troubleshooting steps.\nMake several meaningful commits rather than one final upload.\nRender and inspect the HTML before submitting.\nPush and confirm the newest GitHub Action before September 9 at 1:30 p.m."
   },
   {
-    "objectID": "meetings/04-discrete-random-variables/index.html",
-    "href": "meetings/04-discrete-random-variables/index.html",
-    "title": "Meeting 4: Discrete random variables",
+    "objectID": "meetings/03-conditional-probability/index.html",
+    "href": "meetings/03-conditional-probability/index.html",
+    "title": "Meeting 3: Conditional probability and Bayes’ rule",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 3. Bring your laptop with RStudio ready to use. B1 is due at 1:30 p.m."
+    "text": "Read Blitzstein and Hwang, Introduction to Probability, Chapter 2 (official free reader). Bring your laptop with RStudio ready to use. A2 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/04-discrete-random-variables/index.html#before-class",
-    "href": "meetings/04-discrete-random-variables/index.html#before-class",
-    "title": "Meeting 4: Discrete random variables",
+    "objectID": "meetings/03-conditional-probability/index.html#before-class",
+    "href": "meetings/03-conditional-probability/index.html#before-class",
+    "title": "Meeting 3: Conditional probability and Bayes’ rule",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 3. Bring your laptop with RStudio ready to use. B1 is due at 1:30 p.m."
+    "text": "Read Blitzstein and Hwang, Introduction to Probability, Chapter 2 (official free reader). Bring your laptop with RStudio ready to use. A2 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/04-discrete-random-variables/index.html#lecture-materials",
-    "href": "meetings/04-discrete-random-variables/index.html#lecture-materials",
-    "title": "Meeting 4: Discrete random variables",
+    "objectID": "meetings/03-conditional-probability/index.html#lecture-materials",
+    "href": "meetings/03-conditional-probability/index.html#lecture-materials",
+    "title": "Meeting 3: Conditional probability and Bayes’ rule",
     "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy.\nSave the demonstration .qmd to your course folder and open it in RStudio. Each numbered example is independently runnable: use its green arrow or Run Current Chunk. The examples use base R. Rendering the document also requires knitr and rmarkdown. The HTML preview displays evaluated output; it does not run R in your browser. If using the optional project file, save it beside the QMD and open the project first."
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the R demonstration script\nEditable Quarto source and build instructions\n\nUse the arrow keys to navigate the browser slides. The Typst PDF is a printable and offline copy. Run the demonstration script a section at a time in RStudio; the examples use base R."
   },
   {
-    "objectID": "meetings/04-discrete-random-variables/index.html#during-the-seminar",
-    "href": "meetings/04-discrete-random-variables/index.html#during-the-seminar",
-    "title": "Meeting 4: Discrete random variables",
+    "objectID": "meetings/03-conditional-probability/index.html#during-the-seminar",
+    "href": "meetings/03-conditional-probability/index.html#during-the-seminar",
+    "title": "Meeting 3: Conditional probability and Bayes’ rule",
     "section": "During the seminar",
-    "text": "During the seminar\nWe will map outcomes to numerical values, construct probability mass functions, and compare exact calculations with simulated experiments. A voter-mobilization example connects enumeration and counting to treatment counts.\nWe will use a polling model to study binomial counts and cumulative probabilities, then examine transformations, expectation, variance, and independence. A waiting-time example distinguishes failures before a first success from the total number of calls."
+    "text": "During the seminar\nWe will distinguish conditional from marginal probabilities, examine independence, and use the law of total probability. A hypothetical arrest tree will provide the derivation of Bayes’ rule before the break.\nAfter the break, we will solve Monty Hall analytically and simulate the host’s actions. A model of competing coalitions will illustrate conditioning on a first step and simulating a complete process. In each example, identify the reference group used in the denominator of a conditional probability."
   },
   {
-    "objectID": "meetings/04-discrete-random-variables/index.html#after-class",
-    "href": "meetings/04-discrete-random-variables/index.html#after-class",
-    "title": "Meeting 4: Discrete random variables",
+    "objectID": "meetings/03-conditional-probability/index.html#after-class",
+    "href": "meetings/03-conditional-probability/index.html#after-class",
+    "title": "Meeting 3: Conditional probability and Bayes’ rule",
     "section": "After class",
-    "text": "After class\nRerun the demonstrations and change one input at a time. Explain the difference between increasing the number of voters in a poll and increasing the number of simulated polls. Practice translating each probability inequality into an R expression.\nAssignment instructions and submission repositories are distributed separately through the private-repository workflow."
+    "text": "After class\nComplete B1: Interpreting Cease-Fire Monitoring Reports in your private GitHub repository. It is due September 23 at 1:30 p.m. The assignment combines calculation, simulation, and interpretation in a hypothetical case.\nSave your source, render and inspect the HTML, then commit and push both the .qmd and .html files. GitHub Actions does not commit its rendered copy back to your repository. See the assignment’s submission checklist and Quarto quick reference for details."
   },
   {
-    "objectID": "meetings/06-sampling-distributions/index.html",
-    "href": "meetings/06-sampling-distributions/index.html",
-    "title": "Meeting 6: Sampling distributions",
+    "objectID": "meetings/05-continuous-random-variables/index.html",
+    "href": "meetings/05-continuous-random-variables/index.html",
+    "title": "Meeting 5: Continuous random variables",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 5, Sections 5.1-5.5. Bring your laptop with RStudio ready to use. B2 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 4, especially Sections 4.1-4.4.2. Bring your laptop with RStudio ready to use. A3 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/06-sampling-distributions/index.html#before-class",
-    "href": "meetings/06-sampling-distributions/index.html#before-class",
-    "title": "Meeting 6: Sampling distributions",
+    "objectID": "meetings/05-continuous-random-variables/index.html#before-class",
+    "href": "meetings/05-continuous-random-variables/index.html#before-class",
+    "title": "Meeting 5: Continuous random variables",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 5, Sections 5.1-5.5. Bring your laptop with RStudio ready to use. B2 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 4, especially Sections 4.1-4.4.2. Bring your laptop with RStudio ready to use. A3 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/06-sampling-distributions/index.html#lecture-materials",
-    "href": "meetings/06-sampling-distributions/index.html#lecture-materials",
-    "title": "Meeting 6: Sampling distributions",
+    "objectID": "meetings/05-continuous-random-variables/index.html#lecture-materials",
+    "href": "meetings/05-continuous-random-variables/index.html#lecture-materials",
+    "title": "Meeting 5: Continuous random variables",
     "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy.\nSave the demonstration QMD in your course folder and open it in RStudio. Each numbered chunk defines its own inputs and can run independently. The examples use base R and require no downloads or separate helper scripts. Rendering also requires knitr and rmarkdown. The HTML displays saved output rather than running R in your browser. Save the optional project file beside the QMD if you use it."
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy.\nSave the demonstration QMD in your course folder and open it in RStudio. Each numbered chunk defines its own inputs and can run independently. The examples use base R and require no downloaded data. Rendering also requires knitr and rmarkdown. The HTML displays saved output rather than running R in your browser. If using the optional project file, save it beside the QMD and open the project first."
   },
   {
-    "objectID": "meetings/06-sampling-distributions/index.html#during-the-seminar",
-    "href": "meetings/06-sampling-distributions/index.html#during-the-seminar",
-    "title": "Meeting 6: Sampling distributions",
+    "objectID": "meetings/05-continuous-random-variables/index.html#during-the-seminar",
+    "href": "meetings/05-continuous-random-variables/index.html#during-the-seminar",
+    "title": "Meeting 5: Continuous random variables",
     "section": "During the seminar",
-    "text": "During the seminar\nWe will connect histogram areas and kernel smoothing to last week’s concept of density. Repeated samples let us study a statistic as another random variable and distinguish sample size from simulation repetitions.\nThe LLN describes concentration of sample means, while the CLT describes their standardized limiting shape. We will compare simulated cumulative probabilities with a Normal approximation, including a repeat with a different seed. Squared deviations and estimated standard errors motivate the chi-squared and t distributions.\nDemo 8b explains the functions, lists, and CDF comparison used in A4. Demo 11 computes the t statistic from each sample and compares two-sided tail probabilities. The F and unbiasedness previews are optional."
+    "text": "During the seminar\nWe will distinguish point probabilities, densities, and cumulative probabilities. Integrals describe accumulated area, with geometry and R doing the calculations. No hand evaluation of complicated integrals is needed.\nWe will examine normal CDFs, forecast probabilities, quantiles, and simulation. A discrete vote-count model illustrates the normal approximation and continuity correction. Bargaining and contract examples show how transformations change the distribution of payoffs, and why a mean alone does not describe a decision."
   },
   {
-    "objectID": "meetings/06-sampling-distributions/index.html#after-class",
-    "href": "meetings/06-sampling-distributions/index.html#after-class",
-    "title": "Meeting 6: Sampling distributions",
+    "objectID": "meetings/05-continuous-random-variables/index.html#after-class",
+    "href": "meetings/05-continuous-random-variables/index.html#after-class",
+    "title": "Meeting 5: Continuous random variables",
     "section": "After class",
-    "text": "After class\nA4 is due October 14 at 1:30 p.m. Pacific. Accept your private repository invitation and follow its README. Complete the R answers file and QMD, then commit and push both source files and the freshly rendered HTML.\nWhen exploring the demo, change n and B separately. Explain which change alters the sampling distribution and which changes the simulation’s precision. Use the probability comparisons alongside the plots, not as a claim that every aspect of the distribution is Normal."
+    "text": "After class\nRerun the demonstrations and change one input at a time. Explain the difference between a density height and an interval probability, and between changing a forecast’s standard deviation and increasing the number of simulated draws.\nB2 is due October 7 at 1:30 p.m. Pacific. The instructions, prepared data, and plotting helpers are in your private B2 repository. Submit the QMD and current HTML there. Keep individual submissions private."
   },
   {
-    "objectID": "meetings/08-data-wrangling/index.html",
-    "href": "meetings/08-data-wrangling/index.html",
-    "title": "Meeting 8: Data wrangling with dplyr",
+    "objectID": "meetings/07-point-estimation/index.html",
+    "href": "meetings/07-point-estimation/index.html",
+    "title": "Meeting 7: Point estimation",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 6. Bring your laptop with RStudio ready to use. B3 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Section 5.6. Review sampling distributions and the CLT from last week’s seminar. Bring your laptop with RStudio ready to use. A4 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/08-data-wrangling/index.html#before-class",
-    "href": "meetings/08-data-wrangling/index.html#before-class",
-    "title": "Meeting 8: Data wrangling with dplyr",
+    "objectID": "meetings/07-point-estimation/index.html#before-class",
+    "href": "meetings/07-point-estimation/index.html#before-class",
+    "title": "Meeting 7: Point estimation",
     "section": "",
-    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 6. Bring your laptop with RStudio ready to use. B3 is due at 1:30 p.m."
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Section 5.6. Review sampling distributions and the CLT from last week’s seminar. Bring your laptop with RStudio ready to use. A4 is due at 1:30 p.m."
   },
   {
-    "objectID": "meetings/08-data-wrangling/index.html#lecture-materials",
-    "href": "meetings/08-data-wrangling/index.html#lecture-materials",
-    "title": "Meeting 8: Data wrangling with dplyr",
+    "objectID": "meetings/07-point-estimation/index.html#lecture-materials",
+    "href": "meetings/07-point-estimation/index.html#lecture-materials",
+    "title": "Meeting 7: Point estimation",
     "section": "Lecture materials",
-    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the complete demo bundle (ZIP)\nRead the demonstration with its output\nView the demonstration QMD\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy. The demo HTML shows saved code and results; it does not run R in your browser.\n\n\n\n\n\n\nImportantDownload and extract the whole demo bundle\n\n\n\nThe demonstration QMD needs the accompanying data and helper script. Download the ZIP, extract it, and open poli210-seminar8.Rproj in RStudio. Keep all of its files and folders together. Open the QMD, follow its package setup instructions, run the setup chunk, and then work through the numbered sections in order. The QMD alone is not a complete runnable project."
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the demonstration QMD\nRead the demonstration with its output\nOptional RStudio project file\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy. Save the demonstration QMD in your course folder and open it in RStudio. Each numbered chunk defines its own inputs and runs independently. The examples use base R and need no downloads or separate helper scripts. Rendering also requires knitr and rmarkdown. The HTML displays saved output rather than running R in your browser. Save the optional project file beside the QMD if you use it."
   },
   {
-    "objectID": "meetings/08-data-wrangling/index.html#during-the-seminar",
-    "href": "meetings/08-data-wrangling/index.html#during-the-seminar",
-    "title": "Meeting 8: Data wrangling with dplyr",
+    "objectID": "meetings/07-point-estimation/index.html#during-the-seminar",
+    "href": "meetings/07-point-estimation/index.html#during-the-seminar",
+    "title": "Meeting 7: Point estimation",
     "section": "During the seminar",
-    "text": "During the seminar\nCongressional elections and ultimatum-game data provide examples of selecting columns, filtering and sorting rows, creating variables with mutate(), and summarizing groups. We distinguish missing values from zeros and explore lower and upper bounds for missing minimum acceptable offers.\nWe then practice working with text, reshaping tables, combining rows, and joining datasets. Join audits check whether keys are unique, whether rows were unexpectedly duplicated, and whether any records failed to match. The demo includes frozen teaching datasets and source documentation, so no in-class data downloads are required."
+    "text": "During the seminar\nA field experiment motivates the difference-in-means estimator. We distinguish an estimand, an estimator, and an estimate, then examine unbiasedness, sampling variability, mean squared error, and consistency.\nPotential outcomes help separate random assignment from random sampling and explain why a comparison under self-selection can miss the average treatment effect. Demos 1-4 prepare for B3, including exact enumeration of assignments, repeated studies, and summaries and CDFs of their estimates.\nThe final slide sequence and Demos 5-7 are optional. They revisit estimated standard errors, the exact t distribution under Normal observations, and the large-sample Normal approximation."
   },
   {
-    "objectID": "meetings/08-data-wrangling/index.html#after-class",
-    "href": "meetings/08-data-wrangling/index.html#after-class",
-    "title": "Meeting 8: Data wrangling with dplyr",
+    "objectID": "meetings/07-point-estimation/index.html#after-class",
+    "href": "meetings/07-point-estimation/index.html#after-class",
+    "title": "Meeting 7: Point estimation",
     "section": "After class",
-    "text": "After class\nA5 is due October 28 at 1:30 p.m. Pacific. Accept your private repository invitation and follow its README. Complete R/a5_answers.R and the QMD’s three short written responses. Save, run Rscript checks/check-a5.R in the Terminal, and render a fresh HTML. Commit and push the answers R file, QMD, and current HTML, then check GitHub Actions.\nKeep track of what each row represents before and after a transformation. In particular, counting rows is not always the same as summing the counts stored in a column."
+    "text": "After class\nB3 is due October 21 at 1:30 p.m. Pacific. Accept your private repository invitation and follow its README. The hypothetical village data and helpers are included. Complete the QMD’s code and written responses, run the completion check, and render a fresh HTML. Commit and push both the QMD and current HTML.\nKeep track of what changes in each simulation: treatment assignment, sampled villages, the number of villages per study, or the number of simulation repetitions. These produce different kinds of variation."
+  },
+  {
+    "objectID": "meetings/09-data-visualization/index.html",
+    "href": "meetings/09-data-visualization/index.html",
+    "title": "Meeting 9: Data visualization with ggplot2",
+    "section": "",
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 7. Bring your laptop with RStudio ready to use. A5 is due at 1:30 p.m."
+  },
+  {
+    "objectID": "meetings/09-data-visualization/index.html#before-class",
+    "href": "meetings/09-data-visualization/index.html#before-class",
+    "title": "Meeting 9: Data visualization with ggplot2",
+    "section": "",
+    "text": "Read Speegle and Clair, Probability, Statistics, and Data, Chapter 7. Bring your laptop with RStudio ready to use. A5 is due at 1:30 p.m."
+  },
+  {
+    "objectID": "meetings/09-data-visualization/index.html#lecture-materials",
+    "href": "meetings/09-data-visualization/index.html#lecture-materials",
+    "title": "Meeting 9: Data visualization with ggplot2",
+    "section": "Lecture materials",
+    "text": "Lecture materials\n\nOpen the lecture slides\nDownload the slide PDF\nDownload the complete demo bundle (ZIP)\nRead the demonstration with its output\nView the demonstration QMD\nEditable sources and build instructions\n\nUse the arrow keys to navigate the browser slides. The PDF is a printable, offline copy. The demo HTML shows saved code and results; it does not run R in your browser.\n\n\n\n\n\n\nImportantDownload and extract the whole demo bundle\n\n\n\nThe demonstration QMD needs the accompanying data and helper script. Download the ZIP, extract it, and open poli210-seminar9.Rproj in RStudio. Keep all of its files and folders together. Open data-visualization-demo.qmd, follow its package setup instructions, and run the sections from the top. The QMD alone is not a complete runnable project."
+  },
+  {
+    "objectID": "meetings/09-data-visualization/index.html#during-the-seminar",
+    "href": "meetings/09-data-visualization/index.html#during-the-seminar",
+    "title": "Meeting 9: Data visualization with ggplot2",
+    "section": "During the seminar",
+    "text": "During the seminar\nCongressional election data and NOMINATE scores illustrate how ggplot2 combines data, aesthetic mappings, and geometric layers. We build scatterplots, add fitted lines, and use color and facets to compare groups and elections.\nHistograms, bar plots, and box plots display different kinds of summaries. We use group_by() and summarise() to prepare a plotting dataset, then add standard-error whiskers to grouped means. Later examples cover supplied prediction curves and uncertainty bands, saving plots, and optional Q–Q plots. The complete demo bundle includes the teaching data and their source notes."
+  },
+  {
+    "objectID": "meetings/09-data-visualization/index.html#after-class",
+    "href": "meetings/09-data-visualization/index.html#after-class",
+    "title": "Meeting 9: Data visualization with ggplot2",
+    "section": "After class",
+    "text": "After class\nB4 will be released separately after the seminar. Its private repository will contain the assignment instructions. For now, the demonstration provides worked examples to revisit and modify."
   }
 ]

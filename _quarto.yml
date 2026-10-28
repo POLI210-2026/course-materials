@@ -42,6 +42,11 @@ project:
     - lectures/08-data-wrangling/data-wrangling-live-demo.qmd
     - lectures/08-data-wrangling/data-wrangling-live-demo.html
     - lectures/08-data-wrangling/seminar8-demo.zip
+    - lectures/09-data-visualization/data-visualization-slides.html
+    - lectures/09-data-visualization/data-visualization-slides.pdf
+    - lectures/09-data-visualization/data-visualization-demo.qmd
+    - lectures/09-data-visualization/data-visualization-demo.html
+    - lectures/09-data-visualization/seminar9-demo.zip
 
 website:
   title: "POLI 210"

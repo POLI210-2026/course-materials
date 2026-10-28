@@ -20,7 +20,7 @@ will be added as the semester progresses.
 | **6** | Oct. 7 | [Simulation, sampling distributions, the LLN, and the CLT](06-sampling-distributions/index.qmd). **PSD §§5.1-5.5**, including chi-squared and t distributions. |
 | **7** | Oct. 14 | [Sampling distributions and point estimation](07-point-estimation/index.qmd). **PSD §5.6**, with review of sampling distributions and the CLT. |
 | **8** | Oct. 21 | [Data structures, tidy data, and transformation](08-data-wrangling/index.qmd). **PSD Ch. 6.** |
-| **9** | Oct. 28 | Visualization and descriptive statistics. **PSD Ch. 7.** |
+| **9** | Oct. 28 | [Visualization and descriptive statistics](09-data-visualization/index.qmd). **PSD Ch. 7.** |
 | **10** | Nov. 4 | Standard errors and confidence intervals. **PSD Ch. 8.** |
 |  -  | Nov. 11 | **No class  -  Veterans Day.** |
 | **11** | Nov. 18 | Hypothesis tests, two-sample comparisons, power, and resampling. **PSD Ch. 8.** |
