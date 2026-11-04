@@ -1,0 +1,383 @@
+---
+title: "Confidence intervals"
+subtitle: "POLI 210 - Seminar 10"
+author: "Brad LeVeck"
+date: "2026-11-04"
+date-format: "MMMM D, YYYY"
+format:
+  revealjs:
+    theme: [simple, slides.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    center: false
+    transition: none
+    embed-resources: true
+    code-overflow: wrap
+    include-after-body: math-fonts.html
+  typst:
+    fontsize: 21pt
+    template-partials: [typst-show.typ]
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 10
+fig-height: 3.1
+---
+
+```{r}
+#| include: false
+source("R/figures.R")
+```
+
+## A point estimate leaves a question open
+
+| Mailing | Turnout | Individuals |
+|---|---:|---:|
+| Neighbors | 37.8% | 38,201 |
+| Civic duty | 31.5% | 38,218 |
+
+The estimated difference is **6.3 percentage points**.
+
+How much would that estimate vary if we repeated the study?
+
+A confidence interval uses the **sampling distribution** to attach an interval to the estimate.
+
+::: {.source}
+Gerber, Green, and Larimer (2008), rounded summaries used in Blackwell's slides. We use a simplified independent-samples calculation below.
+:::
+
+## The endpoints vary; the parameter is fixed
+
+An interval estimator produces two functions of the sample:
+
+$$[L(X_1,\ldots,X_n),\ U(X_1,\ldots,X_n)].$$
+
+Its **coverage** is the probability that it contains the population parameter:
+
+$$P_\theta(L\leq\theta\leq U).$$
+
+- A 95% procedure aims for coverage of 0.95 across repeated samples.
+- $1-\alpha$ is the confidence level; for 95%, $\alpha=0.05$.
+- Exact coverage depends on a model; approximate intervals rely on an approximation.
+
+## Start with the sampling distribution
+
+For two independent samples, define
+
+$$\Delta=\mu_Y-\mu_X,\qquad \widehat D=\overline Y-\overline X.$$
+
+Estimate the standard deviation of $\widehat D$ using
+
+$$\widehat{\operatorname{SE}}(\widehat D)
+=\sqrt{\frac{S_Y^2}{n_Y}+\frac{S_X^2}{n_X}}.$$
+
+When both samples are large enough for the Normal approximation,
+
+$$\frac{\widehat D-\Delta}{\widehat{\operatorname{SE}}(\widehat D)}
+\ \text{is approximately}\ N(0,1).$$
+
+## A familiar probability becomes a useful bound
+
+```{r}
+#| echo: false
+p_normal
+```
+
+$$P\left(-1.96\leq
+\frac{\widehat D-\Delta}{\widehat{\operatorname{SE}}}
+\leq1.96\right)\approx0.95.$$
+
+## Rearrange the same event
+
+$$\begin{aligned}
+-1.96&\leq\frac{\widehat D-\Delta}{\widehat{\operatorname{SE}}}\leq1.96\\[6pt]
+-1.96\widehat{\operatorname{SE}}&\leq\widehat D-\Delta\leq1.96\widehat{\operatorname{SE}}\\[6pt]
+\widehat D-1.96\widehat{\operatorname{SE}}&\leq\Delta\leq\widehat D+1.96\widehat{\operatorname{SE}}.
+\end{aligned}$$
+
+The resulting approximate 95% confidence interval is
+
+$$\boxed{\widehat D\ \pm\ 1.96\widehat{\operatorname{SE}}.}$$
+
+The endpoints change with the sample. $\Delta$ does not.
+
+## Calculate an interval for the turnout difference
+
+```{r}
+p_neigh <- .378; n_neigh <- 38201
+p_civic <- .315; n_civic <- 38218
+estimate <- p_neigh - p_civic
+# Plug-in Bernoulli variances; rounded published proportions
+se_diff <- sqrt(p_neigh * (1 - p_neigh) / n_neigh +
+                p_civic * (1 - p_civic) / n_civic)
+100 * (estimate + c(-1, 1) * qnorm(.975) * se_diff)
+```
+
+Approximately **5.63 to 6.97 percentage points** under this simplified model.
+
+::: {.small}
+The original experiment assigned households. This individual-level, independent-samples SE illustrates the formula; inference for the actual study must account for its assignment design.
+:::
+
+## What does 95% confidence mean?
+
+Across repeated samples, about 95% of the intervals from a well-calibrated 95% procedure contain the fixed parameter.
+
+After observing one interval, it either contains that parameter or it does not; we usually cannot tell which.
+
+- **95% describes the procedure's repeated coverage.**
+- It does not mean 95% of individual outcomes lie inside the interval.
+- In this frequentist framework, it does not assign a 95% probability to the fixed parameter being in the realized interval.
+
+## Simulate one sample and one interval
+
+Use $X_i\overset{\mathrm{iid}}{\sim}N(1,10)$: mean 1, **variance 10**.
+
+```{r}
+#| eval: false
+set.seed(2143)
+mu <- 1; sigma <- sqrt(10); n <- 500
+x <- rnorm(n, mean = mu, sd = sigma)
+estimate <- mean(x)
+se <- sd(x) / sqrt(n)
+lower <- estimate - qnorm(.975) * se
+upper <- estimate + qnorm(.975) * se
+lower <= mu & mu <= upper
+```
+
+We know $\mu$ because this is a simulation. In an application, $\mu$ is the unknown target.
+
+## Repeat the whole sampling process
+
+```{r}
+#| eval: false
+B <- 10000
+set.seed(2143)
+ci <- data.frame(lower = rep(NA_real_, B), upper = rep(NA_real_, B))
+for (i in seq_len(B)) {
+  x <- rnorm(n, mean = mu, sd = sigma)
+  margin <- qnorm(.975) * sd(x) / sqrt(n)
+  ci$lower[i] <- mean(x) - margin
+  ci$upper[i] <- mean(x) + margin
+}
+ci$covers <- ci$lower <= mu & mu <= ci$upper
+mean(ci$covers)
+```
+
+This run: **`r sprintf("%.2f%%", 100 * coverage)` coverage** over 10,000 samples.
+
+$n$ is the size of each sample. $B$ is the number of repetitions.
+
+## Many intervals, one population mean
+
+```{r}
+#| echo: false
+#| fig-height: 3.7
+p_coverage
+```
+
+The long-run target is 95%; a batch of 100 need not have exactly 95 successes.
+
+## Choose the confidence level using a quantile
+
+```{r}
+#| echo: false
+#| fig-height: 2.6
+p_quantile
+```
+
+$$\widehat\theta\ \pm\ c\widehat{\operatorname{SE}},\qquad
+c=\texttt{qnorm}(1-\alpha/2).$$
+
+For 90% confidence: $\alpha=.10$, so `qnorm(.95)` $\approx1.645$.
+
+This formula requires the standardized estimator to be approximately Normal.
+
+## Greater confidence requires a wider interval
+
+```{r}
+#| echo: false
+p_widths
+```
+
+Normal critical values: **1.645**, **1.960**, **2.576** for 90%, 95%, 99%.
+
+The estimate and SE are unchanged here. Only the confidence level changes.
+
+## More information can narrow the interval
+
+For a sample mean with independent observations,
+
+$$\widehat{\operatorname{SE}}(\overline X)=\frac{S}{\sqrt n},\qquad
+\text{margin of error}=c\frac{S}{\sqrt n}.$$
+
+- Holding $S$ and $c$ fixed, quadrupling $n$ halves the margin of error.
+- Greater variability in observations produces a wider interval.
+- More observations do not automatically remove selection bias or measurement bias.
+
+Precision and accuracy are different questions.
+
+## The large-sample argument permits an estimated SE
+
+For iid observations with finite, positive variance,
+
+$$T_n=\frac{\overline X-\mu}{S/\sqrt n}
+=\frac{\sigma}{S}\frac{\sqrt n(\overline X-\mu)}{\sigma}
+\xrightarrow{d}N(0,1).$$
+
+- The CLT gives a Normal limit for the second factor.
+- Consistency of $S$ makes $\sigma/S$ approach 1.
+- These conditions allow many population shapes, including skewed distributions.
+
+Estimating the SE preserves our asymptotic justification for the interval.
+
+## Normal observations give an exact t result
+
+If the iid observations are also Normal, $T_n\sim t_{n-1}$ exactly. Then
+
+$$\boxed{\overline X\ \pm\ t_{\alpha/2}\frac{S}{\sqrt n}}$$
+
+has exact $100(1-\alpha)\%$ coverage even in small samples.
+
+PSD labels the positive cutoff by its **upper-tail area**:
+
+$$P(T>t_{\alpha/2})=\alpha/2,\qquad
+t_{\alpha/2}=\texttt{qt}(1-\alpha/2,\ n-1).$$
+
+R's default quantile input is the area **to the left**. Thus `qt(.975, 9)` gives the book's $t_{0.025}$ for 9 df.
+
+## Calculate the t interval in R
+
+```{r}
+set.seed(210)
+x <- rnorm(10, mean = 1, sd = sqrt(10))
+n <- length(x)
+se <- sd(x) / sqrt(n)
+critical <- qt(.975, df = n - 1)
+manual_ci <- mean(x) + c(-1, 1) * critical * se
+round(manual_ci, 3)
+round(as.numeric(t.test(x, conf.level = .95)$conf.int), 3)
+```
+
+Both calculate the same interval for the **population mean**.
+The sample mean `mean(x)` is already known from these observations.
+
+## The t cutoff also fits the asymptotic argument
+
+At a fixed confidence level, `qt(1 - alpha/2, n - 1)` approaches `qnorm(1 - alpha/2)`.
+
+```{r}
+#| echo: false
+#| results: asis
+tab <- normal_table
+tab$Critical <- sprintf("%.3f", tab$Critical)
+tab$Simulated <- sprintf("%.2f%%", 100 * tab$Simulated)
+tab$Theory <- sprintf("%.2f%%", 100 * tab$Theory)
+knitr::kable(tab, col.names = c("n", "Reference", "Cutoff", "Simulated", "Exact"))
+```
+
+::: {.small}
+Coverage for an iid Normal benchmark, unknown variance, 10,000 samples per setting. Monte Carlo SE is about 0.2–0.3 percentage points.
+:::
+
+Under the broader conditions on slide 15, **both cutoffs give asymptotically correct coverage**. Choosing a $t$ cutoff does not itself assume a Normal population.
+
+## Coverage depends on the data-generating process
+
+- **Population shape:** Normality gives an exact one-sample $t$ result. For non-Normal data, coverage is approximate; skewness and heavy tails can slow convergence.
+- **Independence:** repeated observations on the same person, household, or time series need an SE that reflects that dependence.
+- **Sampling and measurement:** the sample must support inference about the intended population and quantity.
+
+Histograms, boxplots, and Q–Q plots help assess shape and unusual values. The study design tells us about independence.
+
+## A t cutoff does not fix a strongly skewed sample
+
+```{r}
+#| echo: false
+#| fig-height: 3.4
+p_robustness
+```
+
+Both populations have mean 1 and variance 1. Each point uses 10,000 samples; whiskers are $\pm2$ Monte Carlo SEs. The dotted line is 95%.
+
+Close $t$ and Normal cutoffs do not guarantee accurate coverage. The actual statistic must also approach its reference distribution.
+
+## Count independent units, not just rows
+
+Suppose we ask **20 voters** to rate the same candidate **5 times**.
+
+There are 100 ratings, but ratings from one voter share that voter's underlying opinion.
+
+- Treating all 100 rows as independent can make the SE too small.
+- An interval can look precise while missing the population mean too often.
+- More repetitions per voter do not substitute for more independently sampled voters.
+
+For this balanced design, analyzing the 20 voter-level averages is one way to respect the independent sampling units.
+
+## Connect this to the whiskers in our graphs
+
+An error bar needs a label: **SD, SE, or a confidence interval?**
+
+- SD describes variation among observations.
+- SE describes variation of an estimator across samples.
+- An approximate 95% Normal CI is estimate $\pm1.96$ SE.
+
+Estimate $\pm1$ SE has approximately 68% coverage when the standardized estimator is Normal. B4's 68% bootstrap intervals use a simulated sampling distribution instead.
+
+Neither interval is intended to contain 68% or 95% of the individual observations.
+
+## Questions to carry forward
+
+1. What is random in a confidence interval, and what is fixed?
+2. How do confidence level, sample size, and variability change its width?
+3. Why can a procedure miss its advertised coverage even when the R code runs correctly?
+
+The general structure is
+
+$$\text{estimate}\ \pm\ \text{critical value}\times\text{estimated SE}.$$
+
+The sampling distribution and the design determine whether that structure works.
+
+## Reading and references
+
+- Matthew Blackwell, *Gov 2000: Estimation and Statistical Inference*, Section 3, pp. 32–49. Lecture sequence and coverage demonstration adapted with permission.
+- *Probability, Statistics, and Data*, [Chapter 8](https://probstatsdata.com/HTCI.html): §§8.1–8.2 for $t$ intervals; §8.5 for assumptions and simulation checks.
+- Gerber, Green, and Larimer (2008), “Social Pressure and Voter Turnout: Evidence from a Large-Scale Field Experiment,” *American Political Science Review*, 102(1), 33–48.
+
+PSD §§8.3–8.4 introduce testing and one-sided procedures. The following two optional slides connect those sections to today's intervals.
+
+## Optional: a bound in just one direction
+
+Sometimes the target is a **lower confidence bound** on a population mean.
+
+For iid Normal observations, a 95% lower bound is
+
+$$L=\overline X-\texttt{qt}(.95,n-1)\frac{S}{\sqrt n},\qquad [L,\infty).$$
+
+All 5% of the error probability is in one tail. A two-sided 95% interval instead puts 2.5% in each tail.
+
+```{r}
+#| eval: false
+t.test(x, alternative = "greater", conf.level = .95)$conf.int
+```
+
+Choose the direction before seeing the result. An upper bound works analogously.
+
+## Optional: an interval and a test ask related questions
+
+Suppose we consider a proposed population mean $\mu_0$.
+
+$$\mu_0\text{ lies outside }[\overline X-cS/\sqrt n,\overline X+cS/\sqrt n]$$
+
+if and only if
+
+$$\left|\frac{\overline X-\mu_0}{S/\sqrt n}\right|>c.$$
+
+With $c=\texttt{qt}(.975,n-1)$, this is also the rejection rule for the corresponding two-sided $t$ test at level .05.
+
+If the proposed value is inside the interval, that does not establish that it is true. PSD §8.3 develops the testing framework.

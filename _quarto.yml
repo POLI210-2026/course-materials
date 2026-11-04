@@ -47,6 +47,11 @@ project:
     - lectures/09-data-visualization/data-visualization-demo.qmd
     - lectures/09-data-visualization/data-visualization-demo.html
     - lectures/09-data-visualization/seminar9-demo.zip
+    - lectures/10-confidence-intervals/confidence-intervals-slides.html
+    - lectures/10-confidence-intervals/confidence-intervals-slides.pdf
+    - lectures/10-confidence-intervals/confidence-intervals-demo.qmd
+    - lectures/10-confidence-intervals/confidence-intervals-demo.html
+    - lectures/10-confidence-intervals/seminar10-demo.zip
 
 website:
   title: "POLI 210"

@@ -1,0 +1,499 @@
+---
+title: "Confidence intervals: seminar demonstration"
+subtitle: "POLI 210 - Seminar 10"
+author: "Brad LeVeck"
+date: "2026-11-04"
+date-format: "MMMM D, YYYY"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    code-fold: false
+    code-tools: true
+execute:
+  warning: false
+  message: false
+  cache: false
+fig-width: 9
+fig-height: 4.5
+fig-dpi: 160
+---
+
+This document runs on its own: it needs no downloaded data or helper files.
+Open it in RStudio and run the chunks in order, or use **Render** to run the
+whole document in a fresh session. The simulations use invented data with
+known population parameters so that we can check whether an interval covers
+its target. The turnout example uses rounded published summaries.
+
+## 0. Setup
+
+The calculations use base R. The graphs use `ggplot2`, and a few summaries
+use `dplyr`, both familiar from the last two seminars.
+
+```{r}
+# Install once if needed, in the Console:
+# install.packages(c("ggplot2", "dplyr"))
+library(ggplot2)
+library(dplyr)
+
+ci_colors <- c("Contains mu" = "#005a8b", "Misses mu" = "#b34b12")
+theme_set(theme_minimal(base_size = 14))
+```
+
+## 1. From the turnout difference to an interval
+
+The Neighbors mailing group had reported turnout of 37.8%; the Civic Duty
+group had 31.5%. These are the rounded figures used in Blackwell's lecture
+from Gerber, Green, and Larimer (2008). A turnout indicator is 1 for a voter
+and 0 otherwise, so its sample mean is the turnout proportion.
+
+For two **independent** samples, estimate the SE of their mean difference by
+
+$$\widehat{\operatorname{SE}}(\widehat D)
+=\sqrt{S_Y^2/n_Y+S_X^2/n_X}.$$
+
+Here we use the plug-in Bernoulli variance $\hat p(1-\hat p)$ with the
+rounded proportions. Using sample variances instead would multiply each
+variance by $n/(n-1)$, a negligible difference for these group sizes.
+
+```{r}
+p_neigh <- .378
+n_neigh <- 38201
+p_civic <- .315
+n_civic <- 38218
+
+estimate <- p_neigh - p_civic
+se_diff <- sqrt(p_neigh * (1 - p_neigh) / n_neigh +
+                p_civic * (1 - p_civic) / n_civic)
+critical <- qnorm(.975)
+turnout_ci <- estimate + c(-1, 1) * critical * se_diff
+
+data.frame(estimate_pp = 100 * estimate,
+           se_pp = 100 * se_diff,
+           lower_pp = 100 * turnout_ci[1],
+           upper_pp = 100 * turnout_ci[2])
+```
+
+Multiplying by 100 changes proportions into **percentage points**.
+
+**Design qualification:** this is a classroom independent-samples
+calculation, not a reproduction of the paper's uncertainty estimates. The
+original treatment was assigned to households, so inference for that study
+must respect household assignment and dependence. A formula alone does not
+establish that its assumptions fit a study.
+
+## 2. Simulate a single interval
+
+Let $X_1,\ldots,X_n$ be independent draws from $N(1,10)$, where 10 is the
+**variance**. R's `rnorm()` asks for the standard deviation, `sqrt(10)`.
+
+```{r}
+set.seed(2143)
+mu <- 1
+sigma <- sqrt(10)
+n <- 500
+x <- rnorm(n, mean = mu, sd = sigma)
+
+estimate <- mean(x)
+se <- sd(x) / sqrt(n)
+critical <- qnorm(.975)
+lower <- estimate - critical * se
+upper <- estimate + critical * se
+
+data.frame(estimate, se, lower, upper,
+           covers = lower <= mu & mu <= upper)
+```
+
+The parameter `mu` stays fixed. Drawing another sample changes `mean(x)`,
+`sd(x)`, and the two endpoints. The Normal cutoff is an approximation here
+because we estimated the population SD. At $n=500$ it works very well.
+
+## 3. Repeat the sampling process and measure coverage
+
+`n` counts observations **within** each sample; `B` counts independent
+**repetitions** of the whole experiment. We reset the seed so that the first
+sample below is the same one as in Section 2.
+
+```{r}
+set.seed(2143)
+mu <- 1
+sigma <- sqrt(10)
+n <- 500
+B <- 10000
+critical <- qnorm(.975)
+
+ci <- data.frame(trial = seq_len(B),
+                 estimate = rep(NA_real_, B),
+                 se = rep(NA_real_, B),
+                 lower = rep(NA_real_, B),
+                 upper = rep(NA_real_, B))
+
+for (i in seq_len(B)) {
+  x <- rnorm(n, mean = mu, sd = sigma)
+  ci$estimate[i] <- mean(x)
+  ci$se[i] <- sd(x) / sqrt(n)
+  ci$lower[i] <- ci$estimate[i] - critical * ci$se[i]
+  ci$upper[i] <- ci$estimate[i] + critical * ci$se[i]
+}
+
+ci <- ci |>
+  mutate(covers = lower <= mu & mu <= upper,
+         result = if_else(covers, "Contains mu", "Misses mu"))
+
+ci |>
+  summarise(repetitions = n(),
+            coverage = mean(covers),
+            average_width = mean(upper - lower))
+```
+
+`mean(covers)` treats `TRUE` as 1 and `FALSE` as 0. It estimates
+$P(L\leq\mu\leq U)$, the procedure's coverage probability.
+
+### Plot the first 100 intervals
+
+Each vertical segment comes from a different sample. The horizontal line
+marks the same population mean in every repetition.
+
+```{r}
+first100 <- ci |> slice_head(n = 100)
+
+ggplot(first100, aes(x = trial, y = estimate, color = result)) +
+  geom_hline(yintercept = mu, color = "#172d42") +
+  geom_linerange(aes(ymin = lower, ymax = upper), linewidth = .7) +
+  geom_point(size = 1.1) +
+  scale_color_manual(values = ci_colors) +
+  labs(x = "Independent sample / interval", y = "Mean and 95% interval",
+       color = NULL,
+       subtitle = paste(sum(first100$covers), "of these 100 intervals contain mu")) +
+  theme(legend.position = "top")
+```
+
+We should not expect exactly 95 covering intervals in every batch of 100.
+The simulation also has sampling error. The SE of our estimated coverage
+is approximately
+
+$$\sqrt{\widehat p(1-\widehat p)/B}.$$
+
+```{r}
+coverage <- mean(ci$covers)
+mcse <- sqrt(coverage * (1 - coverage) / B)
+c(coverage = coverage, Monte_Carlo_SE = mcse)
+```
+
+Increasing `B` measures coverage more precisely. It does not narrow any
+individual study's confidence interval. Increasing `n` changes the study's
+information and, typically, its interval width.
+
+## 4. Change the confidence level while holding the sample fixed
+
+For a two-sided interval, split $\alpha$ equally between the two tails.
+The positive Normal cutoff has probability $1-\alpha/2$ to its left.
+
+```{r}
+levels <- c(.90, .95, .99)
+widths <- data.frame(level = levels,
+                     estimate = ci$estimate[1],
+                     se = ci$se[1]) |>
+  mutate(alpha = 1 - level,
+         critical = qnorm(1 - alpha / 2),
+         lower = estimate - critical * se,
+         upper = estimate + critical * se,
+         width = upper - lower)
+widths
+
+ggplot(widths, aes(y = factor(level), x = estimate)) +
+  geom_segment(aes(x = lower, xend = upper, yend = factor(level)),
+               linewidth = 1.6, color = "#005a8b") +
+  geom_point(size = 3) +
+  labs(x = "Same sample mean and estimated SE", y = "Confidence level")
+```
+
+**Try:** add `.80` to `levels` and rerun this chunk. Predict how its width
+will compare before looking at the graph.
+
+For a fixed critical value and population SD, the theoretical margin
+of error shrinks at rate $1/\sqrt n$:
+
+```{r}
+data.frame(n = c(25, 100, 400)) |>
+  mutate(SE = sqrt(10) / sqrt(n),
+         margin = qnorm(.975) * SE)
+```
+
+This last calculation holds the **population** SD fixed; in a real sample,
+the estimated SD also varies. More data cannot repair a biased sampling
+process merely by producing a smaller SE.
+
+## 5. One statistic, two justifications
+
+Our main argument allows us to estimate the SE. For iid observations with
+finite, positive variance,
+
+$$T_n=\frac{\overline X-\mu}{S/\sqrt n}
+=\frac{\sigma}{S}\frac{\sqrt n(\overline X-\mu)}{\sigma}
+\xrightarrow{d}N(0,1).$$
+
+The CLT gives the Normal limit for the second factor. Consistency of the
+sample SD makes the first approach 1. The observations themselves need not
+be Normal. This justifies large-sample intervals using an estimated SE.
+
+If we additionally assume iid **Normal** observations, this same statistic
+has exactly a $t_{n-1}$ distribution. A $t$ cutoff then supplies exact
+finite-sample coverage. We use that special case in the calculation below.
+
+PSD writes $t_{\alpha/2}$ for the **positive upper-tail cutoff**. R uses
+left-tail probabilities by default: `qt(1 - alpha/2, df = n - 1)`.
+
+```{r}
+set.seed(210)
+x <- rnorm(10, mean = 1, sd = sqrt(10))
+n <- length(x)
+level <- .95
+alpha <- 1 - level
+
+se <- sd(x) / sqrt(n)
+critical <- qt(1 - alpha / 2, df = n - 1)
+manual_ci <- mean(x) + c(-1, 1) * critical * se
+manual_ci
+
+# Same positive cutoff, written using the upper tail:
+qt(alpha / 2, df = n - 1, lower.tail = FALSE)
+
+# Extract just the confidence interval from t.test's output:
+automatic_ci <- t.test(x, conf.level = level)$conf.int
+automatic_ci
+all.equal(as.numeric(automatic_ci), as.numeric(manual_ci))
+```
+
+`$conf.int` selects the interval component of the result. The remaining
+`t.test()` output concerns hypothesis testing, which we will develop
+separately. The interval concerns the unknown **population mean**; the
+sample mean is the number already calculated by `mean(x)`.
+
+### Compare the two reference distributions
+
+```{r}
+grid <- data.frame(z = seq(-4, 4, length.out = 1001)) |>
+  mutate(normal_density = dnorm(z), t_density = dt(z, df = 9))
+
+ggplot(grid, aes(x = z)) +
+  geom_line(aes(y = normal_density, color = "Standard Normal"), linewidth = 1) +
+  geom_line(aes(y = t_density, color = "t, 9 df"), linewidth = 1, linetype = 2) +
+  scale_color_manual(values = c("Standard Normal" = "#005a8b", "t, 9 df" = "#b34b12")) +
+  labs(x = "Standardized sample mean", y = "Density", color = NULL) +
+  theme(legend.position = "top")
+
+c(Normal_cutoff = qnorm(.975), t_cutoff = qt(.975, df = 9))
+```
+
+## 6. Why a t cutoff also works asymptotically
+
+For a fixed confidence level, the $t$ critical value approaches the Normal
+critical value as its degrees of freedom increase:
+
+```{r}
+cutoff_comparison <- data.frame(n = c(10, 30, 100, 500)) |>
+  mutate(t_cutoff = qt(.975, df = n - 1),
+         normal_cutoff = qnorm(.975))
+cutoff_comparison
+```
+
+Consequently, under the broad conditions in Section 5, either cutoff gives
+asymptotically correct coverage. Choosing a $t$ cutoff does not require us
+to claim an exact $t$ distribution for our statistic. In small non-Normal
+samples, its larger cutoff still does not guarantee 95% coverage.
+
+### Check the Normal benchmark
+
+The following function compares the two intervals on the **same samples**.
+It uses a known Normal population so that the special exact $t$ result
+holds. All population parameters are defined inside the function.
+
+```{r}
+compare_normal <- function(n, B = 10000) {
+  mu <- 1
+  sigma <- sqrt(10)
+  zcrit <- qnorm(.975)
+  tcrit <- qt(.975, df = n - 1)
+
+  stats <- replicate(B, {
+    x <- rnorm(n, mean = mu, sd = sigma)
+    c(estimate = mean(x), se = sd(x) / sqrt(n))
+  })
+  z_covers <- abs(stats["estimate", ] - mu) <= zcrit * stats["se", ]
+  t_covers <- abs(stats["estimate", ] - mu) <= tcrit * stats["se", ]
+
+  data.frame(n = n, cutoff = c("Normal", "t"),
+             critical = c(zcrit, tcrit),
+             simulated_coverage = c(mean(z_covers), mean(t_covers)),
+             theoretical_coverage = c(2 * pt(zcrit, df = n - 1) - 1, .95))
+}
+
+set.seed(2110)
+normal_results <- bind_rows(compare_normal(10), compare_normal(500))
+normal_results
+```
+
+`replicate()` returns a matrix with one column per repetition. The named
+rows keep track of each repetition's estimate and SE. The theoretical
+Normal-cutoff coverage uses the *actual* $t$ distribution of the statistic:
+$P(-1.96\leq T_{n-1}\leq1.96)$, using the unrounded cutoff in the code.
+
+Under this Normal model, at $n=10$ the Normal cutoff gives an interval that
+is too narrow too often. At $n=500$, the two critical values and their
+coverage are very close. We now check how that conclusion changes with
+population shape.
+
+## 7. Check robustness to a skewed population
+
+We now keep the population mean and variance at 1 but change its shape.
+A Normal population satisfies the exact $t$ result. An Exponential
+population is strongly right-skewed; its $t$ interval is only approximate.
+
+```{r}
+coverage_t <- function(n, population, B = 10000) {
+  mu <- 1
+  critical <- qt(.975, df = n - 1)
+  covers <- replicate(B, {
+    x <- if (population == "Normal") rnorm(n, 1, 1) else rexp(n, rate = 1)
+    margin <- critical * sd(x) / sqrt(n)
+    mean(x) - margin <= mu && mu <= mean(x) + margin
+  })
+  p <- mean(covers)
+  c(coverage = p, mcse = sqrt(p * (1 - p) / B))
+}
+
+set.seed(2111)
+robustness <- expand.grid(n = c(10, 30, 100, 500),
+                          population = c("Normal", "Exponential"),
+                          stringsAsFactors = FALSE)
+robustness$coverage <- NA_real_
+robustness$mcse <- NA_real_
+for (i in seq_len(nrow(robustness))) {
+  result <- coverage_t(robustness$n[i], robustness$population[i])
+  robustness$coverage[i] <- result["coverage"]
+  robustness$mcse[i] <- result["mcse"]
+}
+robustness
+
+ggplot(robustness, aes(n, coverage, color = population, linetype = population)) +
+  geom_hline(yintercept = .95, linetype = 3) +
+  geom_line(linewidth = .8) +
+  geom_errorbar(aes(ymin = coverage - 2 * mcse, ymax = coverage + 2 * mcse),
+                width = .03) +
+  geom_point(size = 2.5) +
+  scale_x_log10(breaks = c(10, 30, 100, 500)) +
+  scale_color_manual(values = c("Exponential" = "#b34b12", "Normal" = "#005a8b")) +
+  labs(x = "Observations per sample (log scale)", y = "Simulated coverage",
+       color = "Population", linetype = "Population") +
+  theme(legend.position = "top")
+```
+
+The whiskers here describe **Monte Carlo uncertainty in estimated coverage**,
+not uncertainty in the mean from any single study. Distinguish two questions:
+
+1. How close are the $t$ and Normal critical values?
+2. How well does either reference distribution approximate the actual statistic?
+
+The first can be excellent while the second is still poor. The Exponential
+population meets our broad asymptotic conditions, but its finite-sample
+coverage can fall below 95%. There is no universal sample-size cutoff that
+guarantees a good approximation.
+
+## Optional: 100 ratings are not 100 independent voters
+
+Imagine 20 independently sampled voters, each rating a candidate five
+times. A voter's ratings share a personal underlying evaluation. We use an
+unbounded Normal model for these hypothetical scores to keep the dependence
+example transparent.
+
+```{r}
+set.seed(2112)
+mu <- 50
+people <- 20
+repeats <- 5
+person_mean <- rnorm(people, mean = mu, sd = 10)
+ratings <- data.frame(
+  voter = rep(seq_len(people), each = repeats),
+  rating = rnorm(people * repeats, mean = rep(person_mean, each = repeats), sd = 5)
+)
+
+voter_means <- ratings |>
+  group_by(voter) |>
+  summarise(rating = mean(rating), .groups = "drop")
+
+naive <- t.test(ratings$rating)$conf.int
+by_voter <- t.test(voter_means$rating)$conf.int
+data.frame(method = c("Treat all 100 rows as independent", "Use 20 voter means"),
+           lower = c(naive[1], by_voter[1]),
+           upper = c(naive[2], by_voter[2]))
+```
+
+With equally many observations per voter, averaging the 20 voter means and
+averaging all 100 ratings give the same point estimate. Their SEs differ.
+
+```{r}
+set.seed(2113)
+B <- 5000
+panel_coverage <- replicate(B, {
+  person_mean <- rnorm(20, mean = 50, sd = 10)
+  ratings <- matrix(rnorm(100, mean = rep(person_mean, each = 5), sd = 5),
+                    nrow = 5, ncol = 20)
+  # Each column contains one voter's five ratings.
+  voter_means <- colMeans(ratings)
+  raw_ratings <- as.vector(ratings)
+  naive_margin <- qt(.975, 99) * sd(raw_ratings) / sqrt(100)
+  voter_margin <- qt(.975, 19) * sd(voter_means) / sqrt(20)
+  c(naive = abs(mean(raw_ratings) - 50) <= naive_margin,
+    voter_means = abs(mean(voter_means) - 50) <= voter_margin)
+})
+rowMeans(panel_coverage)
+```
+
+This model gives independent Normal voter means, so a $t$ interval on those
+means has exact coverage. Averaging within people is appropriate here
+because the design is balanced and the target is the mean across voters;
+it is not a universal solution for every form of clustered or time-series data.
+
+## Optional: one-sided bounds and the test connection
+
+A lower confidence bound puts the entire error probability in one tail.
+Its positive cutoff is `qt(.95, df)` rather than `qt(.975, df)`.
+
+```{r}
+set.seed(210)
+x <- rnorm(10, mean = 1, sd = sqrt(10))
+n <- length(x)
+lower_bound <- mean(x) - qt(.95, n - 1) * sd(x) / sqrt(n)
+lower_bound
+t.test(x, alternative = "greater", conf.level = .95)$conf.int
+```
+
+For the corresponding two-sided test, a proposed mean $\mu_0$ falls
+outside the 95% interval exactly when its standardized distance exceeds
+the two-sided critical value.
+
+```{r}
+mu0 <- 0
+se <- sd(x) / sqrt(n)
+ci95 <- mean(x) + c(-1, 1) * qt(.975, n - 1) * se
+outside <- mu0 < ci95[1] || mu0 > ci95[2]
+beyond_cutoff <- abs((mean(x) - mu0) / se) > qt(.975, n - 1)
+c(outside_interval = outside, beyond_test_cutoff = beyond_cutoff)
+```
+
+Choose one-sided versus two-sided inference before examining the result.
+A value's presence inside the interval does not prove it is the true mean.
+PSD §§8.3–8.4 develop the testing framework; the core demonstration above
+only needs confidence intervals and coverage.
+
+## Sources
+
+The main sequence and Normal coverage experiment adapt Matthew Blackwell's
+*Gov 2000: Estimation and Statistical Inference*, Section 3, pp. 32–49,
+with permission. The $t$ interval and robustness comparisons connect to
+[*Probability, Statistics, and Data*, §§8.1–8.5](https://probstatsdata.com/HTCI.html).
+The turnout summaries come from Gerber, Green, and Larimer (2008),
+“Social Pressure and Voter Turnout: Evidence from a Large-Scale Field
+Experiment,” *American Political Science Review*, 102(1), 33–48.

@@ -1,0 +1,54 @@
+---
+title: "Meeting 10: Standard errors and confidence intervals"
+subtitle: "November 4, 2026 · 1:30-4:20 p.m. · COB1 205"
+---
+
+## Before class
+
+Read Speegle and Clair, *Probability, Statistics, and Data*,
+[§§8.1–8.5](https://probstatsdata.com/HTCI.html#samplingdistmean).
+We focus on confidence intervals in §§8.1–8.2 and the assumptions discussed
+in §8.5. Hypothesis tests and one-sided inference receive a fuller treatment
+in the next seminar. Bring your laptop. **B4 is due at 1:30 p.m.**
+
+## Lecture materials
+
+- [Open the lecture slides](../../lectures/10-confidence-intervals/confidence-intervals-slides.html)
+- [Download the slide PDF](../../lectures/10-confidence-intervals/confidence-intervals-slides.pdf)
+- [Download the runnable demo bundle (ZIP)](../../lectures/10-confidence-intervals/seminar10-demo.zip){download="seminar10-demo.zip"}
+- [Read the demonstration with its output](../../lectures/10-confidence-intervals/confidence-intervals-demo.html)
+- [Download the demonstration QMD](../../lectures/10-confidence-intervals/confidence-intervals-demo.qmd){download="confidence-intervals-demo.qmd"}
+- [Editable sources and build instructions](https://github.com/POLI210-2026/course-materials/tree/main/lectures/10-confidence-intervals)
+
+Use arrow keys to navigate the browser slides. The PDF is a printable,
+offline copy. The demo HTML shows saved code and results; it does not run R
+in your browser.
+
+Download and extract the ZIP, open `poli210-seminar10.Rproj` in RStudio,
+then open `confidence-intervals-demo.qmd`. Follow its package setup instructions
+and run chunks from the top. The demo QMD also works on its own: no external
+data or helper scripts are needed.
+
+## During the seminar
+
+A difference in turnout motivates the move from point estimates to intervals.
+We derive interval endpoints from a standardized statistic, then use repeated
+samples to see coverage: the intervals vary while the population parameter
+stays fixed. Confidence levels, standard errors, and sample size determine
+interval width.
+
+The studentized CLT supplies the general large-sample argument. The exact
+$t$ result for Normal observations is an additional special case. We compare
+$t$ and Normal cutoffs and examine how skewness and dependence can change
+actual coverage. The final examples connect intervals to plotted error bars.
+
+## After class
+
+Complete **A6**, due **Wednesday, November 18, at 1:30 p.m. Pacific**,
+in your private assignment repository. It develops PSD **8.12, 8.7, and 8.22**:
+interval calculations, speed-of-light measurements, and a supplied simulation
+comparing repeated responses with independently sampled people.
+
+Commit and push your answers R file, QMD, and newly rendered HTML.
+See [Assignments](../../assignments.qmd) for the submission workflow.
+**There is no seminar on November 11 (Veterans Day).**

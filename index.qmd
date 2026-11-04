@@ -12,15 +12,16 @@ part of statistical reasoning: shared work is written in Quarto, managed with
 Git, and checked through GitHub.
 :::
 
-::: {.callout-important title="Seminar 9: Data visualization with ggplot2"}
-**Wednesday, October 28, 1:30-4:20 p.m.**
+::: {.callout-important title="Seminar 10: Confidence intervals"}
+**Wednesday, November 4, 1:30-4:20 p.m.**
 
 Classroom and Office Building 1, Room 205
 
-Read **Speegle and Clair, Chapter 7** and bring your laptop.
-A5 is due at 1:30 p.m. See the [meeting page](meetings/09-data-visualization/index.qmd)
-for lecture slides and the complete Quarto demo bundle, including its data.
-B4 will be released separately after the seminar.
+Read **Speegle and Clair, §§8.1–8.5** and bring your laptop.
+B4 is due at 1:30 p.m. See the [meeting page](meetings/10-confidence-intervals/index.qmd)
+for lecture slides, the printable slide PDF, and the runnable Quarto demonstration.
+**A6 is due November 18 at 1:30 p.m.** through your private assignment repository.
+There is no seminar on November 11 (Veterans Day).
 :::
 
 ## Quick links

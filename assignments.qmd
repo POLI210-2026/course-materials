@@ -42,6 +42,21 @@ All assignments are due at **1:30 p.m.**
 | **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
 
+## A6: standard errors and confidence intervals
+
+**Due November 18 at 1:30 p.m. Pacific.** A6 develops PSD Exercises
+**8.12, 8.7, and 8.22** with guided interval calculations and a supplied
+simulation of repeated measurements. See the
+[Seminar 10 materials](meetings/10-confidence-intervals/index.qmd) for examples.
+
+Accept the invitation to your private A6 repository and clone it as a new
+RStudio project. Complete `R/a6_answers.R` for Parts 1 and 2, run the supplied
+simulation in Part 3, and write the five short responses in the QMD.
+No data downloads are needed. Save, run `Rscript checks/check-a6.R`, then
+render and read your report. Commit and push **the answers R file, QMD,
+and current HTML**, then inspect the latest GitHub Actions run. Checks
+provide feedback on calculations and completion, not a grade for your reasoning.
+
 ## A5: data wrangling with dplyr
 
 **Due October 28 at 1:30 p.m. Pacific.** A5 develops PSD Exercises **6.3(a, c,
