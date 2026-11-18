@@ -52,6 +52,11 @@ project:
     - lectures/10-confidence-intervals/confidence-intervals-demo.qmd
     - lectures/10-confidence-intervals/confidence-intervals-demo.html
     - lectures/10-confidence-intervals/seminar10-demo.zip
+    - lectures/11-hypothesis-testing/hypothesis-testing-slides.html
+    - lectures/11-hypothesis-testing/hypothesis-testing-slides.pdf
+    - lectures/11-hypothesis-testing/hypothesis-testing-demo.qmd
+    - lectures/11-hypothesis-testing/hypothesis-testing-demo.html
+    - lectures/11-hypothesis-testing/seminar11-demo.zip
 
 website:
   title: "POLI 210"

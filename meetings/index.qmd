@@ -23,7 +23,7 @@ will be added as the semester progresses.
 | **9** | Oct. 28 | [Visualization and descriptive statistics](09-data-visualization/index.qmd). **PSD Ch. 7.** |
 | **10** | Nov. 4 | [Standard errors and confidence intervals](10-confidence-intervals/index.qmd). **PSD §§8.1–8.5**, with emphasis on intervals and assumptions. |
 |  -  | Nov. 11 | **No class  -  Veterans Day.** |
-| **11** | Nov. 18 | Hypothesis tests, two-sample comparisons, power, and resampling. **PSD Ch. 8.** |
+| **11** | Nov. 18 | [Hypothesis tests, two-sample comparisons, power, and resampling](11-hypothesis-testing/index.qmd). **PSD §§8.3–8.4 and 8.6–8.8.** |
 |  -  | Nov. 25 | **No class  -  Thanksgiving week.** |
 | **12** | Dec. 2 | Simple linear regression: fitting, interpretation, and inference. **PSD Ch. 11.** |
 | **13** | Dec. 9 | Regression diagnostics, prediction, causal interpretation, and synthesis. **PSD Ch. 11.** |

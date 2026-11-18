@@ -1,0 +1,13 @@
+<script>
+// Recalculate MathJax 2 accent positions after the presentation fonts load.
+// This prevents detached bars/hats on the first few equations in a fresh tab.
+window.addEventListener("load", function () {
+  document.fonts.ready.then(function () {
+    if (window.MathJax && window.MathJax.Hub) {
+      MathJax.Hub.Queue(["Rerender", MathJax.Hub], function () {
+        if (window.Reveal) Reveal.layout();
+      });
+    }
+  });
+});
+</script>

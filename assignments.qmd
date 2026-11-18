@@ -39,8 +39,26 @@ All assignments are due at **1:30 p.m.**
 | **A5** | Data wrangling with `dplyr` | Oct. 28 |
 | **B4** | Political-data visualization and descriptive analysis | Nov. 4 |
 | **A6** | Standard errors and confidence intervals | Nov. 18 |
-| **A7** | Hypothesis testing, power, and resampling | Dec. 2 |
+| **A7** | Hypothesis tests, paired comparisons, and power | Dec. 2 |
 | **B5** | Simple regression with political data | Dec. 9 |
+
+## A7: hypothesis tests, paired comparisons, and power
+
+**Due December 2 at 1:30 p.m. Pacific.** A7 develops PSD Exercises
+**8.18, 8.36, 8.39, and 8.46** in three parts worth **100 points**.
+You will calibrate rejection rules, compare independent groups and paired
+observations, and calculate power. For 8.39, run the paired test both with
+`paired = TRUE` and as a one-sample test of within-child differences.
+See the [Seminar 11 materials](meetings/11-hypothesis-testing/index.qmd)
+for examples.
+
+Accept the invitation to your private A7 repository and clone it as a new
+RStudio project. Complete `R/a7_answers.R`, add your name and six brief
+written responses in the QMD, then run `Rscript checks/check-a7.R`.
+The data and formatting helpers are supplied; no data downloads are needed.
+Render and read your report. Commit and push **the answers R file, QMD,
+and current HTML**, then inspect the latest GitHub Actions run. Automated
+checks provide feedback on calculations and completion, not a grade for reasoning.
 
 ## A6: standard errors and confidence intervals
 

@@ -12,16 +12,16 @@ part of statistical reasoning: shared work is written in Quarto, managed with
 Git, and checked through GitHub.
 :::
 
-::: {.callout-important title="Seminar 10: Confidence intervals"}
-**Wednesday, November 4, 1:30-4:20 p.m.**
+::: {.callout-important title="Seminar 11: Hypothesis testing"}
+**Wednesday, November 18, 1:30-4:20 p.m.**
 
 Classroom and Office Building 1, Room 205
 
-Read **Speegle and Clair, §§8.1–8.5** and bring your laptop.
-B4 is due at 1:30 p.m. See the [meeting page](meetings/10-confidence-intervals/index.qmd)
+Read **Speegle and Clair, §§8.3–8.4 and 8.6–8.8** and bring your laptop.
+A6 is due at 1:30 p.m. See the [meeting page](meetings/11-hypothesis-testing/index.qmd)
 for lecture slides, the printable slide PDF, and the runnable Quarto demonstration.
-**A6 is due November 18 at 1:30 p.m.** through your private assignment repository.
-There is no seminar on November 11 (Veterans Day).
+**A7 is due December 2 at 1:30 p.m.** through your private assignment repository.
+There is no seminar on November 25 (Thanksgiving week).
 :::
 
 ## Quick links

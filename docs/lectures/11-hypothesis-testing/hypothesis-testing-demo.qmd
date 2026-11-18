@@ -1,0 +1,453 @@
+---
+title: "Hypothesis testing: demonstration"
+subtitle: "POLI 210 — Seminar 11"
+author: "Brad LeVeck"
+date: "2026-11-18"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    code-fold: false
+execute:
+  warning: false
+  message: false
+  cache: false
+fig-width: 9
+fig-height: 4
+fig-dpi: 150
+---
+
+# Start here
+
+Open this file in RStudio. Run the setup first, then the sections in order.
+To reproduce everything from scratch, restart R and **Run All** or **Render**.
+All data below are simulated teaching examples; no downloads are required.
+The household example illustrates a design feature of Gerber, Green, and
+Larimer (2008), **not a replication of their results**.
+
+```{r}
+#| label: setup
+library(ggplot2)
+library(dplyr)
+theme_set(theme_minimal(base_size = 14))
+blue <- "#006D9C"
+orange <- "#BA4A27"
+B <- 4000
+```
+
+# 1. A null model we can count
+
+Eight cups: four milk-first, four tea-first. The taster selects exactly four
+as milk-first. Let $K$ be the number of actual milk-first cups in that selection.
+Under random guessing, every set of four is equally likely.
+
+$$P_0(K=k)=\frac{\binom{4}{k}\binom{4}{4-k}}{\binom{8}{4}}.$$
+
+```{r}
+#| label: tea-exact
+tea <- data.frame(k = 0:4)
+tea$prob <- choose(4, tea$k) * choose(4, 4 - tea$k) / choose(8, 4)
+tea
+sum(tea$prob)
+p_tea <- sum(tea$prob[tea$k >= 4])
+p_tea
+```
+
+This is an **upper-tail** test: successful discrimination gives large $K$.
+With perfect performance, $p=1/70$. If $K=3$, the tail includes both 3 and 4,
+so $p=17/70$, not merely $P_0(K=3)$.
+
+```{r}
+#| label: tea-simulate
+set.seed(21101)
+cups <- c(rep("milk-first", 4), rep("tea-first", 4))
+k_sim <- replicate(10000, {
+  selected <- sample(cups, size = 4, replace = FALSE)
+  sum(selected == "milk-first")
+})
+mean(k_sim >= 4)
+
+p_tea_plot <- ggplot(tea, aes(k, prob)) +
+  geom_col(fill = blue, width = .65) +
+  scale_x_continuous(breaks = 0:4) +
+  labs(x = "K: milk-first cups correctly selected", y = "Null probability")
+p_tea_plot
+```
+
+# 2. One sample: statistic, p-value, and confidence interval
+
+Suppose a political attitude score has population mean $\mu$. Test
+$H_0:\mu=50$ against $H_A:\mu\ne50$. The simulation below deliberately uses
+independent Normal observations, so the one-sample t reference is exact.
+In other settings, the studentized CLT can justify approximate inference.
+
+```{r}
+#| label: one-sample
+set.seed(21102)
+score <- rnorm(50, mean = 54, sd = 12)
+n <- length(score)
+se <- sd(score) / sqrt(n)
+t_obs <- (mean(score) - 50) / se
+p_manual <- 2 * pt(-abs(t_obs), df = n - 1)
+ci_manual <- mean(score) + c(-1, 1) * qt(.975, df = n - 1) * se
+one_fit <- t.test(score, mu = 50)
+
+c(mean = mean(score), SE = se, t = t_obs, p = p_manual)
+ci_manual
+one_fit
+```
+
+The two-sided p-value counts both tails beyond $\pm|t_{obs}|$.
+Does the 95% interval contain 50? Does the test reject at $\alpha=.05$?
+These decisions agree when we use the same SE, reference distribution, and
+confidence level. A one-sided alternative would need to be chosen **before**
+seeing the direction of the result; `alternative = "greater"` tests $\mu>50$.
+
+```{r}
+#| label: p-value-plot
+ref <- data.frame(t = seq(-5, 5, length.out = 2001))
+ref$density <- dt(ref$t, df = n - 1)
+p_pvalue <- ggplot(ref, aes(t, density)) +
+  geom_area(data = subset(ref, t <= -abs(t_obs)), fill = orange, alpha = .6) +
+  geom_area(data = subset(ref, t >= abs(t_obs)), fill = orange, alpha = .6) +
+  geom_line(color = blue, linewidth = 1) +
+  geom_vline(xintercept = c(-abs(t_obs), abs(t_obs)), linetype = 2) +
+  labs(x = "Test statistic under H0", y = "Density",
+       subtitle = sprintf("Shaded null probability = %.4f", p_manual))
+p_pvalue
+```
+
+# 3. Two independent samples: Welch's test
+
+Compare independent samples from two populations of attitude scores.
+Define the contrast as **Y minus X**. Unequal sample sizes and variances are
+allowed. These synthetic samples do not by themselves establish a causal effect.
+
+```{r}
+#| label: welch
+set.seed(21103)
+x <- rnorm(30, mean = 50, sd = 10)
+y <- rnorm(45, mean = 56, sd = 16)
+d_hat <- mean(y) - mean(x)
+se_diff <- sqrt(var(y) / length(y) + var(x) / length(x))
+welch_fit <- t.test(y, x, mu = 0)
+
+c(difference = d_hat, SE = se_diff, statistic = d_hat / se_diff)
+welch_fit
+```
+
+R's default is Welch's method (`var.equal = FALSE`). It uses a t reference
+with approximate degrees of freedom. It does **not** require equal population
+variances, but it still needs the observations and the groups to be independent
+for this SE formula. It does not solve dependence or confounding.
+
+# 4. Paired observations: analyze the differences
+
+The same 20 respondents answer before and after a debate. A respondent's
+baseline attitude appears in both measurements. Responses within a person
+are related; the **people** are independent in this simulation.
+
+```{r}
+#| label: paired
+set.seed(21104)
+before <- rnorm(20, mean = 50, sd = 12)
+after <- before + rnorm(20, mean = 3, sd = 5)
+change <- after - before
+paired_fit <- t.test(after, before, paired = TRUE)
+change_fit <- t.test(change, mu = 0)
+paired_fit
+change_fit
+c(paired_SE = sd(change) / sqrt(length(change)),
+  ignoring_pairs_SE = sqrt(var(after) / length(after) +
+                             var(before) / length(before)))
+```
+
+Here pairing reduces the SE because the before/after covariance is positive.
+That is a property of these data, not a guarantee for every pair of variables.
+A before/after comparison alone does not isolate the debate's causal effect.
+
+```{r}
+#| label: paired-plot
+paired_data <- data.frame(id = rep(1:20, 2),
+                          time = factor(rep(c("Before", "After"), each = 20),
+                                        levels = c("Before", "After")),
+                          score = c(before, after))
+p_pairs <- ggplot(paired_data, aes(time, score, group = id)) +
+  geom_line(color = blue, alpha = .5) + geom_point(color = blue) +
+  labs(x = NULL, y = "Attitude score", subtitle = "One line connects one respondent's two answers")
+p_pairs
+```
+
+# 5. Power: repeat an entire study
+
+Imagine two independent groups of attitude scores with a common population
+SD of 10. Let $\delta=\mu_Y-\mu_X$ be the true difference and let `n_group`
+be the sample size **in each group**. We simulate the same Welch test we would
+use to analyze a study. Record whether each fresh study rejects $H_0:\delta=0$.
+
+```{r}
+#| label: power-function
+reject_once <- function(n_group, delta, sigma = 10, alpha = .05) {
+  x_new <- rnorm(n_group, mean = 50, sd = sigma)
+  y_new <- rnorm(n_group, mean = 50 + delta, sd = sigma)
+  t.test(y_new, x_new)$p.value < alpha
+}
+
+set.seed(21105)
+power_grid <- expand.grid(n_group = c(30, 60, 120), delta = c(0, 3, 6))
+power_grid$rejection_rate <- vapply(seq_len(nrow(power_grid)), function(i) {
+  mean(replicate(B, reject_once(power_grid$n_group[i], power_grid$delta[i])))
+}, numeric(1))
+power_grid$MCSE <- sqrt(power_grid$rejection_rate *
+                         (1 - power_grid$rejection_rate) / B)
+power_grid
+```
+
+At $\delta=0$, the rejection rate estimates the Type I error rate. At a
+specified nonzero $\delta$, it estimates power. More simulated repetitions
+reduce **Monte Carlo error**; more subjects per group change the study's power.
+
+## A Normal approximation for the graph
+
+For these planning assumptions, the population SE of the difference is
+$s=10\sqrt{2/n}$. Approximate its sampling distribution by $N(\delta,s^2)$
+and reject when $|\widehat D|>1.96s$. The rejection cutoffs come from the null;
+we evaluate their probability under each alternative.
+
+```{r}
+#| label: normal-power
+normal_power <- function(delta, n_group, sigma = 10, alpha = .05) {
+  s <- sigma * sqrt(2 / n_group)
+  cutoff <- qnorm(1 - alpha / 2) * s
+  pnorm(-cutoff, mean = delta, sd = s) +
+    pnorm(cutoff, mean = delta, sd = s, lower.tail = FALSE)
+}
+
+power_curves <- expand.grid(delta = seq(0, 10, by = .1),
+                           n_group = c(30, 60, 120))
+power_curves$power <- with(power_curves, normal_power(delta, n_group))
+p_power_curves <- ggplot(power_curves,
+                        aes(delta, power, color = factor(n_group))) +
+  geom_line(linewidth = 1) +
+  geom_point(data = power_grid, aes(y = rejection_rate), size = 2.6) +
+  geom_hline(yintercept = .05, linetype = 3, color = "gray50") +
+  scale_color_manual(values = c(blue, orange, "#47733D"), name = "n per group") +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "True mean difference (score points)", y = "Probability of rejection",
+       subtitle = "Lines: Normal approximation; points: simulated Welch tests")
+p_power_curves
+```
+
+The small gaps also reflect that Welch's test estimates the SE and uses a
+t cutoff; the curves use the population SE and a Normal cutoff.
+
+## Planning a sample size in R
+
+`power.t.test()` provides a convenient calculation for a balanced, common-SD
+Normal model using the pooled two-sample t test. This is a planning model;
+it is not an exact power calculation for every design or for unequal-variance
+Welch tests. Simulation lets us explore the procedure and design we actually intend.
+
+```{r}
+#| label: power-plan
+plan <- power.t.test(delta = 3, sd = 10, power = .80,
+                     sig.level = .05, type = "two.sample",
+                     alternative = "two.sided", strict = TRUE)
+plan
+ceiling(plan$n)  # Round up: number needed IN EACH GROUP.
+```
+
+`strict = TRUE` counts rejections in either tail, as a two-sided test does.
+Plan around a substantively meaningful effect and plausible variability,
+not the observed effect from the study whose p-value you are interpreting.
+
+# 6. Bootstrap: approximate sampling uncertainty
+
+Reuse the 50 attitude scores from Section 2. Treat their empirical distribution
+(each observed score gets probability $1/n$) as a stand-in for the unknown
+population. Draw samples of size $n$ **with replacement**, recomputing the mean.
+
+```{r}
+#| label: bootstrap-mean
+set.seed(21106)
+boot_mean <- replicate(B, {
+  score_star <- sample(score, size = length(score), replace = TRUE)
+  mean(score_star)
+})
+c(estimate = mean(score), bootstrap_SE = sd(boot_mean),
+  formula_SE = sd(score) / sqrt(length(score)))
+quantile(boot_mean, c(.025, .975))  # Approximate percentile interval.
+
+p_boot_mean <- ggplot(data.frame(estimate = boot_mean), aes(estimate)) +
+  geom_histogram(bins = 35, fill = blue, color = "white") +
+  geom_vline(xintercept = mean(score), color = orange, linewidth = 1) +
+  labs(x = "Mean in a bootstrap sample", y = "Number of replicates",
+       subtitle = "The bootstrap distribution is centered near the observed sample mean")
+p_boot_mean
+```
+
+The bootstrap SD estimates the estimator's standard error. The percentile
+interval is an approximate method, not an exact coverage guarantee. These
+replicates fluctuate around the observed mean, **not around the null mean 50**.
+Counting how often `boot_mean` exceeds the observed mean would not give a
+valid p-value for $H_0:\mu=50$.
+
+This is the idea behind the bootstrap summaries provided in B4. It can also
+help with statistics whose SE formulas are less familiar, such as a median
+or ratio. Its validity still depends on the sampling structure and statistic.
+
+# 7. Dependence: keep households together
+
+Gerber, Green, and Larimer assigned treatment at the household level, within
+geographic blocks. Our **synthetic illustration** uses a simpler design:
+60 independent households, two voters each, and exactly 30 treated households.
+Potential outcomes are fixed once generated; assignment determines which we see.
+
+The latent household propensity creates related outcomes within a household.
+The optional details of generating potential outcomes are shown here so the
+example is completely reproducible; the resampling starts with `voters`.
+
+```{r}
+#| label: household-data
+set.seed(21107)
+H <- 60
+household_propensity <- rbeta(H, shape1 = .3, shape2 = .7)
+household <- rep(seq_len(H), each = 2)
+u <- runif(2 * H)
+p0 <- household_propensity[household]
+p1 <- plogis(qlogis(p0) + .6)
+y0 <- as.integer(u < p0)
+y1 <- as.integer(u < p1)
+assigned <- sample(rep(c(0, 1), each = H / 2))
+voters <- data.frame(household, treated = assigned[household],
+                     voted = ifelse(assigned[household] == 1, y1, y0))
+
+hh <- voters |>
+  group_by(household, treated) |>
+  summarise(turnout = mean(voted), .groups = "drop")
+head(voters)
+head(hh)
+```
+
+Each household mean is 0, 0.5, or 1. Because every household has two voters,
+the mean of household means equals the mean across voters in that arm.
+With unequal household sizes, averaging household rates and averaging voters
+can target different quantities; preserve the intended weighting.
+
+```{r}
+#| label: household-bootstrap
+h_treated <- hh$turnout[hh$treated == 1]
+h_control <- hh$turnout[hh$treated == 0]
+observed <- mean(h_treated) - mean(h_control)
+
+set.seed(21108)
+boot_household <- replicate(B, {
+  t_star <- sample(h_treated, length(h_treated), replace = TRUE)
+  c_star <- sample(h_control, length(h_control), replace = TRUE)
+  mean(t_star) - mean(c_star)
+})
+observed
+sd(boot_household)
+```
+
+We resample household summaries **within each arm**, with replacement. For
+this equal-size, mean-outcome example, that preserves exactly the contribution
+of resampling whole households with all their voters. This bootstrap models
+sampling independent households; it is not the experiment's reassignment test.
+
+## Compare with resampling individual voters
+
+```{r}
+#| label: naive-bootstrap
+v_treated <- voters$voted[voters$treated == 1]
+v_control <- voters$voted[voters$treated == 0]
+set.seed(21109)
+boot_voter <- replicate(B, {
+  mean(sample(v_treated, length(v_treated), replace = TRUE)) -
+    mean(sample(v_control, length(v_control), replace = TRUE))
+})
+bootstrap_comparison <- data.frame(
+  resampling_unit = c("Individual voter", "Whole household"),
+  bootstrap_SE = c(sd(boot_voter), sd(boot_household)))
+bootstrap_comparison
+
+boot_comparison <- data.frame(
+  estimate = c(boot_voter, boot_household),
+  unit = rep(c("Individual voter", "Whole household"), each = B))
+p_cluster_boot <- ggplot(boot_comparison, aes(estimate)) +
+  geom_histogram(binwidth = 1 / 60, fill = blue, color = "white") +
+  geom_vline(xintercept = observed, color = orange, linewidth = .8) +
+  facet_wrap(~unit, nrow = 1) +
+  scale_x_continuous(breaks = c(-.2, 0, .2, .4)) +
+  labs(x = "Bootstrap difference in turnout proportions", y = "Number of replicates")
+p_cluster_boot
+```
+
+The row bootstrap breaks the positive within-household association and
+understates uncertainty here. This is the same dependence issue as repeated
+responses in A6. More rows need not mean more independent information.
+
+# 8. A null distribution from randomized assignments
+
+For the synthetic experiment, consider the **sharp null**: treatment changes
+no voter's outcome, $Y_i(1)=Y_i(0)$ for every voter. Under that null, the
+observed outcomes would be the same under every allowed assignment. Keep them
+fixed; randomly assign exactly 30 of the 60 **households** to treatment again.
+
+```{r}
+#| label: household-randomization
+set.seed(21110)
+null_difference <- replicate(B, {
+  d_star <- sample(hh$treated, replace = FALSE)
+  mean(hh$turnout[d_star == 1]) - mean(hh$turnout[d_star == 0])
+})
+# Count ties as at least as extreme; tolerance handles floating-point rounding.
+extreme <- abs(null_difference) >= abs(observed) - 1e-12
+p_randomization <- (1 + sum(extreme)) / (B + 1)
+c(observed_difference = observed, randomization_p = p_randomization)
+
+p_randomization_plot <- ggplot(data.frame(difference = null_difference),
+                              aes(difference)) +
+  geom_histogram(binwidth = 1 / 60, fill = blue, color = "white") +
+  geom_vline(xintercept = c(-abs(observed), abs(observed)),
+             color = orange, linewidth = 1, linetype = 2) +
+  labs(x = "Difference under reassigned household labels", y = "Number of replicates",
+       subtitle = sprintf("Two-sided Monte Carlo p-value = %.3f", p_randomization))
+p_randomization_plot
+```
+
+Unlike the bootstrap, these labels are shuffled **without replacement**:
+every household appears once and the treatment count is unchanged. The `+1`
+correction includes the observed assignment in the Monte Carlo calculation
+and avoids a reported p-value of zero. Full enumeration would use its exact
+tail proportion instead.
+
+A sharp null is stronger than a zero **average** effect: positive and negative
+individual effects could cancel. This simple randomization test is justified
+by the sharp null and the assignment design (also assuming no interference
+between households). It is not a generic exact test of equal means for
+arbitrary observational groups.
+
+**For the actual Gerber–Green–Larimer design**, reassign households within the
+original blocks and retain each block's treatment-arm counts. Do not apply
+our unrestricted two-arm shuffle to their data.
+
+# 9. Choose the repetition to match the question
+
+| Goal | What gets repeated? | What remains fixed? |
+|---|---|---|
+| Power | Generate fresh studies under a specified true effect | Design, analysis rule, and model parameters |
+| Bootstrap SE | Sample units with replacement from observed data | Sample size and the chosen resampling structure |
+| Randomization test | Draw assignments allowed by the design | Outcomes under the sharp null, units, and design constraints |
+
+For paired data, resample pairs. For households or schools, preserve clusters.
+For serial dependence, a suitable block or time-series method is needed.
+Resampling is not a repair for a biased sample, confounding, or too few independent units.
+
+# Reading and references
+
+- *Probability, Statistics, and Data*, [Chapter 8](https://probstatsdata.com/HTCI.html), especially §§8.3–8.4 and 8.6–8.8.
+- Matthew Blackwell, *Gov 2000: Hypothesis Testing* (2016), used with permission; motivating tea example and testing/power sequence.
+- Gerber, A. S., Green, D. P., and Larimer, C. W. (2008). “Social Pressure and Voter Turnout: Evidence from a Large-Scale Field Experiment.” *American Political Science Review* 102(1):33–48. [Article](https://doi.org/10.1017/S000305540808009X).
+- R documentation: [`t.test`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/t.test.html), [`power.t.test`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/power.t.test.html).

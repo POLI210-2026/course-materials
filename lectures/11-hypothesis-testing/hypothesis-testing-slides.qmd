@@ -1,0 +1,521 @@
+---
+title: "Hypothesis testing"
+subtitle: "POLI 210 — Seminar 11"
+author: "Brad LeVeck"
+date: "2026-11-18"
+date-format: "MMMM D, YYYY"
+format:
+  revealjs:
+    theme: [simple, slides.scss]
+    slide-number: c/t
+    width: 1280
+    height: 720
+    center: false
+    transition: none
+    embed-resources: true
+    code-overflow: wrap
+    include-after-body: math-fonts.html
+  typst:
+    fontsize: 21pt
+    template-partials: [typst-show.typ]
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+fig-format: png
+fig-dpi: 180
+fig-width: 10
+fig-height: 3.1
+---
+
+```{r}
+#| include: false
+source("R/figures.R")
+```
+
+## From an estimate to a question
+
+A confidence interval describes uncertainty about a population parameter.
+
+A hypothesis test starts with a particular claim:
+
+> If that claim were true, how unusual would our result be?
+
+Today: **null models → tests → two-sample comparisons → power → resampling.**
+
+## Could someone really taste the difference?
+
+Prepare eight cups: four milk-first and four tea-first.
+
+- Present them in a random order.
+- Ask the taster to identify exactly four as milk-first.
+- Suppose all four are correct.
+
+If the taster were guessing, how often would that happen?
+
+There are $\binom{8}{4}=70$ possible selections, all equally likely under random guessing.
+
+::: {.source}
+Fisher's tea-tasting example, following Blackwell's hypothesis-testing slides.
+:::
+
+## A null distribution we can count
+
+Let $K$ count the actual milk-first cups among the four selected.
+
+$$P_0(K=k)=\frac{\binom{4}{k}\binom{4}{4-k}}{\binom{8}{4}}.$$
+
+```{r}
+#| echo: false
+#| fig-height: 2.7
+p_tea_plot
+```
+
+Perfect performance: $P_0(K\geq4)=1/70\approx0.014$.
+
+## Name the claim and the comparison
+
+For a population mean, one possible test is
+
+$$H_0:\mu=50 \qquad\text{versus}\qquad H_A:\mu\ne50.$$
+
+- The **null hypothesis** supplies the claim we evaluate.
+- The **alternative** specifies which departures count as evidence.
+- A **test statistic** summarizes the departure in our data.
+- Its **null distribution** describes repeated results if $H_0$ holds.
+
+The hypotheses concern the population, not the already observed sample mean.
+
+## Standardize the distance from the null
+
+For a mean, a familiar statistic is
+
+$$T=\frac{\overline X-\mu_0}{S/\sqrt n}.$$
+
+It measures the distance from $\mu_0$ in **estimated standard errors**.
+
+For IID observations with finite, positive variance, the studentized CLT gives
+
+$$T\ \overset{H_0}{\approx}\ N(0,1)\qquad\text{for sufficiently large }n.$$
+
+Large positive **or** negative values count against a two-sided null.
+
+## Set a rejection rule before seeing the result
+
+At level $\alpha=.05$, a two-sided Normal-reference test rejects when
+
+$$|T|>z_{0.975}\approx1.96.$$
+
+```{r}
+#| echo: false
+p_rejection
+```
+
+The rejection region has probability 0.05 **under the null approximation**.
+
+## Two ways a decision can be wrong
+
+| Decision | $H_0$ is true | $H_0$ is false |
+|---|---|---|
+| Reject $H_0$ | Type I error | Detect a departure |
+| Do not reject $H_0$ | Correct non-rejection | Type II error |
+
+- **Level $\alpha$:** an upper bound on the Type I error probability for a valid test.
+- **Power:** rejection probability under a specified alternative.
+- “Do not reject” does not establish that $H_0$ is true.
+
+The costs of the two errors depend on the question; 0.05 is a convention.
+
+## The p-value measures a null tail probability
+
+For a two-sided test based on $|T|$,
+
+$$p=P_0\bigl(|T|\geq|t_{\mathrm{obs}}|\bigr).$$
+
+```{r}
+#| echo: false
+p_pvalue
+```
+
+This plot uses the demo's one-sample t test. Both tails count.
+
+## Keep the conditioning straight
+
+A p-value asks about **possible results under the null model**.
+
+It is not $P(H_0\mid\text{data})$, and it does not measure effect size.
+
+- A tiny effect can give a small p-value in a precise study.
+- A consequential effect can be missed in a noisy study.
+- Report the estimate and uncertainty alongside the test.
+
+For a prespecified test, reject at level $\alpha$ when $p\leq\alpha$.
+
+## A one-sided question changes the tail
+
+If the prespecified question is whether a mean is **higher** than 50:
+
+$$H_0:\mu\leq50,\qquad H_A:\mu>50.$$
+
+Use the upper tail, calibrated at the boundary $\mu=50$.
+
+```{r}
+#| eval: false
+t.test(score, mu = 50, alternative = "greater")
+```
+
+Choose the direction before examining the data. Switching tails after seeing
+the result changes the test's error rate.
+
+## Where the t reference fits
+
+The same statistic can use different justifications:
+
+| Justification | Null reference |
+|---|---|
+| Studentized CLT, sufficiently large IID sample | Approximately $N(0,1)$ |
+| IID Normal observations | Exactly $t_{n-1}$ for a one-sample mean |
+
+R's `t.test()` uses the t reference. Its cutoffs approach the Normal cutoffs as $n$ grows.
+
+A t cutoff does not repair dependence, severe small-sample skewness, or a biased sample.
+
+## The test and interval answer related questions
+
+```{r}
+#| eval: false
+fit <- t.test(score, mu = 50)
+fit$statistic
+fit$p.value
+fit$conf.int
+```
+
+For the demo's simulated attitude scores:
+
+- Mean = **`r round(mean(score),2)`**; SE = **`r round(se,2)`**.
+- $t=$ **`r round(t_obs,2)`**; two-sided $p=$ **`r round(p_manual,4)`**.
+- 95% CI: **[`r round(ci_manual[1],2)`, `r round(ci_manual[2],2)`]**.
+
+A matching 95% interval excludes the null value exactly when its two-sided test rejects at 5%.
+
+## Return to the turnout experiment
+
+| Mailing | Turnout |
+|---|---:|
+| Neighbors | 37.8% |
+| Civic duty | 31.5% |
+
+The difference is about **6.3 percentage points**. How much could chance assignment explain?
+
+**Design matters:** treatment was assigned to households within geographic blocks.
+Individuals in one household are not independent experimental units.
+
+::: {.source}
+Gerber, Green, and Larimer (2008), Table 2 and experimental design. Rounded summaries; we return to household assignment in the resampling example.
+:::
+
+## Two independent samples
+
+Let $\Delta=\mu_Y-\mu_X$, estimated by $\widehat D=\overline Y-\overline X$.
+
+For independent samples,
+
+$$\widehat{\mathrm{SE}}(\widehat D)
+=\sqrt{\frac{S_Y^2}{n_Y}+\frac{S_X^2}{n_X}},\qquad
+T=\frac{\widehat D-\Delta_0}{\widehat{\mathrm{SE}}(\widehat D)}.$$
+
+Both samples contribute uncertainty. Equal sample sizes or variances are not required.
+
+**Welch's test** uses this SE and an approximate t reference.
+
+## Compare independent groups in R
+
+```{r}
+#| eval: false
+# y and x are independent samples of attitude scores.
+# The contrast is Y minus X.
+t.test(y, x, mu = 0)
+```
+
+In the synthetic demo:
+
+- Difference = **`r round(d_hat,2)`** score points.
+- SE = **`r round(se_diff,2)`**; $p=$ **`r round(welch_fit$p.value,3)`**.
+
+This is Welch's test by default. Independence still matters; a difference between observational groups need not be causal.
+
+## Sometimes the observations come in pairs
+
+```{r}
+#| echo: false
+p_pairs
+```
+
+The same person answers twice. Treat each person's **change** as one observation.
+
+## A paired test is a one-sample test of changes
+
+Let $D_i=\text{after}_i-\text{before}_i$. Test $H_0:E[D_i]=0$.
+
+$$\widehat{\mathrm{SE}}(\overline D)=\frac{S_D}{\sqrt n},
+\qquad n=\text{number of independent pairs}.$$
+
+```{r}
+#| eval: false
+t.test(after, before, paired = TRUE)
+t.test(after - before, mu = 0)  # Same test.
+```
+
+$$\operatorname{Var}(D_i)=\operatorname{Var}(\text{after}_i)
++\operatorname{Var}(\text{before}_i)-2\operatorname{Cov}(\text{after}_i,\text{before}_i).$$
+
+Positive covariance can make paired comparisons more precise.
+
+## Pause: what makes an observation independent?
+
+- Two separately sampled groups: two-sample SE.
+- Two answers from the same person: analyze paired differences.
+- Two voters in the same household: preserve the household structure.
+
+The number of rows is not necessarily the number of independent units.
+
+**Break**
+
+## Power asks about repeated studies
+
+For a specified true difference $\delta$,
+
+$$\operatorname{Power}(\delta)=P_\delta(\text{reject }H_0).$$
+
+At a nonzero alternative, power is $1-P_\delta(\text{Type II error})$.
+
+Choose a meaningful effect, a plausible population model, a design, and a test.
+Then ask how frequently that procedure would detect the effect.
+
+At the null value, the rejection probability is the Type I error rate.
+
+## Keep the cutoffs fixed; change the truth
+
+```{r}
+#| echo: false
+#| fig-height: 3.4
+p_power_regions
+```
+
+The shaded area is rejection probability under each possible truth.
+
+These are **Normal planning approximations**, using the population SE. The gray dashed curve is the null distribution.
+
+## Simulate the whole testing procedure
+
+```{r}
+#| eval: false
+reject_once <- function(n_group, delta) {
+  x_new <- rnorm(n_group, mean = 50, sd = 10)
+  y_new <- rnorm(n_group, mean = 50 + delta, sd = 10)
+  t.test(y_new, x_new)$p.value < .05
+}
+mean(replicate(4000, reject_once(n_group = 60, delta = 3)))
+```
+
+One repetition generates a **fresh study**, then runs its test.
+
+- `delta = 0`: estimate the Type I error rate.
+- `delta = 3`: estimate power to detect a three-point difference.
+
+## More information can detect smaller effects
+
+```{r}
+#| echo: false
+#| fig-height: 3.5
+p_power_curves
+```
+
+More subjects per group increase power. More simulation repetitions only make our estimate of power more precise.
+
+## Plan around an effect that matters
+
+```{r}
+#| eval: false
+plan <- power.t.test(
+  delta = 3, sd = 10, power = .80,
+  sig.level = .05, type = "two.sample",
+  alternative = "two.sided", strict = TRUE
+)
+ceiling(plan$n)  # Number IN EACH GROUP.
+```
+
+This calculation gives **`r ceiling(plan$n)` per group**, under a balanced, common-SD Normal model for a pooled t test.
+
+Simulation accommodates other designs and tests. Household assignment requires a household-aware power calculation.
+
+## A non-rejection can be uninformative
+
+With low power, even an important effect will often produce $p>.05$.
+
+- Inspect the interval: which effect sizes are still compatible with the data?
+- A smaller p-value does not necessarily imply a larger effect.
+- Do not infer a group difference because one group is “significant” and another is not. **Test the difference itself.**
+
+Statistical detection and substantive importance are different questions.
+
+## Bootstrap: use the empirical distribution
+
+We have one sample and an estimator. We want its sampling uncertainty.
+
+1. Give each observed unit equal probability in a stand-in population.
+2. Draw a sample of the original size **with replacement**.
+3. Recalculate the statistic.
+4. Repeat; use the spread of those estimates to approximate its SE.
+
+The sample can contain repeated observations and omit others.
+
+This is the resampling idea behind the bootstrap intervals supplied in B4.
+
+## A bootstrap SE in a few lines
+
+```{r}
+#| eval: false
+boot_mean <- replicate(4000, {
+  score_star <- sample(score, length(score), replace = TRUE)
+  mean(score_star)
+})
+sd(boot_mean)                     # Bootstrap SE.
+quantile(boot_mean, c(.025, .975)) # Approximate interval.
+```
+
+For these simulated scores: bootstrap SE = **`r round(sd(boot_mean),2)`**;
+formula SE = **`r round(se,2)`**.
+
+Bootstrap intervals are approximate; resampling does not guarantee coverage.
+
+## This distribution is centered at the estimate
+
+```{r}
+#| echo: false
+p_boot_mean
+```
+
+The line is the observed mean. This is **not yet a null distribution** for testing $\mu=50$.
+
+## Keep dependent observations together
+
+A simplified turnout experiment:
+
+- 60 independent households, each with two voters.
+- Randomly assign 30 households to treatment and 30 to control.
+- Voters within a household have related turnout outcomes.
+
+For a bootstrap, resample **whole households within each arm**.
+
+::: {.source}
+Synthetic teaching example. Gerber–Green–Larimer used household assignment within geographic blocks and multiple arms; this illustration simplifies their design.
+:::
+
+## Summarize households, then resample households
+
+```{r}
+#| eval: false
+hh <- voters |>
+  group_by(household, treated) |>
+  summarise(turnout = mean(voted), .groups = "drop")
+
+h_treated <- hh$turnout[hh$treated == 1]
+h_control <- hh$turnout[hh$treated == 0]
+boot_household <- replicate(4000, {
+  mean(sample(h_treated, length(h_treated), replace = TRUE)) -
+    mean(sample(h_control, length(h_control), replace = TRUE))
+})
+```
+
+Equal household sizes make this equivalent to resampling each household with all its voters for our difference in means.
+
+## The resampling unit changes the uncertainty
+
+```{r}
+#| echo: false
+p_cluster_boot
+```
+
+SE from individual resampling: **`r round(sd(boot_voter),3)`**.
+SE from household resampling: **`r round(sd(boot_household),3)`**.
+
+Resampling voters separately breaks their positive association and understates uncertainty here.
+
+## For a test, build a distribution under the null
+
+For our randomized experiment, consider the **sharp null**:
+
+$$H_0:Y_i(1)=Y_i(0)\quad\text{for every voter }i.$$
+
+Under this null, each voter's observed outcome would stay the same under any allowed assignment.
+
+Keep outcomes fixed. Reassign **household** treatment labels according to the original design, and recalculate the difference.
+
+This is stronger than a null of zero average effect.
+
+## Reassign labels, respecting the experiment
+
+```{r}
+#| eval: false
+observed <- mean(h_treated) - mean(h_control)
+null_difference <- replicate(4000, {
+  d_star <- sample(hh$treated, replace = FALSE)
+  mean(hh$turnout[d_star == 1]) - mean(hh$turnout[d_star == 0])
+})
+```
+
+Every household appears once; exactly 30 receive each label.
+
+For a blocked experiment, reassign **within blocks**, preserving each block's arm counts. Assume no interference between households.
+
+## Compare the observed result with that null
+
+```{r}
+#| echo: false
+p_randomization_plot
+```
+
+Count differences at least as large in absolute value, including ties:
+
+$$p_{\mathrm{MC}}=\frac{1+\#\{|\widehat D^*|\geq|\widehat D_{\mathrm{obs}}|\}}{B+1}.$$
+
+## Similar code, different repeated experiments
+
+| Method | What changes? | Main question |
+|---|---|---|
+| Power simulation | New data under a specified truth | How often would this test reject? |
+| Bootstrap | Units sampled with replacement | How variable is this estimator? |
+| Randomization test | Assignments allowed by the design | How unusual is this result under the sharp null? |
+
+A label permutation is not an exact equal-means test for arbitrary observational groups. It needs an appropriate exchangeability or randomization justification.
+
+## When resampling is especially useful
+
+- **Less familiar statistics:** approximate uncertainty for a median or ratio.
+- **Dependent observations:** resample pairs or clusters together.
+- **Known assignment designs:** simulate the null using the actual randomization.
+
+Choose a repetition that preserves the source of randomness and dependence.
+
+More resamples cannot fix confounding, selection bias, or too few independent units.
+
+## Questions to ask before running a test
+
+1. What parameter or causal claim is being tested?
+2. What would count as evidence against it?
+3. Which units are independent, or how was treatment assigned?
+4. What justifies the reference distribution?
+5. What do the estimate, interval, p-value, and power each tell us?
+
+## Reading and references
+
+::: {.small}
+
+- *Probability, Statistics, and Data*, Chapter 8: §§8.3–8.4 and 8.6–8.8; review §§8.1–8.2 and 8.5 as needed. [probstatsdata.com/HTCI.html](https://probstatsdata.com/HTCI.html)
+- Matthew Blackwell, *Gov 2000: Hypothesis Testing* (2016). Tea example and testing/power sequence adapted with permission; graphics redrawn for this seminar.
+- Gerber, Green, and Larimer (2008). “Social Pressure and Voter Turnout: Evidence from a Large-Scale Field Experiment.” *APSR* 102(1):33–48. [doi:10.1017/S000305540808009X](https://doi.org/10.1017/S000305540808009X)
+- R documentation for [`t.test`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/t.test.html) and [`power.t.test`](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/power.t.test.html).
+
+:::
